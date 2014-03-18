@@ -18,7 +18,7 @@
         \textsc{\LARGE Inżynieria Oprogramowania Systemów Rozproszonych} \\[0.8cm]
         \textsc{\LARGE Dokumentacja} \\[0.5cm]
         \HRule \\[0.4cm]
-        { \huge \bfseries System agregacji i przetwarzania zdarzeń systemowych} \\[0.4cm]
+        { \huge \bfseries Kaflog} \\[0.4cm]
         \HRule \\[1.5cm]
     
     \begin{minipage}{0.4\textwidth}
@@ -60,9 +60,9 @@
 
 \begin{tikzpicture} 
     \begin{umlsystem}[x=0, y=0, fill=red!10]{KafLog} 
-        \umlactor[x=-7.5]{Użytkownik} 
+        \umlactor[x=-7.5]{Użytkownik}
 
-        \foreach \x/\a in {2/Zarejestruj agenta, 1/Pokaż stan systemu, 0/Pokaż statystyki agenta, -1/Pokaż statystyki zbiorcze, -2/Stwórz raport w HTML} {
+        \foreach \x/\a in {2/Zarejestruj agenta, 1/Pokaż stan systemu, 0/Pokaż statystyki agenta, -1/Pokaż statystyki zbiorcze, -2/Stwórz raport w HTML, -3/Pokaż historię logów} {
             \umlusecase[name=\x,x=0, y=\x]{\a}; 
             \umlassoc{Użytkownik}{\x};
         }
@@ -79,10 +79,14 @@
   utworzenie planu testów funkcjonalnych & utworzenie diagramów klas/sekwencji \\
   naprawa luk bezpieczeństwa & generowanie raportów w mvn \\
   testowanie aplikacji & poszukiwanie luk bezpieczeństwa \\
-  optymalizacja aplikacji & przeprowadzenie testów wydajnościowych
+  optymalizacja aplikacji & przeprowadzenie testów wydajnościowych \\
+   & generowanie strony w mvn
 \end{tabular}
 
 
 
 
 \end{document}
+
+
+%% TODO HANDLE: kreślenie tematu projektu wraz z opisem proponowanego problemu,

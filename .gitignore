@@ -1,5 +1,6 @@
 *.class
 
+Application/target
 Documentation/*.aux
 Documentation/*.gz
 Documentation/*.log
