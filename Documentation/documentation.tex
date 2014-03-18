@@ -1,0 +1,64 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[english,polish]{babel}
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{amsmath}
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
+\begin{document}
+\begin{titlepage}
+    \begin{center}
+        \includegraphics[width=0.4\textwidth]{images/logo.jpg} \\[1cm]
+        \textsc{\LARGE Inżynieria Oprogramowania Systemów Rozproszonych} \\[0.8cm]
+        \textsc{\LARGE Dokumentacja} \\[0.5cm]
+        \HRule \\[0.4cm]
+        { \huge \bfseries System agregacji i przetwarzania zdarzeń systemowych} \\[0.4cm]
+        \HRule \\[1.5cm]
+    
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushleft} \large
+        \emph{Autorzy:} \\
+        Łukasz \textsc{Opioła} \\
+        Bartosz \textsc{Polnik}
+        \end{flushleft}
+    \end{minipage}
+    \begin{minipage}{0.4\textwidth}
+        \begin{flushright} \large
+            \emph{Prowadzący:} \\
+            Dr. Inż. Marcin \textsc{Jarząb}
+        \end{flushright}
+    \end{minipage}
+
+    \vfill
+
+    {\large \today}
+
+    \end{center}
+\end{titlepage}
+
+\section{Opis tematu}
+    Koncepcja podobna jest to tej przedstawionej w projekcie 5, z tą różnicą iż przesyłanie informacji o zdarzeniach ma być zrealizowane przy użyciu modelu publish-subscribe w którym na węzłach są uruchomieni agenci (producenci) śledzący zmiany w plikach zdarzeń i wysyłających informacje do brokera Kafka który następnie wpisuje dane do Hadoopa.
+
+\section{Technologie} 
+    Projekt zostanie zrealizowany z wykorzystaniem następujących technologii:
+    \begin{itemize}
+        \item Cloudera
+        \item Hadoop Yarn (MR2)
+        \item Hive
+        \item HBase
+        \item Oozie
+        \item Kafka
+    \end{itemize}
+
+\section{Podział zadań}
+
+\begin{tabular}{ c | c }
+  Łukasz Opioła & Bartosz Polnik \\ \hline
+  4 & 5 \\
+  7 & 8 \\
+\end{tabular}
+
+
+\end{document}

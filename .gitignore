@@ -1,0 +1,7 @@
+*.class
+
+Documentation/*.aux
+Documentation/*.gz
+Documentation/*.log
+Documentation/*.fdb_latexmk
+
