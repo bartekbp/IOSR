@@ -39,7 +39,7 @@
 \end{titlepage}
 
 \section{Opis tematu}
-    Koncepcja podobna jest to tej przedstawionej w projekcie 5, z tą różnicą iż przesyłanie informacji o zdarzeniach ma być zrealizowane przy użyciu modelu publish-subscribe w którym na węzłach są uruchomieni agenci (producenci) śledzący zmiany w plikach zdarzeń i wysyłających informacje do brokera Kafka który następnie wpisuje dane do Hadoopa.
+    System agregacji logów z rozproszonych węzłów obliczeniowych wspierających masywną skalowalność w oparciu o bibliotekę Kafka. Na węzłach uruchomieni są agenci (producenci) śledzący zmiany w plikach zdarzeń i wysyłający informacje do brokera Kafka, który następnie wpisuje dane do Hadoopa. Celem jest dostarczenie określonych raportów odnośnie kategorii zdarzeń (INFO, ERROR, DEBUG), częstotliwości ich występowania etc.
 
 \section{Technologie} 
     Projekt zostanie zrealizowany z wykorzystaniem następujących technologii:
