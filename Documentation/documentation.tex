@@ -3,6 +3,10 @@
 \usepackage{polski}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
+\usepackage{tikz-uml}
+\usepackage{tikz} 
+
+\usepackage{pgf}
 \usepackage{listings}
 \usepackage{color}
 \usepackage{amsmath}
@@ -52,13 +56,33 @@
         \item Kafka
     \end{itemize}
 
+\section{Przypadki użycia}
+
+\begin{tikzpicture} 
+    \begin{umlsystem}[x=0, y=0, fill=red!10]{KafLog} 
+        \umlactor[x=-7.5]{Użytkownik} 
+
+        \foreach \x/\a in {2/Zarejestruj agenta, 1/Pokaż stan systemu, 0/Pokaż statystyki agenta, -1/Pokaż statystyki zbiorcze, -2/Stwórz raport w HTML} {
+            \umlusecase[name=\x,x=0, y=\x]{\a}; 
+            \umlassoc{Użytkownik}{\x};
+        }
+    \end{umlsystem} 
+\end{tikzpicture}
+
 \section{Podział zadań}
 
 \begin{tabular}{ c | c }
   Łukasz Opioła & Bartosz Polnik \\ \hline
-  4 & 5 \\
-  7 & 8 \\
+  przewodzenie zespołem & konfiguracja środowiska \\
+  tworzenie use-case & spisywanie minutek \\
+  specyfikacja funkcjonalna & specyfikacja funkcjonalna \\
+  utworzenie planu testów funkcjonalnych & utworzenie diagramów klas/sekwencji \\
+  naprawa luk bezpieczeństwa & generowanie raportów w mvn \\
+  testowanie aplikacji & poszukiwanie luk bezpieczeństwa \\
+  optymalizacja aplikacji & przeprowadzenie testów wydajnościowych
 \end{tabular}
+
+
 
 
 \end{document}
