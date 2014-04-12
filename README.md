@@ -12,7 +12,7 @@ Pobrać i zainstalować najnowszą wersje Vagrant'a i VirtualBoxa 4.2 (konieczni
 --------------------------------------------
 UWAGA: Obecna konfugaracja wymaga 2GB RAMu. Jeśli to za dużo, należy edytować Vagrantfile i zmniejszyć ilość pamięci przydzielanej poszczególnym VMkom.
 
-Wejść do katalogu z Vagrantfile i odpalić:
+Wejść do katalogu vagrant/ i odpalić:
 
     vagrant up
 
@@ -22,17 +22,19 @@ Jeśli nie potrafi pobrać sobie box'a ("An error occurred while downloading the
 
 I spróbować ponownie. Jeśli "vagrant up" zwróci nam prompta bez sypania błędami, to znaczy, że środowisko wstało.
 
-Za pierwszym uruchomieniem środowiska, Vagrant wykona tzw. "provision scripts", które ustawią /etc/hosts, zainstalują javę etc. Przy wznowieniach skrypty te są pomijane. Jeśli z jakiegoś powodu chcemy ponownie odpalić te skrypty, można wykonać (gdy środowiko jest postawione):
+Za pierwszym uruchomieniem środowiska, Vagrant wykona tzw. "provisioning" - skrypty, które ustawią /etc/hosts, zainstalują javę etc. Przy wznowieniach skrypty te są pomijane. Jeśli z jakiegoś powodu chcemy ponownie odpalić te skrypty, można wykonać (gdy środowiko jest postawione):
 
     vagrant provision
 
-
-3. Przygotowanie do pracy ze środowiskiem
-------------------------------------------
 Dodać wpisy z pliku vagrant/files/hosts do lokalnego /etc/hosts, aby móc posługiwać się hostname'ami np. w przeglądarce.
 
+
+3. Stawianie clustra cloudery
+------------------------------------------
 TODO: Docelowo będę chciał napisać skrypt, który postawi klaster automatycznie, na razie jednak jest to mniej ważne. Dlatego też trzeba sobie wyklikać klaster przez GUI.
+
 TODO: Na razie nie udało mi się przejść całego procesu instalacji. Póki co można to olać i pobawić się kafką.
+
 Wejść przez przeglądarkę na adres:
     
     http://cloudera-master:7180/
