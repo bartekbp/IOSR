@@ -60,7 +60,7 @@ Skonfigurować cluster cloudery za pomocą wizarda, który nam się wyświetlił
 
 4. Wstrzymywanie, kasowanie środowiska
 --------------------------------------
-Aby wstrzymać wszystkie VMki i potem wznowić pracę w tym samym miejscu, używamy:
+Aby wstrzymać wszystkie VMki, a potem wznowić pracę w tym samym miejscu, używamy:
 
     vagrant halt
     vagrant up
@@ -76,9 +76,9 @@ Na poszczególne VMki logujemy się przy użyciu komendy vagrant ssh podając na
 
     vagrant ssh kafka-node1
 
-W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korzystać z następującego mechanizmu. Wszystko wrzucone do folderu zawierającego Vagrantfile (u nas w repo katalog vagrant/) jest podmontowane pod ścieżką /vagrant na vmkach.
+W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korzystać z następującego mechanizmu - wszystko wrzucone do folderu zawierającego Vagrantfile (u nas w repo katalog vagrant/) jest podmontowane pod ścieżką /vagrant na vmkach.
 
-Używanie kafki - na maszyny korzystające ze skryptu inicjującego "kafka-node.sh" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka (jest w repo pod ebooks/).
+Używanie kafki - na maszyny "kafka-nodexxx" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka (jest w repo pod ebooks/).
 
 
 6. Uwagi do dokumentacji kafki (uzywamy wersji 0.8.1, a w ebooku jest 0.72/0.8)
