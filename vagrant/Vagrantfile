@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+
+    # Start with installation of nodes destined to be cloudera slaves
+    config.vm.define :"cloudera-slave1" do |cloudera_slave1|
+        cloudera_slave1.vm.box = "precise64"
+        cloudera_slave1.vm.provider "vmware_fusion" do |v|
+            v.vmx["memsize"]  = "512"
+        end
+        cloudera_slave1.vm.provider :virtualbox do |v|
+            v.name = "cloudera-slave1"
+            v.customize ["modifyvm", :id, "--memory", "512"]
+        end
+        cloudera_slave1.vm.network :private_network, ip: "10.211.55.101"
+        cloudera_slave1.vm.hostname = "cloudera-slave1"
+        cloudera_slave1.vm.provision :shell, :path => "provision_scripts/cloudera-slave.sh"
+    end
+
+    # Cloudera master
+    config.vm.define :"cloudera-master" do |cloudera_master|
+        cloudera_master.vm.box = "precise64"
+        cloudera_master.vm.provider "vmware_fusion" do |v|
+            v.vmx["memsize"]  = "1024"
+        end
+        cloudera_master.vm.provider :virtualbox do |v|
+            v.name = "cloudera-master"
+            v.customize ["modifyvm", :id, "--memory", "1024"]
+        end
+        cloudera_master.vm.network :private_network, ip: "10.211.55.100"
+        cloudera_master.vm.hostname = "cloudera-master"
+        cloudera_master.vm.provision :shell, :path => "provision_scripts/cloudera-master.sh"
+    end
+
+    # Kafka nodes
+    config.vm.define :"kafka-node1" do |kafka_node1|
+        kafka_node1.vm.box = "precise64"
+        kafka_node1.vm.provider "vmware_fusion" do |v|
+            v.vmx["memsize"]  = "512"
+        end
+        kafka_node1.vm.provider :virtualbox do |v|
+            v.name = "kafka-node1"
+            v.customize ["modifyvm", :id, "--memory", "512"]
+        end
+        kafka_node1.vm.network :private_network, ip: "10.211.55.102"
+        kafka_node1.vm.hostname = "kafka-node1"
+        kafka_node1.vm.provision :shell, :path => "provision_scripts/kafka-node.sh"
+    end
+
+end
