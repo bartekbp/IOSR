@@ -7,3 +7,4 @@
 cp -f /vagrant/files/hosts /etc/hosts
 
 # No setup needed as cloudera master can configure it's slaves remotely
+# TODO: Is java needed??

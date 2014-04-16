@@ -1,8 +1,9 @@
 *.class
 
-Application/target
-Documentation/*.aux
-Documentation/*.gz
-Documentation/*.log
-Documentation/*.fdb_latexmk
+application/target
+documentation/*.aux
+documentation/*.gz
+documentation/*.log
+documentation/*.fdb_latexmk
 
+vagrant/.vagrant
