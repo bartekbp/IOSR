@@ -17,7 +17,7 @@ tar zxvf jdk-7u55-linux-x64.tar.gz
 mkdir -p /usr/lib/jvm/
 mv jdk1.7.0_55 /usr/lib/jvm/java-7-oracle/
 ln -s /usr/lib/jvm/java-7-oracle/bin/java /usr/bin/java
-echo '/usr/lib/jvm/java-7-oracle' >> /home/vagrant/.bashrc
+echo 'export JAVA_HOME=/usr/lib/jvm/java-7-oracle' >> /home/vagrant/.bashrc
 rm jdk-7u55-linux-x64.tar.gz 
 
 #  Prepare kafka binaries
