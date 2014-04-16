@@ -25,3 +25,4 @@ cp /vagrant/files/kafka_2.10-0.8.1.tgz .
 tar xzf kafka_2.10-0.8.1.tgz
 rm -f kafka_2.10-0.8.1.tgz
 mv kafka_2.10-0.8.1 kafka
+chown -R vagrant kafka
