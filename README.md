@@ -1,5 +1,11 @@
 1. Instalacja środowiska
 ------------------------
+Pierwszy krok; pobrać:
+
+    http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+
+i umieścić w vagrant/files/.
+
 UWAGA: Potrzebne jest dużo wolnego miejsca na dysku (30GB). Domyślnie wszystko wyląduje w "~/VirtualBox VMs". Aby zmienić tę lokalizację, trzeba odpalić virtualbox'a, wejść w preferencje i zmienić domyślny katalog.
 
 Pobrać i zainstalować najnowszą wersje Vagrant'a i VirtualBoxa 4.2 (koniecznie ta wersja, ze względu na wersję guest additions w boxach vagrantowych):
