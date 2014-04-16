@@ -7,3 +7,4 @@ documentation/*.log
 documentation/*.fdb_latexmk
 
 vagrant/.vagrant
+vagrant/files/jdk-7u55-linux-x64.tar.gz
