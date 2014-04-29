@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>kaflog</groupId>
+    <artifactId>kaflog</artifactId>
+    <version>0.1</version>
+
+    <name>Kaflog</name>
+    <description>Kaflog is a publish/subscribe system for log aggregation from distributes nodes.</description>
+
+    <developers>
+        <developer>
+            <id>lopiola</id>
+            <name>Łukasz Opioła</name>
+        </developer>
+        <developer>
+            <id>polnik</id>
+            <name>Bartosz Polnik</name>
+        </developer>
+        <developer>
+            <id>mjjaniec</id>
+            <name>Michał Janiec</name>
+        </developer>
+    </developers>
+
+    <scm>
+        <developerConnection>scm:git@github.com:bartekbp/IOSR.git</developerConnection>
+    </scm>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License (GPL)</name>
+            <url>http://www.gnu.org/licenses/gpl.txt</url>
+        </license>
+    </licenses>
+
+    <properties>
+        <jdk.version>1.7</jdk.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <test.failure.ignore>false</test.failure.ignore>
+        <javadoc-plugin.version>2.9.1</javadoc-plugin.version>
+        <site-plugin.version>3.3</site-plugin.version>
+        <project-info-reports-plugin.version>2.7</project-info-reports-plugin.version>
+        <logdir>${project.build.directory}</logdir>
+    </properties>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>central</id>
+            <name>Maven Plugin Repository</name>
+            <url>http://repo2.maven.org/maven2/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc-plugin.version}</version>
+                <configuration>
+                    <excludePackageNames>pl.edu.agh.yata.server.guice</excludePackageNames>
+                </configuration>
+            </plugin>
+
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>${project-info-reports-plugin.version}</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>index</report>
+                            <report>project-team</report>
+                            <report>license</report>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugin-management</report>
+                            <report>scm</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>kafka</groupId>
+            <artifactId>kafka</artifactId>
+            <version>0.8.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/kafka_2.10-0.8.1.jar</systemPath>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <groupId>scala</groupId>
+            <artifactId>scala</artifactId>
+            <version>2.10.1</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/scala-library-2.10.1.jar</systemPath>
+            <type>jar</type>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>${site-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <mainClass>pl.edu.agh.kp.KaflogProducer</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

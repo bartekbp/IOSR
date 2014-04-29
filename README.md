@@ -95,3 +95,32 @@ Zmieniono sposób tworzenia topica
 
     stary -> bin/kafka-create-topic.sh --zookeeper localhost:2181 --replica 1 --partition 1 --topic kafkatopic
     nowy ->  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kafkatopic
+
+
+7. Budowanie projektu i deploy na wirtualne maszyny
+---------------------------------------------------
+W głównym folderze projektu jest Makefile. Odpalamy
+
+    make
+
+I paczka z naszym kaflogiem będzie dostępna na każdej maszynie wirtualnej pod 
+
+    /vagrant/files/kaflog-0.1/
+
+
+8. Używanie KaflogProducera
+---------------------------
+Przykład jest dla jednej maszyny, można oczywiście przenieść to na środowisko rozproszone.
+Potrzebne będzie 5 otwartych sesji ssh do node'a, gdzie jest dostępna kafka (np. kafka-node1).
+Odpalamy po kolei:
+
+    ~/kafka/bin/zookeeper-server-start.sh config/zookeeper.properties
+    ~/kafka/bin/kafka-server-start.sh config/server.properties
+    ~/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kaflogtopic
+    /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh
+    ~/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kaflogtopic --from-beginning
+
+W ty momencie działa nasz producent i będzie publikował logi z sysloga. Aby zalogować coś do sysloga, wystarczy:
+
+    logger "tresc loga"
+    /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow_na_minute>
