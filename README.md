@@ -130,3 +130,4 @@ Odpalamy:
     /vagrant/files/kaflog-0.1/bin/kaflog_hadoop_consumer.sh
 
 Zrobić makaron i nie zapomnieć dodać soli.
+
