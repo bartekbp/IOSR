@@ -120,7 +120,9 @@ Odpalamy po kolei:
     /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh
     ~/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kaflogtopic --from-beginning
 
-W ty momencie działa nasz producent i będzie publikował logi z sysloga. Aby zalogować coś do sysloga, wystarczy:
+W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na dwa sposoby:
 
     logger "tresc loga"
     /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow_na_minute>
+
+Zrobić popcorn i oglądać.
