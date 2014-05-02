@@ -9,6 +9,11 @@ import java.net.*;
 import java.text.ParseException;
 import java.util.Properties;
 
+/**
+ * We could replace this class with:
+ * https://github.com/xstevens/syslog-kafka/blob/master/src/main/java/kafka/syslog/SyslogKafkaServer.java
+ * (in this way we could achieve better log parsing and higher level api)
+ */
 public class KaflogProducer {
     private Producer<Integer, String> producer;
     private Properties props = new Properties();

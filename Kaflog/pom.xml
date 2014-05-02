@@ -55,6 +55,19 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <repositories>
+        <repository>
+            <id>repository.jboss.org-public</id>
+            <name>JBoss repository</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>simile.mit.edu</id>
+            <name>simile.mit.edu</name>
+            <url>http://simile.mit.edu/maven/</url>
+        </repository>
+    </repositories>
+
     <reporting>
         <plugins>
             <plugin>
@@ -97,20 +110,9 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>kafka</groupId>
-            <artifactId>kafka</artifactId>
-            <version>0.8.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/kafka_2.10-0.8.1.jar</systemPath>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>scala</groupId>
-            <artifactId>scala</artifactId>
-            <version>2.10.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/scala-library-2.10.1.jar</systemPath>
-            <type>jar</type>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.10</artifactId>
+            <version>0.8.1.1</version>
         </dependency>
     </dependencies>
 
@@ -134,9 +136,13 @@
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
+                <artifactId>maven-assembly-plugin</artifactId>
                 <version>2.4</version>
                 <configuration>
+
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
