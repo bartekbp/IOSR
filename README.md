@@ -115,6 +115,7 @@ Odpalamy:
 
     /vagrant/files/kaflog-0.1/bin/kaflog_producer_all.sh 
 
+
 W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na dwa sposoby:
 
     logger "tresc loga"
