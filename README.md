@@ -114,8 +114,8 @@ Przykład jest dla jednej maszyny, można oczywiście przenieść to na środowi
 Potrzebne będzie 5 otwartych sesji ssh do node'a, gdzie jest dostępna kafka (np. kafka-node1).
 Odpalamy po kolei:
 
-    ~/kafka/bin/zookeeper-server-start.sh config/zookeeper.properties
-    ~/kafka/bin/kafka-server-start.sh config/server.properties
+    ~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
+    ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
     ~/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kaflogtopic
     /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh
     ~/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kaflogtopic --from-beginning

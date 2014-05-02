@@ -58,7 +58,7 @@ public class KaflogProducer {
             // <xxx>mmm dd hh:mm:ss hostname user: message
             String data = new String(packet.getData(), 0, packet.getLength());
             data = data.substring(data.indexOf('>') + 1);
-            String[] tokens = data.split(" ", 6);
+            String[] tokens = data.split("\\s+", 6);
 //            System.out.println(tokens[0]);
 //            System.out.println(tokens[1]);
 //            System.out.println(tokens[2]);

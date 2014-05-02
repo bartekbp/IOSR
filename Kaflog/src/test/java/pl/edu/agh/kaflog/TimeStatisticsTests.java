@@ -88,4 +88,9 @@ public class TimeStatisticsTests {
         TimeStatistics statistics = new TimeStatistics(1, 60);
         statistics.start("A 278 15:16:17");
     }
+
+    public void legalArgsTest() throws ParseException {
+        TimeStatistics statistics = new TimeStatistics(1, 60);
+        statistics.start("May  2 15:09:02");
+    }
 }

@@ -8,4 +8,4 @@ cd $RUNNER_SCRIPT_DIR/..
 CP=`ls lib | sed -e 's|^|lib/|' | tr '\n' ':'`
 
 # Start the producer
-java -cp $CP pl.edu.agh.kp.KaflogProducer
+java -cp $CP pl.edu.agh.kaflog.producer.KaflogProducer
