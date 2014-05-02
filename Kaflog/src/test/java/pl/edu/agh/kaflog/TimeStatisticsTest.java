@@ -7,7 +7,7 @@ import java.text.ParseException;
 
 import static org.junit.Assert.assertEquals;
 
-public class TimeStatisticsTests {
+public class TimeStatisticsTest {
     @Test
     public void secondResolutionTest() throws ParseException {
         TimeStatistics statistics = new TimeStatistics(1, 60);
@@ -89,6 +89,7 @@ public class TimeStatisticsTests {
         statistics.start("A 278 15:16:17");
     }
 
+    @Test
     public void legalArgsTest() throws ParseException {
         TimeStatistics statistics = new TimeStatistics(1, 60);
         statistics.start("May  2 15:09:02");
