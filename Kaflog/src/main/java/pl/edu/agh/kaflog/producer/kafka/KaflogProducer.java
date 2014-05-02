@@ -3,7 +3,6 @@ package pl.edu.agh.kaflog.producer.kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import pl.edu.agh.kaflog.producer.Main;
 import pl.edu.agh.kaflog.utils.KaflogProperties;
 
 
@@ -17,7 +16,8 @@ import java.util.Properties;
  * https://github.com/xstevens/syslog-kafka/blob/master/src/main/java/kafka/syslog/SyslogKafkaServer.java
  * (in this way we could achieve better log parsing and higher level api)
  */
-public class KaflogProducer implements Main.ThrowingRunnable {
+
+public class KaflogProducer {
     private Producer<Integer, String> producer;
     private Properties props = new Properties();
 
