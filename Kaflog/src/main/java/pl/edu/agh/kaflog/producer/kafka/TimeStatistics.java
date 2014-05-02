@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.producer;
+package pl.edu.agh.kaflog.producer.kafka;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

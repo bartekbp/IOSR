@@ -2,11 +2,23 @@ package pl.edu.agh.kaflog.producer.monitoring;
 
 
 import com.j256.simplejmx.server.JmxServer;
+import pl.edu.agh.kaflog.producer.Main;
 
 import javax.management.JMException;
 
 
 public class MBeanPublisher {
+    public static Main.ThrowingRunnable initTask() {
+        return new Main.ThrowingRunnable() {
+                @Override
+                public void run() throws JMException {
+                    MBeanPublisher publisher = MBeanPublisher.withPort(9010);
+                    publisher.startServer();
+                    publisher.registerObject(new IPProviderMBean());
+                }
+            };
+    }
+
     private final int port;
     private State state = State.Created;
     private JmxServer jmxServer;

@@ -1,10 +1,9 @@
-package pl.edu.agh.kaflog.producer;
+package pl.edu.agh.kaflog.producer.kafka;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
-import pl.edu.agh.kaflog.producer.monitoring.IPProviderMBean;
-import pl.edu.agh.kaflog.producer.monitoring.MBeanPublisher;
+import pl.edu.agh.kaflog.producer.Main;
 
 import java.io.IOException;
 import java.net.*;
@@ -16,38 +15,28 @@ import java.util.Properties;
  * https://github.com/xstevens/syslog-kafka/blob/master/src/main/java/kafka/syslog/SyslogKafkaServer.java
  * (in this way we could achieve better log parsing and higher level api)
  */
-public class KaflogProducer {
+public class KaflogProducer implements Main.ThrowingRunnable {
     private Producer<Integer, String> producer;
     private Properties props = new Properties();
-
 
     private final TimeStatistics lastMinute = new TimeStatistics(1, 60);
     private final TimeStatistics lastHour = new TimeStatistics(60, 60);
     private final TimeStatistics lastDay = new TimeStatistics(3600, 24);
 
-    public static void main(String[] args) {
-        try {
-            System.out.println("Current time: " + TimeStatistics.getCurrentDate());
-            new KaflogProducer();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public KaflogProducer() throws Exception {
-        MBeanPublisher publisher = MBeanPublisher.withPort(9010);
-        publisher.startServer();
-        publisher.registerObject(new IPProviderMBean());
-
+    public KaflogProducer() {
         props.put("metadata.broker.list", "localhost:9092");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         props.put("request.required.acks", "1");
         producer = new Producer<>(new ProducerConfig(props));
-        tentego();
-        producer.close();
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                producer.close();
+            }
+        });
     }
 
-    public void tentego() throws SocketException, UnknownHostException, IOException, ParseException {
+    public void run() throws IOException, ParseException {
         DatagramSocket socket = new DatagramSocket(5001, InetAddress.getByName("127.0.0.1"));
         System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getPort());
         byte[] buf = new byte[512];

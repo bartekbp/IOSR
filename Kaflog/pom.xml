@@ -146,6 +146,12 @@
             <artifactId>simplejmx</artifactId>
             <version>1.9</version>
         </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>17.0</version>
+        </dependency>
+
 
     </dependencies>
 
@@ -224,7 +230,7 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>pl.edu.agh.kaflog.producer.KaflogProducer</mainClass>
+                            <mainClass>pl.edu.agh.kaflog.producer.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
