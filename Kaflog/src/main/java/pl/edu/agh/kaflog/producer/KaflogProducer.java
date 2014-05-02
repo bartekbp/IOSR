@@ -3,6 +3,8 @@ package pl.edu.agh.kaflog.producer;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
+import pl.edu.agh.kaflog.producer.monitoring.IPProviderMBean;
+import pl.edu.agh.kaflog.producer.monitoring.MBeanPublisher;
 
 import java.io.IOException;
 import java.net.*;
@@ -33,6 +35,10 @@ public class KaflogProducer {
     }
 
     public KaflogProducer() throws Exception {
+        MBeanPublisher publisher = MBeanPublisher.withPort(9010);
+        publisher.startServer();
+        publisher.registerObject(new IPProviderMBean());
+
         props.put("metadata.broker.list", "localhost:9092");
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         props.put("request.required.acks", "1");

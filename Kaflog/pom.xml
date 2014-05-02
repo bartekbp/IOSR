@@ -136,6 +136,17 @@
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.j256.simplejmx</groupId>
+            <artifactId>simplejmx</artifactId>
+            <version>1.9</version>
+        </dependency>
+
     </dependencies>
 
     <build>

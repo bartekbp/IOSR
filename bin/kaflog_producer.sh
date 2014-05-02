@@ -8,4 +8,5 @@ cd $RUNNER_SCRIPT_DIR/..
 CP=`ls lib | sed -e 's|^|lib/|' | tr '\n' ':'`
 
 # Start the producer
-java -cp $CP pl.edu.agh.kaflog.producer.KaflogProducer
+# default MBean port is 9010
+java ${JAVA_ARGS} -cp $CP pl.edu.agh.kaflog.producer.KaflogProducer
