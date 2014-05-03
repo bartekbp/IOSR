@@ -110,15 +110,10 @@ I paczka z naszym kaflogiem będzie dostępna na każdej maszynie wirtualnej pod
 
 8. Używanie KaflogProducera
 ---------------------------
-Przykład jest dla jednej maszyny, można oczywiście przenieść to na środowisko rozproszone.
-Potrzebne będzie 5 otwartych sesji ssh do node'a, gdzie jest dostępna kafka (np. kafka-node1).
-Odpalamy po kolei:
+Przykład powinien działać w zasetupowanym clouderowym klastrze i być odpalany na kafka-node1.
+Odpalamy:
 
-    ~/kafka/bin/zookeeper-server-start.sh ~/kafka/config/zookeeper.properties
-    ~/kafka/bin/kafka-server-start.sh ~/kafka/config/server.properties
-    ~/kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kaflogtopic
-    /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh
-    ~/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic kaflogtopic --from-beginning
+    /vagrant/files/kaflog-0.1/bin/kaflog_producer_all.sh 
 
 W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na dwa sposoby:
 
@@ -126,3 +121,10 @@ W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalog
     /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow_na_minute>
 
 Zrobić popcorn i oglądać.
+
+9. Używanie HadoopConsumera
+Przykład powienien działać w zasetupowanym clouderowym klastrze i być odpalany na cloudera-master.
+
+    /vagrant/files/kaflog-0.1/bin/kaflog_hadoop_consumer.sh 
+
+Zrobić makaron i nie zapomnieć dodać soli.
