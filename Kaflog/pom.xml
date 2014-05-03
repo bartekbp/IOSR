@@ -68,6 +68,12 @@
             <name>simile.mit.edu</name>
             <url>http://simile.mit.edu/maven/</url>
         </repository>
+        <repository>
+            <id>polnik-repo</id>
+            <name>polnik-repo</name>
+            <url>http://student.agh.edu.pl/~polnik/maven2</url>
+        </repository>
+
     </repositories>
 
     <reporting>
@@ -150,6 +156,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.linkedin.camus</groupId>
+            <artifactId>camus-etl-kafka</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
         </dependency>
 
 

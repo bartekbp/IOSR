@@ -9,4 +9,4 @@ CP=`ls lib | sed -e 's|^|lib/|' | tr '\n' ':'`
 
 # Start the producer
 # default MBean port is 9010
-java -cp $CP pl.edu.agh.kaflog.producer.Main
+/usr/lib/jvm/java-7-oracle/bin/java -cp $CP pl.edu.agh.kaflog.hadoopconsumer.Main -P /vagrant/files/config/cloudera-master/camus.properties
