@@ -123,9 +123,10 @@ W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalog
 Zrobić popcorn i oglądać.
 
 9. Używanie HadoopConsumera
+---------------------------
 Przykład powienien działać w zasetupowanym clouderowym klastrze i być odpalany na cloudera-master. 
-Odpalanie:
+Odpalamy:
 
-    /vagrant/files/kaflog-0.1/bin/kaflog_hadoop_consumer.sh 
+    /vagrant/files/kaflog-0.1/bin/kaflog_hadoop_consumer.sh
 
 Zrobić makaron i nie zapomnieć dodać soli.
