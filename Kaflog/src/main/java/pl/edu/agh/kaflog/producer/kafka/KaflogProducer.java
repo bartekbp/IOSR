@@ -4,6 +4,8 @@ import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
 import pl.edu.agh.kaflog.producer.Main;
+import pl.edu.agh.kaflog.utils.KaflogProperties;
+
 
 import java.io.IOException;
 import java.net.*;
@@ -24,7 +26,8 @@ public class KaflogProducer implements Main.ThrowingRunnable {
     private final TimeStatistics lastDay = new TimeStatistics(3600, 24);
 
     public KaflogProducer() {
-        props.put("metadata.broker.list", "localhost:9092");
+        String brokersList = KaflogProperties.getProperty("kaflog.kafka.brokersList");
+        props.put("metadata.broker.list", brokersList);
         props.put("serializer.class", "kafka.serializer.StringEncoder");
         props.put("request.required.acks", "1");
         producer = new Producer<>(new ProducerConfig(props));
@@ -47,6 +50,7 @@ public class KaflogProducer implements Main.ThrowingRunnable {
         lastDay.start(TimeStatistics.getCurrentDate());
 
         long timer = System.currentTimeMillis();
+        String topic = KaflogProperties.getProperty("kaflog.kafka.topic");
         while (true) {
             socket.receive(packet);
             // Data is in format:
@@ -80,7 +84,7 @@ public class KaflogProducer implements Main.ThrowingRunnable {
                 break;
             }
 
-            KeyedMessage<Integer, String> msg = new KeyedMessage<>("kaflogtopic", data);
+            KeyedMessage<Integer, String> msg = new KeyedMessage<>(topic, data);
             producer.send(msg);
         }
     }
