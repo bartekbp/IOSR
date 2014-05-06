@@ -14,6 +14,20 @@ public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMes
     public LogMessageSerializer(VerifiableProperties properties) {
     }
 
+    /**
+     * Kafka needs it.
+     * Without it:
+     * Exception in thread "main" java.lang.NoSuchMethodException: pl.edu.agh.kaflog.common.LogMessageSerializer.<init>(kafka.utils.VerifiableProperties)
+     * @param properties
+     */
+    public LogMessageSerializer(VerifiableProperties properties) {
+
+    }
+
+    public LogMessageSerializer() {
+
+    }
+
     @Override
     public byte[] toBytes(LogMessage logMessage) {
         byte[] result = null;
