@@ -3,6 +3,9 @@ package pl.edu.agh.kaflog.producer.kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.producer.Main;
 import pl.edu.agh.kaflog.utils.KaflogProperties;
 
@@ -18,9 +21,11 @@ import java.util.Properties;
  * (in this way we could achieve better log parsing and higher level api)
  */
 
-public class KaflogProducer implements Main.ThrowingRunnable{
-    private Producer<Integer, String> producer;
+public class KaflogProducer implements Main.ThrowingRunnable {
+    private static Logger log = LoggerFactory.getLogger(KaflogProducer.class);
+    private Producer<Integer, LogMessage> producer;
     private Properties props = new Properties();
+    DatagramSocket socket;
 
     private final TimeStatistics lastMinute = new TimeStatistics(1, 60);
     private final TimeStatistics lastHour = new TimeStatistics(60, 60);
@@ -35,14 +40,20 @@ public class KaflogProducer implements Main.ThrowingRunnable{
 
         Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                producer.close();
+                try {
+                    log.info("Attempting graceful producer shutdown");
+                    producer.close();
+                    socket.close();
+                } catch (Exception e) {
+                    log.error(e.toString());
+                }
             }
         });
     }
 
     public void run() throws IOException, ParseException {
-        DatagramSocket socket = new DatagramSocket(5001, InetAddress.getByName("127.0.0.1"));
-        System.out.println("Listen on " + socket.getLocalAddress() + " from " + socket.getInetAddress() + " port " + socket.getPort());
+        socket = new DatagramSocket(5001, InetAddress.getByName("127.0.0.1"));
+        log.info("Listen on " + socket.getLocalAddress());
         byte[] buf = new byte[512];
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
 
@@ -57,15 +68,19 @@ public class KaflogProducer implements Main.ThrowingRunnable{
             // Data is in format:
             // <xxx>mmm dd hh:mm:ss hostname user: message
             String data = new String(packet.getData(), 0, packet.getLength());
-            data = data.substring(data.indexOf('>') + 1);
+            int parPos = data.indexOf('>');
+            int facilityAndSeverity = Integer.parseInt(data.substring(1, parPos));
+            data = data.substring(parPos + 1);
             String[] tokens = data.split("\\s+", 6);
-//            System.out.println(tokens[0]);
-//            System.out.println(tokens[1]);
-//            System.out.println(tokens[2]);
-//            System.out.println(tokens[3]);
-//            System.out.println(tokens[4]);
-//            System.out.println(tokens[5]);
-            System.out.println(data);
+            LogMessage logMessage = new LogMessage(
+                    facilityAndSeverity / 8, // facility
+                    facilityAndSeverity % 8, // severity
+                    String.format("%s %s", tokens[0], tokens[1]), // date
+                    tokens[2], // time
+                    tokens[3], // hostname
+                    tokens[4].substring(0, tokens[4].length() - 1), // source (remove tailing colon)
+                    tokens[5]); // message
+            System.out.println(logMessage);
 
             String date = String.format("%s %s %s", tokens[0], tokens[1], tokens[2]);
             lastMinute.report(date);
@@ -80,12 +95,7 @@ public class KaflogProducer implements Main.ThrowingRunnable{
                 System.out.println("Number of logs in last day: " + lastDay.getSum(currentTime));
             }
 
-            if (tokens[5].equals("finish\n")) {
-                socket.close();
-                break;
-            }
-
-            KeyedMessage<Integer, String> msg = new KeyedMessage<>(topic, data);
+            KeyedMessage<Integer, LogMessage> msg = new KeyedMessage<>(topic, logMessage);
             producer.send(msg);
         }
     }
