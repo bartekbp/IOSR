@@ -90,10 +90,7 @@ public class TimeStatisticsTest {
         statistics.start("A 278 15:16:17");
     }
 
-<<<<<<< HEAD:Kaflog/src/test/java/pl/edu/agh/kaflog/producer/kafka/TimeStatisticsTest.java
     @Test
-=======
->>>>>>> fixed splitting syslog udp package:Kaflog/src/test/java/pl/edu/agh/kaflog/TimeStatisticsTests.java
     public void legalArgsTest() throws ParseException {
         TimeStatistics statistics = new TimeStatistics(1, 60);
         statistics.start("May  2 15:09:02");

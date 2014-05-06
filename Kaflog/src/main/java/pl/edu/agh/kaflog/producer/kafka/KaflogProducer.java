@@ -3,6 +3,7 @@ package pl.edu.agh.kaflog.producer.kafka;
 import kafka.javaapi.producer.Producer;
 import kafka.producer.KeyedMessage;
 import kafka.producer.ProducerConfig;
+import pl.edu.agh.kaflog.producer.Main;
 import pl.edu.agh.kaflog.utils.KaflogProperties;
 
 
@@ -17,7 +18,7 @@ import java.util.Properties;
  * (in this way we could achieve better log parsing and higher level api)
  */
 
-public class KaflogProducer {
+public class KaflogProducer implements Main.ThrowingRunnable{
     private Producer<Integer, String> producer;
     private Properties props = new Properties();
 
