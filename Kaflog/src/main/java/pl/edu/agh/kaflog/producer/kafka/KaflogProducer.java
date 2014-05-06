@@ -34,7 +34,7 @@ public class KaflogProducer implements Main.ThrowingRunnable {
     public KaflogProducer() {
         String brokersList = KaflogProperties.getProperty("kaflog.kafka.brokersList");
         props.put("metadata.broker.list", brokersList);
-        props.put("serializer.class", "kafka.serializer.StringEncoder");
+        props.put("serializer.class", "pl.edu.agh.kaflog.common.LogMessageSerializer");
         props.put("request.required.acks", "1");
         producer = new Producer<>(new ProducerConfig(props));
 

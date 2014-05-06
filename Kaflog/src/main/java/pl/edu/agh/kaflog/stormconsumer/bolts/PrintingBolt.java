@@ -4,7 +4,9 @@ import backtype.storm.topology.BasicOutputCollector;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseBasicBolt;
 import backtype.storm.tuple.Tuple;
+import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.stormconsumer.KaflogStorm;
+import pl.edu.agh.kaflog.stormconsumer.spouts.LogMessageScheme;
 
 
 public class PrintingBolt extends BaseBasicBolt {
@@ -12,9 +14,9 @@ public class PrintingBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple input, BasicOutputCollector collector) {
-        System.out.println("bolt got input");
-        System.out.println(input);
-        KaflogStorm.setLastLog(input.getString(0));
+        LogMessage message = (LogMessage) input.getValueByField(LogMessageScheme.LOG_MESSAGE_FIELD);
+        System.out.println(message);
+        KaflogStorm.setLastLog(message.toString());
     }
 
     @Override
