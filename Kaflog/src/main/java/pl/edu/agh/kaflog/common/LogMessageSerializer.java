@@ -3,10 +3,16 @@ package pl.edu.agh.kaflog.common;
 
 import kafka.serializer.Decoder;
 import kafka.serializer.Encoder;
+import kafka.utils.VerifiableProperties;
 
 import java.io.*;
 
 public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMessage> {
+    public LogMessageSerializer() {
+    }
+
+    public LogMessageSerializer(VerifiableProperties properties) {
+    }
 
     @Override
     public byte[] toBytes(LogMessage logMessage) {

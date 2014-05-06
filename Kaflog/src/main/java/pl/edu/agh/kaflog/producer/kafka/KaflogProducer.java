@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.producer.Main;
 import pl.edu.agh.kaflog.utils.KaflogProperties;
-
+import pl.edu.agh.kaflog.utils.ExecutorUtils;
 
 import java.io.IOException;
 import java.net.*;
@@ -20,8 +20,7 @@ import java.util.Properties;
  * https://github.com/xstevens/syslog-kafka/blob/master/src/main/java/kafka/syslog/SyslogKafkaServer.java
  * (in this way we could achieve better log parsing and higher level api)
  */
-
-public class KaflogProducer implements Main.ThrowingRunnable {
+public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
     private static Logger log = LoggerFactory.getLogger(KaflogProducer.class);
     private Producer<Integer, LogMessage> producer;
     private Properties props = new Properties();

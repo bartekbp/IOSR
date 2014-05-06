@@ -3,6 +3,7 @@ package pl.edu.agh.kaflog.stormconsumer.spouts;
 import backtype.storm.spout.Scheme;
 import backtype.storm.tuple.Fields;
 import com.google.common.collect.Lists;
+import kafka.utils.VerifiableProperties;
 import pl.edu.agh.kaflog.common.LogMessageSerializer;
 
 

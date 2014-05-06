@@ -194,6 +194,11 @@
             <artifactId>storm-kafka-0.8-plus</artifactId>
             <version>0.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+        </dependency>
 
 
     </dependencies>

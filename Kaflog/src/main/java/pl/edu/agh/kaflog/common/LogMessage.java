@@ -33,6 +33,20 @@ public class LogMessage implements Serializable {
                 message);
     }
 
+    private String toString(String sep) {
+        return String.format("[%s]" + sep + "%s" + sep + "%s" + sep + "%s@%s" + sep + "%s",
+                LogMessageSerializer.LEVEL_STRING[severity],
+                date,
+                time,
+                hostname,
+                source,
+                message);
+    }
+
+    public String toRaw() {
+        return toString(";");
+    }
+
     public int getFacility() {
         return facility;
     }

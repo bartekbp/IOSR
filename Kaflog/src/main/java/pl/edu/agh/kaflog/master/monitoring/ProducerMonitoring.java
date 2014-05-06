@@ -6,6 +6,8 @@ import com.google.common.collect.Lists;
 import com.j256.simplejmx.client.JmxClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.edu.agh.kaflog.producer.Main;
+import pl.edu.agh.kaflog.utils.ExecutorUtils;
 
 
 import javax.management.JMException;
@@ -17,35 +19,20 @@ import java.util.Set;
 
 public class ProducerMonitoring {
     private static final Logger log = LoggerFactory.getLogger(ProducerMonitoring.class);
+    private static final RegisterClientMBean registerClientMBean = new RegisterClientMBean();
 
-    private final JmxClient client;
-
-    public ProducerMonitoring(String host, int port) throws JMException {
-        client = new JmxClient(host, port);
+    public static ExecutorUtils.ThrowingRunnable initTask() {
+        return new ExecutorUtils.ThrowingRunnable() {
+            @Override
+            public void run() throws JMException {
+                MBeanPublisher publisher = MBeanPublisher.withPort(2997);
+                publisher.startServer();
+                publisher.registerObject(registerClientMBean);
+            }
+        };
     }
 
-
-    public List<String> listBeans() {
-        try {
-            return Lists.transform(new ArrayList<>(client.getBeanNames()), new Function<ObjectName, String>() {
-                @Override
-                public String apply(ObjectName objectName) {
-                    return objectName.getCanonicalName();
-                }
-            });
-        } catch (JMException e) {
-            log.error(e.toString());
-            return Collections.emptyList();
-        }
+    public List<String> listClients() {
+        return registerClientMBean.listClients();
     }
-
-    public String getIP() {
-        try {
-            return client.getAttributeString(new ObjectName("IPProvider", "name", "IPProvider"), "iP");
-        } catch (Exception e) {
-            log.error(e.toString());
-            return "";
-        }
-    }
-
 }

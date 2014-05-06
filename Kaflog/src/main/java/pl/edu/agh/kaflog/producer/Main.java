@@ -4,40 +4,27 @@ package pl.edu.agh.kaflog.producer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
 import pl.edu.agh.kaflog.producer.kafka.KaflogProducer;
-import pl.edu.agh.kaflog.producer.monitoring.MBeanPublisher;
+import pl.edu.agh.kaflog.producer.monitoring.Pinger;
+import pl.edu.agh.kaflog.utils.ExecutorUtils;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
-public class Main {
+public class Main implements ExecutorUtils.ThrowingRunnable {
     private static Logger log = LoggerFactory.getLogger(Main.class);
-    private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-    private void addTask(Runnable runnable) {
-        executorService.submit(runnable);
-    }
-
-    private void addTask(final ThrowingRunnable runnable) {
-       addTask(new Runnable() {
-           @Override
-           public void run() {
-               try {
-                   runnable.run();
-               } catch (Exception e) {
-                   log.error(e.toString());
-               }
-           }
-       });
-    }
-
-    public static void main(String... args) {
+    public static void main(String... args) throws Exception {
         Main main = new Main();
-        main.addTask(MBeanPublisher.initTask());
-        main.addTask(new KaflogProducer());
+        main.run();
     }
 
-    public interface ThrowingRunnable {
-        public void run() throws Exception;
+    @Override
+    public void run() throws Exception {
+        ExecutorUtils executorUtils = new ExecutorUtils();
+        executorUtils.addRecurringTask(new Pinger("cloudera-master", 2997), 30, TimeUnit.SECONDS);
+        executorUtils.addTask(new KaflogProducer());
     }
 }
