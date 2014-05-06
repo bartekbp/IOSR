@@ -145,10 +145,10 @@ Nie wiem czemu strasznie muli apt-get. Trzeba poczekać (u mnie ~ 20 minut)
 Następnie trzeba uruchomić cluster storma:
 
     # @cloudera-master: tu odpalamy nimbusa - taki storm-master
-    ~/strom-0.8.1/bin/strom nimbus
+    ~/storm-0.8.1/bin/storm nimbus
 
     # @cloudera-slave1: tu odpalamy supervisora
-    ~/storm-0.8.1/bin/storm supervisior
+    ~/storm-0.8.1/bin/storm supervisor
 
 Wreszcie można odpalić storma
 
