@@ -136,10 +136,11 @@ Zrobić makaron i nie zapomnieć dodać soli.
 10. Używanie Storm Conumera
 ---------------------------
 Trzeba doinstalować kilka rzeczy, zatem jednorazowo należy ponownie wykonać provisioning. Cluster będzie postawiony
-na nodach cloudera-master i cloudera-slave1
+na nodach cloudera-master i cloudera-slave1.
+
 Nie wiem czemu strasznie muli apt-get. Trzeba poczekać (u mnie ~ 20 minut)
 
-    vagrant provision cloudera-master provision cloudera-slave1
+    vagrant provision cloudera-master cloudera-slave1
 
 Następnie trzeba uruchomić cluster storma:
 
