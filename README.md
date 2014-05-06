@@ -133,7 +133,7 @@ Odpalamy:
 Zrobić makaron i nie zapomnieć dodać soli.
 
 
-10. Używanie Storm Conumera
+10. Używanie Storm Consumera
 ---------------------------
 Trzeba doinstalować kilka rzeczy, zatem jednorazowo należy ponownie wykonać provisioning. Cluster będzie postawiony
 na nodach cloudera-master i cloudera-slave1.
