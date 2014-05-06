@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
         cloudera_slave1.vm.network :private_network, ip: "10.211.55.101"
         cloudera_slave1.vm.hostname = "cloudera-slave1"
         cloudera_slave1.vm.provision :shell, :path => "provision_scripts/cloudera-slave.sh"
+        cloudera_slave1.vm.provision :shell, :path => "provision_scripts/install-storm.sh"
     end
 
     # Cloudera master
@@ -31,6 +32,7 @@ Vagrant.configure("2") do |config|
         cloudera_master.vm.network :private_network, ip: "10.211.55.100"
         cloudera_master.vm.hostname = "cloudera-master"
         cloudera_master.vm.provision :shell, :path => "provision_scripts/cloudera-master.sh"
+	    cloudera_master.vm.provision :shell, :path => "provision_scripts/install-storm.sh"
     end
 
     # Kafka nodes

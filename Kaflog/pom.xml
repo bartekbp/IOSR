@@ -73,7 +73,21 @@
             <name>polnik-repo</name>
             <url>http://student.agh.edu.pl/~polnik/maven2</url>
         </repository>
+        <repository>
+            <id>cloudera-repo-releases</id>
+            <url>https://repository.cloudera.com/artifactory/repo/</url>
+        </repository>
 
+        <repository>
+            <id>clojars</id>
+            <url>https://clojars.org/repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
     </repositories>
 
     <reporting>
@@ -141,6 +155,7 @@
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka_2.10</artifactId>
             <version>0.8.1.1</version>
+
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -161,6 +176,23 @@
             <groupId>com.linkedin.camus</groupId>
             <artifactId>camus-etl-kafka</artifactId>
             <version>0.1.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>kafka</groupId>
+                    <artifactId>kafka</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.storm</groupId>
+            <artifactId>storm-core</artifactId>
+            <version>0.9.1-incubating</version>
+        </dependency>
+        <dependency>
+            <groupId>net.wurstmeister.storm</groupId>
+            <artifactId>storm-kafka-0.8-plus</artifactId>
+            <version>0.3.0</version>
         </dependency>
 
 
@@ -244,6 +276,7 @@
                             <mainClass>pl.edu.agh.kaflog.producer.Main</mainClass>
                         </manifest>
                     </archive>
+                    <descriptor>src/assembly/dep.xml</descriptor>
                 </configuration>
             </plugin>
         </plugins>

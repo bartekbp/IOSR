@@ -3,7 +3,7 @@ RELEASE_NAME = "kaflog-0.1"
 all: deploy
 
 package_kaflog: ${shell find Kaflog/src -type f} Kaflog/pom.xml
-	mvn -f Kaflog clean compile assembly:single
+	mvn -f Kaflog/pom.xml clean compile assembly:single
 
 deploy: package_kaflog
 	rm -rf ${RELEASE_NAME}
