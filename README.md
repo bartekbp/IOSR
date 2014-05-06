@@ -132,3 +132,24 @@ Odpalamy:
 
 Zrobić makaron i nie zapomnieć dodać soli.
 
+
+10. Używanie Storm Conumera
+---------------------------
+Trzeba doinstalować kilka rzeczy, zatem jednorazowo należy ponownie wykonać provisioning. Cluster będzie postawiony
+na nodach cloudera-master i cloudera-slave1
+Nie wiem czemu strasznie muli apt-get. Trzeba poczekać (u mnie ~ 20 minut)
+
+    vagrant provision cloudera-master provision cloudera-slave1
+
+Następnie trzeba uruchomić cluster storma:
+
+    # @cloudera-master: tu odpalamy nimbusa - taki storm-master
+    ~/strom-0.8.1/bin/strom nimbus
+
+    # @cloudera-slave1: tu odpalamy supervisora
+    ~/storm-0.8.1/bin/storm supervisior
+
+Wreszcie można odpalić storma
+
+    # @cloudera-master
+    /vagrant/files/kaflog-0.1/bin/kaflog_storm_consumer.sh
