@@ -9,4 +9,4 @@ CP=`ls lib | sed -e 's|^|lib/|' | tr '\n' ':'`
 
 # Start the producer
 # default MBean port is 2972
-/usr/lib/jvm/java-7-oracle/bin/java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=n -cp $CP pl.edu.agh.kaflog.producer.Main
+/usr/lib/jvm/java-7-oracle/bin/java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5007,suspend=n -cp $CP pl.edu.agh.kaflog.hiveviewcreator.Main

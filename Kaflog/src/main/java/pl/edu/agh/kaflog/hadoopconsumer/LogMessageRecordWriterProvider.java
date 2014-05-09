@@ -53,7 +53,7 @@ public class LogMessageRecordWriterProvider implements RecordWriterProvider {
             @Override
             public void write(IEtlKey ignore, CamusWrapper data) throws IOException {
                 LogMessage message = (LogMessage) data.getRecord();
-                String record = message.toRaw() + recordDelimiter;
+                String record = message.toRawString() + recordDelimiter;
                 writer.write(record.getBytes());
             }
 

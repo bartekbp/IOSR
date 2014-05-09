@@ -66,6 +66,7 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             socket.receive(packet);
             // Data is in format:
             // <xxx>mmm dd hh:mm:ss hostname user: message
+            // or <xxx>mmm dd hh:mm:ss hostname -- MARK --
             String data = new String(packet.getData(), 0, packet.getLength());
             int parPos = data.indexOf('>');
             int facilityAndSeverity = Integer.parseInt(data.substring(1, parPos));
