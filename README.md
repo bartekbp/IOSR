@@ -154,3 +154,10 @@ Wreszcie można odpalić storma
 
     # @cloudera-master
     /vagrant/files/kaflog-0.1/bin/kaflog_storm_consumer.sh
+
+11. Import danych z Hdfs do Hive
+--------------------------------
+Trzeba stworzyc katalog /user/vagrant z prawami usera vagrant. Aby to wykonać należy wpisać;
+
+    # @cloudera-master: sudo -u hdfs hadoop fs -mkdir /user/vagrant
+    # @cloudera-master: sudo -u hdfs hadoop fs -chown vagrant /user/vagrant
