@@ -28,12 +28,15 @@ public class KaflogProperties {
         return PROPERTIES.getProperty(name);
     }
 
-    public static Integer getIntProperty(String name) {
+    public static int getIntProperty(String name) {
         try {
             return Integer.parseInt(PROPERTIES.getProperty(name));
         } catch(NumberFormatException e) {
-            return null;
+            return 0;
         }
     }
 
+    public static boolean getBoolProperty(String name) {
+        return Boolean.parseBoolean(PROPERTIES.getProperty(name));
+    }
 }
