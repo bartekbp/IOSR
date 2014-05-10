@@ -18,7 +18,13 @@ mkdir -p /usr/lib/jvm/
 mv jdk1.7.0_55 /usr/lib/jvm/java-7-oracle/
 ln -s /usr/lib/jvm/java-7-oracle/bin/java /usr/bin/java
 echo 'export JAVA_HOME=/usr/lib/jvm/java-7-oracle' >> /home/vagrant/.bashrc
+ln -s /usr/lib/jvm/java-7-oracle /usr/lib/jvm/default-java
+source /home/vagrant/.bashrc
 rm jdk-7u55-linux-x64.tar.gz 
+
+cp /etc/sudoers /etc/sudoers.copy
+echo "Defaults env_keep+=JAVA_HOME" >> /etc/sudoers.copy
+mv /etc/sudoers.copy /etc/sudoers
 
 # Install cloudera
 REPOCM=${REPOCM:-cm5}
@@ -51,6 +57,9 @@ tar xzf kafka_2.10-0.8.1.tgz
 rm -f kafka_2.10-0.8.1.tgz
 mv kafka_2.10-0.8.1 kafka
 chown -R vagrant kafka
+
+# sudo -u hdfs hadoop fs -mkdir /user/vagrant
+# sudo -u hdfs hadoop fs -chown vagrant /user/vagrant
 
 
 # Alternatywa - instalacja CDH5 bez cloudera managera (reczna instalacja i konfiguracja wszystkich nodeow) - czy chcemy?

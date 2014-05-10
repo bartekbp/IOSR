@@ -9,27 +9,21 @@ import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.fs.LocatedFileStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hdfs.DistributedFileSystem;
-import org.apache.hadoop.hive.common.FileUtils;
-import org.datanucleus.query.evaluator.memory.LocateFunctionEvaluator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Closeable;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Iterator;
-import java.util.List;
 
-public class HadoopFSUtils implements Closeable {
-    private static Logger logger = LoggerFactory.getLogger(HadoopFSUtils.class);
+public class HdfsUtils implements Closeable {
+    private static Logger logger = LoggerFactory.getLogger(HdfsUtils.class);
     private FileSystem fileSystem;
 
-    public HadoopFSUtils() {
+    public HdfsUtils() {
         Configuration configuration = new Configuration();
         configuration.set("fs.hdfs.impl", DistributedFileSystem.class.getName());
-        configuration.set("HADOOP_USER_NAME", "vagrant");
         try {
             fileSystem = FileSystem.get(new URI("hdfs://cloudera-master:8020/"), configuration);
         } catch (Exception e) {

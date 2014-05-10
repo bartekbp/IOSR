@@ -1,7 +1,7 @@
 package pl.edu.agh.kaflog.hiveviewcreator;
 
 import org.apache.hadoop.fs.Path;
-import pl.edu.agh.kaflog.utils.HadoopFSUtils;
+import pl.edu.agh.kaflog.utils.HdfsUtils;
 import pl.edu.agh.kaflog.utils.IteratorUtils;
 
 import java.io.IOException;
@@ -13,15 +13,15 @@ public class HiveDataImporter {
     public void fromHdfs(Path root, boolean recursive) throws IOException, SQLException {
 
         try(HiveLogMessageDao hiveDao = new HiveLogMessageDao();
-            HadoopFSUtils hadoopFSUtils = new HadoopFSUtils()) {
+            HdfsUtils hdfsUtils = new HdfsUtils()) {
 
-            Iterator<Path> paths = hadoopFSUtils.listFiles(root, recursive);
+            Iterator<Path> paths = hdfsUtils.listFiles(root, recursive);
             hiveDao.createTableIfNotExistsWithFieldsDelimiter('\7');
             for(Path path : IteratorUtils.toIterable(paths)) {
                 hiveDao.loadHdfs(path);
             }
 
-            hadoopFSUtils.deleteSubPaths(root);
+            hdfsUtils.deleteSubPaths(root);
         }
     }
 }

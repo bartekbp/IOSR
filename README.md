@@ -157,7 +157,6 @@ Wreszcie można odpalić storma
 
 11. Import danych z Hdfs do Hive
 --------------------------------
-Trzeba stworzyc katalog /user/vagrant z prawami usera vagrant. Aby to wykonać należy wpisać;
+Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add.
 
-    # @cloudera-master: sudo -u hdfs hadoop fs -mkdir /user/vagrant
-    # @cloudera-master: sudo -u hdfs hadoop fs -chown vagrant /user/vagrant
+Dodatkowo należy dodać sobie użytkownika vagrant do cloudery.
