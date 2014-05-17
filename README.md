@@ -160,3 +160,17 @@ Wreszcie można odpalić storma
 Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add.
 
 Dodatkowo należy dodać sobie użytkownika vagrant do cloudery.
+
+12. Podział na podmoduły
+--------------------------------
+Główny moduł to kaflog. Jest to parent pom dla prawie wszystkich projektów poza mastermonitoring. Dla mastermonitoring parentem jest spring-boot-starter-parent.
+
+Mastermonitoring to webappka, ale można ją odpalać przez java -jar.
+Alternatywny sposób to odpalanie przez mvn spring-boot:run - to się przydaje podczas pracy.
+
+Przykładowe sample dla mastermonitoring są dostępne na:
+
+    ${host}:8080
+    ${host}:8080/sample_raw_output
+    ${host}:8080/sample_raw_view
+    ${host}:8080/sample_view_with_model

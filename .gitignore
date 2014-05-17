@@ -1,6 +1,6 @@
 *.class
 
-Kaflog/target
+Kaflog/*/target
 Kaflog/.idea
 Kaflog/*.iml
 documentation/*.aux
