@@ -33,7 +33,7 @@ import java.util.List;
 @EnableAutoConfiguration
 @ComponentScan
 @EnableScheduling
-public class Main extends SpringBootServletInitializer  {
+public class Main extends SpringBootServletInitializer {
     @Autowired
     ProducerMonitoring producerMonitoring;
 
@@ -78,10 +78,11 @@ public class Main extends SpringBootServletInitializer  {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.authorizeRequests().anyRequest().fullyAuthenticated().and()
-                    .formLogin().loginPage("/login").failureUrl("/login?error")
+                    .formLogin().loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error")
                     .permitAll();
             http.csrf().disable();
-            http.logout().logoutUrl("/login?logout");
+            http.logout().logoutUrl("/logout").logoutSuccessUrl("/login?logout");
+            http.authorizeRequests().antMatchers("/login", "/logout").permitAll();
         }
     }
 }
