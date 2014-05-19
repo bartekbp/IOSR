@@ -1,8 +1,9 @@
 *.class
 
-Kaflog/*/target
 Kaflog/.idea
-Kaflog/*.iml
+Kaflog/*/target
+Kaflog/*/.idea
+Kaflog/*/*.iml
 documentation/*.aux
 documentation/*.gz
 documentation/*.log
