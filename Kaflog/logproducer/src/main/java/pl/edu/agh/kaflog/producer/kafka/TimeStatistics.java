@@ -1,15 +1,8 @@
 package pl.edu.agh.kaflog.producer.kafka;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class TimeStatistics {
-    public static final SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd HH:mm:ss", Locale.US);
-
     private int resolution;
     private int width;
 
@@ -17,7 +10,7 @@ public class TimeStatistics {
     private int lastPosition;
     private int sum;
 
-    private Date startDate;
+    private long startTime;
 
     public TimeStatistics(int resolution, int width) {
         this.resolution = resolution;
@@ -27,17 +20,12 @@ public class TimeStatistics {
         lastPosition = 0;
     }
 
-    public static String getCurrentDate() {
-        return dateFormat.format(Calendar.getInstance().getTime());
+    public void start(long startDate) {
+        this.startTime = startDate;
     }
 
-    public void start(String dateString) throws ParseException {
-        startDate = dateFormat.parse(dateString);
-    }
-
-    public void report(String dateString) throws ParseException {
-        Date date = dateFormat.parse(dateString);
-        long diff = date.getTime() - startDate.getTime();
+    public void report(long time) {
+        long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
         int position = (seconds / resolution);
 
@@ -52,9 +40,8 @@ public class TimeStatistics {
         sum++;
     }
 
-    public int getSum(String dateString) throws ParseException {
-        Date date = dateFormat.parse(dateString);
-        long diff = date.getTime() - startDate.getTime();
+    public int getSum(long time) {
+        long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
         int position = (seconds / resolution);
 

@@ -137,7 +137,7 @@ public class HiveLogMessageDao implements AutoCloseable {
             return Lists.transform(rowSetDynaClass.getRows(), new Function<DynaBean, LogMessage>() {
                 @Override
                 public LogMessage apply(DynaBean dynaBean) {
-                    return LogMessage.fromRawString(Joiner.on('\07').join(ObjectUtils.defaultIfNull(dynaBean.get("severity"), LogMessageSerializer.LEVEL_STRING[LogMessageSerializer.LEVEL_STRING.length - 1]),
+                    return LogMessage.fromRawString(Joiner.on('\07').join(ObjectUtils.defaultIfNull(dynaBean.get("severity"), LogMessage.LEVEL_STRING[LogMessage.LEVEL_STRING.length - 1]),
                             ObjectUtils.defaultIfNull(dynaBean.get("date"), ""),
                             ObjectUtils.defaultIfNull(dynaBean.get("time"), ""),
                             ObjectUtils.defaultIfNull(dynaBean.get("hostname"), ""),

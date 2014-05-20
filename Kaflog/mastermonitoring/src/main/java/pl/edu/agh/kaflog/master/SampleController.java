@@ -1,41 +1,26 @@
 package pl.edu.agh.kaflog.master;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-//import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+
+//import pl.edu.agh.kaflog.common.LogMessage;
 
 @Controller
 public class SampleController {
     @Autowired
     ProducerMonitoring producerMonitoring;
 
-//    @Autowired
-//    LogStreamConsumer logStreamConsumer;
-
     @RequestMapping(value={"", "/", "/monitoring"})
     public String monitoring() {
         return "monitoring";
-    }
-
-    @RequestMapping("/log_stream")
-    public ModelAndView logStream() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "Hello world");
-        List<String> logs = new LinkedList<String>();
-//        for(LogMessage logMessage : logStreamConsumer.pollLogs()) {
-//            logs.add(logMessage.toString());
-//        }
-        modelAndView.addObject("logs", logs);
-        modelAndView.setViewName("log_stream");
-        return modelAndView;
     }
 
     @RequestMapping("/statistics")
@@ -83,5 +68,4 @@ public class SampleController {
 
         return model;
     }
-
 }

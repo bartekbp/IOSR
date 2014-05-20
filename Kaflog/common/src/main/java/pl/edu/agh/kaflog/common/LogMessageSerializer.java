@@ -42,41 +42,6 @@ public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMes
         return result;
     }
 
-    public static final String[] FACILITY_STRING = {
-            "user-level messages",
-            "mail system",
-            "system daemons",
-            "security/authorization messages",
-            "messages generated internally by syslogd",
-            "line printer subsystem",
-            "network news subsystem",
-            "UUCP subsystem",
-            "clock daemon",
-            "security/authorization messages",
-            "FTP daemon",
-            "NTP subsystem",
-            "log audit",
-            "log alert",
-            "clock daemon",
-            "local0",
-            "local1",
-            "local2",
-            "local3",
-            "local4",
-            "local5",
-            "local6",
-            "local7"};
-
-    public static final String[] LEVEL_STRING = {
-            "emergency",
-            "alert",
-            "critical",
-            "error",
-            "warning",
-            "notice",
-            "info",
-            "debug"};
-
     @Override
     public LogMessage fromBytes(byte[] bytes) {
         LogMessage result = null;

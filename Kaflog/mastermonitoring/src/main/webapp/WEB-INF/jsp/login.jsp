@@ -70,10 +70,10 @@
     </c:if>
 
     <form class="form-signin" role="form" name="form" action="/login" method="POST">
-        <h2 style="text-align: center;" class="form-signin-heading">Please sign in</h2>
+        <h2 style="text-align: center;" class="form-signin-heading">Kaflog admin panel</h2>
         <input class="form-control" name="username" type="text" placeholder="username">
         <input class="form-control" type="password" name="password" placeholder="password">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
     </form>
 </div>
 

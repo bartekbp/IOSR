@@ -6,12 +6,14 @@ import kafka.producer.ProducerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.edu.agh.kaflog.common.LogMessage;
-import pl.edu.agh.kaflog.producer.Main;
-import pl.edu.agh.kaflog.common.utils.KaflogProperties;
+import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.common.utils.ExecutorUtils;
+import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.text.ParseException;
 import java.util.Properties;
 
@@ -56,9 +58,9 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
         byte[] buf = new byte[512];
         DatagramPacket packet = new DatagramPacket(buf, buf.length);
 
-        lastMinute.start(TimeStatistics.getCurrentDate());
-        lastHour.start(TimeStatistics.getCurrentDate());
-        lastDay.start(TimeStatistics.getCurrentDate());
+        lastMinute.start(KaflogDateUtils.getCurrentTime());
+        lastHour.start(KaflogDateUtils.getCurrentTime());
+        lastDay.start(KaflogDateUtils.getCurrentTime());
 
         long timer = System.currentTimeMillis();
         String topic = KaflogProperties.getProperty("kaflog.kafka.topic");
@@ -72,24 +74,23 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             int facilityAndSeverity = Integer.parseInt(data.substring(1, parPos));
             data = data.substring(parPos + 1);
             String[] tokens = data.split("\\s+", 6);
+            long time = KaflogDateUtils.dateToMillis(String.format("%s %s %s", tokens[0], tokens[1], tokens[2]));
             LogMessage logMessage = new LogMessage(
                     facilityAndSeverity / 8, // facility
                     facilityAndSeverity % 8, // severity
-                    String.format("%s %s", tokens[0], tokens[1]), // date
-                    tokens[2], // time
+                    time, // date and time
                     tokens[3], // hostname
                     tokens[4].substring(0, tokens[4].length() - 1), // source (remove tailing colon)
                     tokens[5]); // message
             System.out.println(logMessage);
 
-            String date = String.format("%s %s %s", tokens[0], tokens[1], tokens[2]);
-            lastMinute.report(date);
-            lastHour.report(date);
-            lastDay.report(date);
+            lastMinute.report(time);
+            lastHour.report(time);
+            lastDay.report(time);
 
             if (System.currentTimeMillis() - timer > 10000) {
                 timer = System.currentTimeMillis();
-                String currentTime = TimeStatistics.getCurrentDate();
+                long currentTime = KaflogDateUtils.getCurrentTime();
                 System.out.println("Number of logs in last minute: " + lastMinute.getSum(currentTime));
                 System.out.println("Number of logs in last hour: " + lastHour.getSum(currentTime));
                 System.out.println("Number of logs in last day: " + lastDay.getSum(currentTime));

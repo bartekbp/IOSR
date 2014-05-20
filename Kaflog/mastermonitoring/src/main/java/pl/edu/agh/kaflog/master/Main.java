@@ -48,7 +48,7 @@ public class Main extends SpringBootServletInitializer {
 
     @Scheduled(fixedRate = 20000)
     public void listClients() {
-        System.out.println(producerMonitoring.listClients());
+        //System.out.println(producerMonitoring.listClients());
     }
 
     @Bean
