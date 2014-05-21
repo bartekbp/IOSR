@@ -59,10 +59,7 @@
     </div>
 </div>
 
-<div style="margin-top: 70px;" class="container">
-    <br>
-    Message: ${message}
-
+<div style="margin: 70px 10px 10px;">
     <table class="table table-striped table-hover">
         <caption class="text-left">Clients</caption>
         <thead>
