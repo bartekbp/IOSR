@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.master;
+package pl.edu.agh.kaflog.master.logs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import java.util.Collection;
 public class LogStreamConsumer extends Thread {
     private static final Logger log = LoggerFactory.getLogger(LogStreamConsumer.class);
 
-    private LimitedQueue<LogMessage> logQueue = new LimitedQueue<LogMessage>(100);
+    private LogQueue<LogMessage> logQueue = new LogQueue<LogMessage>(100);
 
     private volatile boolean active = true;
 

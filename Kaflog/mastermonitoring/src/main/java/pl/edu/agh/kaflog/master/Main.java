@@ -77,12 +77,17 @@ public class Main extends SpringBootServletInitializer {
     protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            http.authorizeRequests().anyRequest().fullyAuthenticated().and()
-                    .formLogin().loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error")
-                    .permitAll();
-            http.csrf().disable();
+            http
+                    .authorizeRequests()
+                    .antMatchers("/login", "/logout", "/webjars/**").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin()
+                    .loginPage("/login").defaultSuccessUrl("/").failureUrl("/login?error").permitAll();
+
             http.logout().logoutUrl("/logout").logoutSuccessUrl("/login?logout");
-            http.authorizeRequests().antMatchers("/login", "/logout").permitAll();
+
+            http.csrf().disable();
         }
     }
 }

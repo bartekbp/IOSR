@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.master;
+package pl.edu.agh.kaflog.master.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,13 +8,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
-import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
+import pl.edu.agh.kaflog.master.logs.LogStreamConsumer;
 
 
 @Controller
 public class LogStreamController {
-    @Autowired
-    ProducerMonitoring producerMonitoring;
 
     @Autowired
     LogStreamConsumer logStreamConsumer;

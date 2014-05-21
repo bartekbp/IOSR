@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.master;
+package pl.edu.agh.kaflog.master.logs;
 
 import java.util.Collection;
 import java.util.LinkedList;
@@ -6,10 +6,10 @@ import java.util.LinkedList;
 /**
  * Created by lopiola on 19.05.14.
  */
-public class LimitedQueue<E> extends LinkedList<E> {
+public class LogQueue<E> extends LinkedList<E> {
     private int limit;
 
-    public LimitedQueue(int limit) {
+    public LogQueue(int limit) {
         this.limit = limit;
     }
 
