@@ -1,36 +1,63 @@
 package pl.edu.agh.kaflog.master.logs;
 
-import java.util.Collection;
+import pl.edu.agh.kaflog.common.LogMessage;
+
 import java.util.LinkedList;
 
 /**
  * Created by lopiola on 19.05.14.
  */
-public class LogQueue<E> extends LinkedList<E> {
-    private int limit;
+public class LogQueue {
+    private LogMessage[] queue;
+    private Object[] semaphore;
+    private int size;
 
-    public LogQueue(int limit) {
-        this.limit = limit;
+    // Index of last log in the queue
+    private volatile int counter = -1;
+
+    public LogQueue(int size) {
+        this.size = size;
+        this.queue = new LogMessage[size];
+        this.semaphore = new Object[size];
+        for (int i = 0; i < size; i++) {
+            semaphore[i] = new Object();
+        }
     }
 
-    public synchronized void setLimit(int limit) {
-        this.limit = limit;
+    // Puts a log in the queue (on the place of the oldest log)
+    // Pushes cannot be done in parallel
+    public synchronized void push(LogMessage logMessage) {
+        int targetIndex = (counter + 1) % size;
+        // Make sure this log is not read/written concurrently
+        synchronized (semaphore[targetIndex]) {
+            queue[targetIndex] = logMessage;
+        }
+        counter = targetIndex;
     }
 
-    @Override
-    public synchronized boolean add(E o) {
-        super.add(o);
-        while (size() > limit) { super.remove(); }
-        return true;
-    }
+    // Polls all logs that were logged after 'since' param. Up to 'limit' of logs will be returned.
+    public LinkedList<LogMessage> poll(long since, int limit) {
+        if (limit > size) throw new IllegalArgumentException("limit cannot be bigger than queue size");
 
-    public synchronized E poll() {
-        return removeFirst();
-    }
+        LinkedList<LogMessage> result = new LinkedList<LogMessage>();
 
-    public synchronized Collection<E> pollAll() {
-        LinkedList<E> result = new LinkedList<E>(this);
-        clear();
+        if (counter == -1) return result;
+
+        int index = counter;
+        for (int i = 0; i < limit; i++) {
+            // Make sure this log is not read/written concurrently
+            synchronized (semaphore[index]) {
+                if (queue[index] != null && since < queue[index].getTimestamp()) {
+                    result.addFirst(queue[index]);
+                } else {
+                    break;
+                }
+            }
+            index--;
+            if (index < 0) {
+                index += size;
+            }
+        }
         return result;
     }
 }

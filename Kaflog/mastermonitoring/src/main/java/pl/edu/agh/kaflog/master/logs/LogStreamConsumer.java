@@ -10,6 +10,7 @@ import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  * Created by lopiola on 19.05.14.
@@ -18,12 +19,12 @@ import java.util.Collection;
 public class LogStreamConsumer extends Thread {
     private static final Logger log = LoggerFactory.getLogger(LogStreamConsumer.class);
 
-    private LogQueue<LogMessage> logQueue = new LogQueue<LogMessage>(100);
+    private LogQueue logQueue = new LogQueue(100);
 
     private volatile boolean active = true;
 
-    public Collection<LogMessage> pollLogs() {
-        return logQueue.pollAll();
+    public LinkedList<LogMessage> pollLogs(long since, int limit) {
+        return logQueue.poll(since, limit);
     }
 
     public void terminate() {
@@ -47,7 +48,7 @@ public class LogStreamConsumer extends Thread {
                     "root",
                     "random logfdghjfhdfghjkfdsfghjlkjhlkgjfhl;kfdjh;ldfkjh;ladhgkajdhgflauhgfiluhaliuerytoiueytoeiwurytwoeiutyajkdfh!" +
             "random logfdghjfhdfghjkfdsfghjlkjhlkgjfhl;kfdjh;ldfkjh;ladhgkajdhgflauhgfiluhaliuerytoiueytoeiwurytwoeiutyajkdfh!");
-            logQueue.add(newLogMessage);
+            logQueue.push(newLogMessage);
             try {
                 Thread.sleep(2000);
             } catch (InterruptedException e) {

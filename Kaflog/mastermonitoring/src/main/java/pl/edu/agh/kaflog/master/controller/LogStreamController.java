@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.master.logs.LogStreamConsumer;
+
+import java.util.LinkedList;
 
 
 @Controller
@@ -20,21 +23,26 @@ public class LogStreamController {
     @RequestMapping("/log_stream")
     public ModelAndView logStream() {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", "Hello world");
-//        List<String> logs = new LinkedList<String>();
-//        for(LogMessage logMessage : logStreamConsumer.pollLogs()) {
-//            logs.add(logMessage.toString());
-//        }
-//        modelAndView.addObject("logs", logs);
         modelAndView.setViewName("log_stream");
         return modelAndView;
     }
 
+    // Used for ajax polling for logs. Returns data in format
+    // <timestamp>;<rendered_table_row>
+    // timestamp is the timestamp of newest log
+    // The page should parse out the timestamp and ask for new logs with updated timestamp
     @RequestMapping(value = "/poll_logs", method = RequestMethod.GET)
     public @ResponseBody
-    String pollLogs() {
-        StringBuilder sb = new StringBuilder();
-        for(LogMessage logMessage : logStreamConsumer.pollLogs()) {
+    String pollLogs(@RequestParam(value = "since", required = false) long since,
+                    @RequestParam(value = "limit", required = false) int limit) {
+
+        LinkedList<LogMessage> newLogs = logStreamConsumer.pollLogs(since, limit);
+        if (newLogs.size() == 0) {
+            return since + ";";
+        }
+
+        StringBuilder sb = new StringBuilder(newLogs.getLast().getTimestamp() + ";");
+        for(LogMessage logMessage : newLogs) {
             sb.append(renderLog(logMessage));
         }
         return sb.toString();

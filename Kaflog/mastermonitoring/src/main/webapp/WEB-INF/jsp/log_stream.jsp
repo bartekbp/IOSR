@@ -12,23 +12,21 @@
 
     <script type="text/javascript">
         function updateLogs() {
-            console.log("wat");
-            $.ajax({url: 'poll_logs.html'})
-                    .fail(function(jqXHR, textStatus, errorThrown) {
+            $.ajax({url: 'poll_logs?since=' + timestamp + '&limit=' + 10})
+                    .fail(function (jqXHR, textStatus, errorThrown) {
                         clearInterval(id);
                         $('#main_table').append("<tr><td>Error</td><td>-</td><td>-</td><td>-</td><td>-</td><td>No connection to server</td></tr>");
                     })
                     .done(function (response, textStatus, jqXHR) {
-                        console.log([response, textStatus, jqXHR]);
-                        if (response != "") {
-                            $('#main_table').append(response);
+                        timestamp = response.substring(0, response.indexOf(";"));
+                        var renderedHtml = response.substring(response.indexOf(";") + 1, response.length);
+                        if (renderedHtml != "") {
+                            $('#main_table').append(renderedHtml);
                         }
                     });
         }
         var id = setInterval(updateLogs, 500);
-    </script>
-
-    <script type="text/javascript">
+        var timestamp = new Date().getTime();
     </script>
 </head>
 
@@ -61,7 +59,6 @@
 
 <div style="margin: 70px 10px 10px;">
     <table class="table table-striped table-hover">
-        <caption class="text-left">Clients</caption>
         <thead>
         <tr>
             <th>Date</th>
