@@ -12,6 +12,7 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class HBaseBolt implements IRichBolt {
@@ -26,8 +27,10 @@ public class HBaseBolt implements IRichBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         Configuration configuration = HBaseConfiguration.create();
+        configuration.set("hbase.zookeeper.quorum", "localhost");
+        configuration.set("hbase.zookeeper.property.clientPort","2181");
+        configuration.set("hbase.master", "localhost:60000");
         try {
-
             table = new HTable(configuration, tableName);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -43,11 +46,12 @@ public class HBaseBolt implements IRichBolt {
         int size = input.getValues().size();
 
         Put put = new Put(Bytes.toBytes(rowId));
-        for (int i = 1; i < size; ++i) {
-            HBaseField field = (HBaseField) input.getValue(i);
+        List<HBaseField> fields = (List<HBaseField>) input.getValue(1);
+        for (HBaseField field : fields) {
             put.add(Bytes.toBytes(field.family), Bytes.toBytes(field.qualifier), Bytes.toBytes(field.value));
         }
         try {
+            System.out.println("Put: " + put);
             table.put(put);
         } catch(IOException e) {
             throw new RuntimeException(e);

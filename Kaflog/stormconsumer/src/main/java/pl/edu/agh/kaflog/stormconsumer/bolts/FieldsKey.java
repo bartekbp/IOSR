@@ -33,11 +33,18 @@ public class FieldsKey {
     }
 
 
-    @Override
-    public String toString() {
+    public String getQualifier() {
         StringBuilder sb = new StringBuilder();
         for(String key: keys) {
             sb.append("$").append(key);
+        }
+        return sb.toString();
+    }
+
+    public String getRowId() {
+        StringBuilder sb = new StringBuilder();
+        for(Object value: values) {
+            sb.append("$").append(value);
         }
         return sb.toString();
     }

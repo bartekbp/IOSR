@@ -3,6 +3,7 @@
 Kaflog/.idea
 Kaflog/*/target
 Kaflog/*/.idea
+Kaflog/.idea
 Kaflog/*/*.iml
 documentation/*.aux
 documentation/*.gz
