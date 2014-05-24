@@ -7,18 +7,17 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import com.google.common.collect.Lists;
-import pl.edu.agh.kaflog.stormconsumer.model.Bucket;
-import pl.edu.agh.kaflog.stormconsumer.model.Kind;
+import pl.edu.agh.kaflog.stormconsumer.spouts.Kind;
 import pl.edu.agh.kaflog.stormconsumer.utils.StormFields;
 
 import java.util.*;
 
-public class TimeBucketsAggregator extends BaseRichBolt {
+public class CustomAggregator extends BaseRichBolt {
     private OutputCollector collector;
     private List<String> fields;
     private Map<Bucket, Map<Object, Integer>> counts;
 
-    public TimeBucketsAggregator(String... fields) {
+    public CustomAggregator(String... fields) {
         this.fields = Arrays.asList(fields);
     }
 
@@ -51,14 +50,14 @@ public class TimeBucketsAggregator extends BaseRichBolt {
         } else {
             map.put(key, map.get(key) - 1);
         }
-        List<HBaseField> toEmit = Collections.singletonList(
-                new HBaseField(key.getQualifier(), bucket.toString(), String.valueOf(map.get(key))));
-        collector.emit(Lists.newArrayList(key.getRowId(), toEmit));
+        HBaseField field = new HBaseField(key.getFamily(), bucket.toString(), String.valueOf(map.get(key)));
+        collector.emit(Lists.<Object>newArrayList(key.getId(), Lists.newArrayList(field)));
+
     }
 
     private void addAll(Tuple input) {
         FieldsKey key = tupleToKey(input);
-        List<Object> toEmit = new ArrayList<Object>();
+        List<Object> fields = new ArrayList<>();
 
         for (Bucket bucket : Bucket.values()) {
             Map<Object, Integer> map = counts.get(bucket);
@@ -67,14 +66,19 @@ public class TimeBucketsAggregator extends BaseRichBolt {
             } else {
                 map.put(key, map.get(key) + 1);
             }
-            toEmit.add(new HBaseField(key.getQualifier(), bucket.toString(), String.valueOf(map.get(key))));
+            fields.add(new HBaseField(key.getFamily(), bucket.toString(), String.valueOf(map.get(key))));
         }
-        collector.emit(Lists.newArrayList(key.getRowId(), toEmit));
+        List<Object> toEmit = new ArrayList<>();
+        toEmit.add(key.getId());
+        toEmit.add(fields);
+        collector.emit(toEmit);
+
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields(StormFields.ROW_ID, StormFields.VALUES));
+        declarer.declare(new Fields(StormFields.ROW_ID, StormFields.HBASE_FIELDS));
+
     }
 
     private FieldsKey tupleToKey(Tuple tuple) {

@@ -10,7 +10,7 @@ import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 import pl.edu.agh.kaflog.stormconsumer.bolts.HBaseBolt;
-import pl.edu.agh.kaflog.stormconsumer.bolts.TimeBucketsAggregator;
+import pl.edu.agh.kaflog.stormconsumer.bolts.CustomAggregator;
 import pl.edu.agh.kaflog.stormconsumer.bolts.Delayer;
 import pl.edu.agh.kaflog.stormconsumer.bolts.Extractor;
 import pl.edu.agh.kaflog.stormconsumer.spouts.FakeSpout;
@@ -35,16 +35,16 @@ public class Main {
         builder.setSpout("kaflogSpout", spout);
         builder.setBolt("delayer", new Delayer()).shuffleGrouping("kaflogSpout");
         builder.setBolt("extractor", new Extractor()).shuffleGrouping("delayer");
-        builder.setBolt("severityAggregator", new TimeBucketsAggregator(StormFields.SEVERITY))
+        builder.setBolt("severityAggregator", new CustomAggregator(StormFields.SEVERITY))
                 .fieldsGrouping("extractor", new Fields(StormFields.SEVERITY));
-        builder.setBolt("hostAggregator", new TimeBucketsAggregator(StormFields.HOST))
+        builder.setBolt("hostAggregator", new CustomAggregator(StormFields.HOST))
                 .fieldsGrouping("extractor", new Fields(StormFields.HOST));
-        builder.setBolt("hostSeverityAggregator", new TimeBucketsAggregator(StormFields.HOST, StormFields.SEVERITY))
+        builder.setBolt("hostSeverityAggregator", new CustomAggregator(StormFields.HOST, StormFields.SEVERITY))
                 .fieldsGrouping("extractor", new Fields(StormFields.HOST, StormFields.SEVERITY));
         builder.setBolt("storage", new HBaseBolt(KaflogProperties.getProperty("kaflog.storm.hbase.table")))
-                .shuffleGrouping("severityAggregator")
                 .shuffleGrouping("hostAggregator")
-                .shuffleGrouping("hostSeverityAggregator");
+                .shuffleGrouping("hostSeverityAggregator")
+                .shuffleGrouping("severityAggregator");
 
         StormTopology topology = builder.createTopology();
 

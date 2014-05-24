@@ -32,7 +32,6 @@ public class FieldsKey {
         return 31 * keys.hashCode() + values.hashCode();
     }
 
-
     public String getQualifier() {
         StringBuilder sb = new StringBuilder();
         for(String key: keys) {

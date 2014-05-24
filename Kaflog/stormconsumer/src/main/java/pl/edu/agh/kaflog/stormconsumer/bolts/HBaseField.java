@@ -8,4 +8,9 @@ public class HBaseField {
         this.qualifier = qualifier;
         this.value = value;
     }
+
+    @Override
+    public String toString() {
+        return family + ": " + qualifier + ": " + value;
+    }
 }

@@ -2,8 +2,8 @@ package pl.edu.agh.kaflog.stormconsumer.bolts;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-public class HBaseBolt implements IRichBolt {
+public class HBaseBolt extends BaseRichBolt {
 
     private final String tableName;
     private HTable table;
@@ -43,9 +43,9 @@ public class HBaseBolt implements IRichBolt {
     @Override
     public void execute(Tuple input) {
         String rowId = input.getString(0);
-        int size = input.getValues().size();
 
         Put put = new Put(Bytes.toBytes(rowId));
+
         List<HBaseField> fields = (List<HBaseField>) input.getValue(1);
         for (HBaseField field : fields) {
             put.add(Bytes.toBytes(field.family), Bytes.toBytes(field.qualifier), Bytes.toBytes(field.value));
@@ -71,10 +71,5 @@ public class HBaseBolt implements IRichBolt {
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
 
-    }
-
-    @Override
-    public Map<String, Object> getComponentConfiguration() {
-        return null;
     }
 }
