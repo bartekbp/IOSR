@@ -1,5 +1,5 @@
 window.gauges = {};
-var maxLogsPerSec = 1000;
+var maxLogsPerSec = 300;
 var gaugeOpts = {
     lines: 12, // The number of lines to draw
     angle: 0.1, // The length of each line
@@ -16,10 +16,11 @@ var gaugeOpts = {
     generateGradient: true
 };
 
+
 function updateAll(data) {
     var rows = data.split('\n');
     var counter = 0;
-    var update = [];
+    var updated = [];
 
     // Tokens are:
     // 0: hostname
@@ -31,12 +32,23 @@ function updateAll(data) {
     // 6: logsInLastDay
     // 7: logsOverall
     for (var i = 0; i < rows.length; i++) {
-        var tokens = rows[i].split(':');
+        var tokens = rows[i].split(';');
         if ($('#' + tokens[0]).length == 0) {
             createRow(tokens[0], tokens[1]);
         }
+        updateRow(tokens[0], tokens[2], tokens[3], tokens[4], tokens[5], tokens[6], tokens[7]);
+        updated[counter++] = tokens[0];
+    }
+
+    var allRows = $('.monitoring_row');
+    for (i = 0; i < allRows.length; i++) {
+        var id = $(allRows[i]).attr('id');
+        if ($.inArray(id, updated) == -1) {
+            $('#' + id).remove();
+        }
     }
 }
+
 
 function createRow(rowId, ipAddress) {
     var rowBody = '<tr class="monitoring_row" id="' + rowId + '">' + $('#dummy_row').html() + '</tr>';
@@ -65,8 +77,6 @@ function createRow(rowId, ipAddress) {
     window.gauges[rowId + '_ovr'].maxValue = maxLogsPerSec;
     window.gauges[rowId + '_ovr'].animationSpeed = 1;
     window.gauges[rowId + '_ovr'].set(1);
-
-    updateRow(rowId, 0, 1203, 2304, 23434, 143324, 2342341);
 }
 
 function updateRow(rowId, offlineFor, uptime, logsInLastMin, logsInLastHour, logsInLastDay, logsOverall) {
@@ -90,4 +100,20 @@ function updateRow(rowId, offlineFor, uptime, logsInLastMin, logsInLastHour, log
     if (seconds < 10) seconds = '0' + seconds;
 
     $(row).find('.uptime_holder').html(hours + ":" + minutes + ":" + seconds);
+
+    $(row).find('.logs_minute').html(logsInLastMin + ' logs');
+    $(row).find('.logsps_minute').html((logsInLastMin / 60).toFixed(2) + ' logs/s');
+    window.gauges[rowId + '_min'].set(Math.min(1000, ~~(logsInLastMin / 60) + 1));
+
+    $(row).find('.logs_hour').html(logsInLastHour + ' logs');
+    $(row).find('.logsps_hour').html((logsInLastHour / 3600).toFixed(2) + ' logs/s');
+    window.gauges[rowId + '_hour'].set(Math.min(1000, ~~(logsInLastHour / 3600) + 1));
+
+    $(row).find('.logs_day').html(logsInLastDay + ' logs');
+    $(row).find('.logsps_day').html((logsInLastDay / 86400).toFixed(2) + ' logs/s');
+    window.gauges[rowId + '_day'].set(Math.min(1000, ~~(logsInLastDay / 86400) + 1));
+
+    $(row).find('.logs_overall').html(logsOverall + ' logs');
+    $(row).find('.logsps_overall').html((logsOverall / uptime).toFixed(2) + ' logs/s');
+    window.gauges[rowId + '_ovr'].set(Math.min(1000, ~~(logsOverall / uptime) + 1));
 }
