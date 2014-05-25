@@ -8,18 +8,13 @@ import kafka.utils.VerifiableProperties;
 import java.io.*;
 
 public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMessage> {
-    public LogMessageSerializer() {
-    }
-
-    public LogMessageSerializer(VerifiableProperties properties) {
-    }
 
     /**
      * Kafka needs it.
      * Without it:
      * Exception in thread "main" java.lang.NoSuchMethodException: pl.edu.agh.kaflog.common.LogMessageSerializer.<init>(kafka.utils.VerifiableProperties)
-     * @param properties
      */
+    @SuppressWarnings("unused")
     public LogMessageSerializer(VerifiableProperties properties) {
 
     }

@@ -3,17 +3,16 @@ package pl.edu.agh.kaflog.stormconsumer.spouts;
 import backtype.storm.spout.Scheme;
 import backtype.storm.tuple.Fields;
 import com.google.common.collect.Lists;
-import kafka.utils.VerifiableProperties;
 import pl.edu.agh.kaflog.common.LogMessageSerializer;
+import pl.edu.agh.kaflog.stormconsumer.utils.StormFields;
 
 
 import java.util.List;
 
 
-public class LogMessageScheme implements Scheme {
-    public static final String LOG_MESSAGE_FIELD = "logMessage";
+public class LogMessageSchema implements Scheme {
 
-    private static final Fields fields = new Fields(LOG_MESSAGE_FIELD);
+    public static final Fields fields = new Fields(StormFields.LOG_MESSAGE);
     private static final LogMessageSerializer SERIALIZER = new LogMessageSerializer();
 
     @Override

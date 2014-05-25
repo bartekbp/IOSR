@@ -1,5 +1,6 @@
 package pl.edu.agh.kaflog.stormconsumer.spouts;
 
+
 import backtype.storm.spout.SchemeAsMultiScheme;
 import storm.kafka.KafkaSpout;
 import storm.kafka.SpoutConfig;
@@ -9,8 +10,9 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class KaflogSpout extends KafkaSpout {
-    public KaflogSpout(Properties properties) throws IOException {
-        super(readConfig(properties));
+
+    public KaflogSpout(Properties config) throws IOException {
+        super(readConfig(config));
     }
 
     private static SpoutConfig readConfig(Properties properties) throws IOException {
@@ -19,11 +21,7 @@ public class KaflogSpout extends KafkaSpout {
                 properties.getProperty("kaflog.kafka.topic"),
                 "",
                 properties.getProperty("kaflog.kafka.consumerId"));
-        config.scheme = new SchemeAsMultiScheme(new LogMessageScheme());
+        config.scheme = new SchemeAsMultiScheme(new LogMessageSchema());
         return config;
     }
 }
-
-
-
-
