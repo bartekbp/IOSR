@@ -45,17 +45,17 @@ public class ProducerMonitoring {
         return result;
     }
 
-    private NodeState mockState1 = new NodeState("10.200.150.1", "kafka-node1", false, 1000, currentTimeMinusSecs(5), 10000, 1000, 100, 10);
-    private NodeState mockState2 = new NodeState("10.200.150.2", "kafka-node2", false, 5010102, currentTimeMinusSecs(5), 10000, 1000, 100, 10);
-    private NodeState mockState3 = new NodeState("10.200.150.3", "kafka-node3", false, 23423523, currentTimeMinusSecs(5), 10000, 1000, 100, 10);
+    private NodeState mockState1 = new NodeState("10.200.150.1", "kafka-node1", currentTimeMinusSecs(5), 1000, 10000, 1000, 100, 10);
+    private NodeState mockState2 = new NodeState("10.200.150.2", "kafka-node2", currentTimeMinusSecs(5), 501001, 10000, 1000, 100, 10);
+    private NodeState mockState3 = new NodeState("10.200.150.3", "kafka-node3", currentTimeMinusSecs(5), 2342352, 10000, 1000, 100, 10);
 
     private void setRandomState(NodeState nodeState) {
         nodeState.setLastHeartbeat(currentTimeMinusSecs(new Random().nextInt(14)));
-        nodeState.setUptime(nodeState.getUptime() + 500);
-        nodeState.setTotalLogs(new Random().nextInt(10000));
-        nodeState.setLogsInlastDay(new Random().nextInt(1000));
-        nodeState.setLogsInLastHour(new Random().nextInt(100));
-        nodeState.setLogsInLastMinute(new Random().nextInt(10));
+        nodeState.setUptime(nodeState.getUptime() + 1);
+        nodeState.setTotalLogs(new Random().nextInt((int) (300 * nodeState.getUptime())));
+        nodeState.setLogsInlastDay(new Random().nextInt(300 * 86400));
+        nodeState.setLogsInLastHour(new Random().nextInt(300 * 3600));
+        nodeState.setLogsInLastMinute(new Random().nextInt(300 * 60));
     }
 
     private long currentTimeMinusSecs(int secs) {

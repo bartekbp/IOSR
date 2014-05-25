@@ -41,9 +41,9 @@ public class MonitoringController {
         StringBuilder sb = new StringBuilder();
         for (NodeState nodeState : nodeStates) {
             sb.append(renderRow(nodeState));
-            sb.append("\n");
+            sb.append("+");
         }
-        return sb.toString();
+        return sb.substring(0, sb.length() - 1);
     }
 
     // Tokens:
@@ -63,9 +63,9 @@ public class MonitoringController {
         sb.append(";");
         long lastHeartBeatAgo = KaflogDateUtils.getCurrentTime() - nodeState.getLastHeartbeat();
         if (lastHeartBeatAgo < PRODUCER_TIMEOUT) lastHeartBeatAgo = 0;
-        sb.append(lastHeartBeatAgo);
+        sb.append(lastHeartBeatAgo / 1000);
         sb.append(";");
-        sb.append(3147654); // TODO uptime
+        sb.append(nodeState.getUptime());
         sb.append(";");
         sb.append(nodeState.getLogsInLastMinute());
         sb.append(";");

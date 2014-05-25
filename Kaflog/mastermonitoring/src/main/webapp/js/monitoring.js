@@ -18,7 +18,7 @@ var gaugeOpts = {
 
 
 function updateAll(data) {
-    var rows = data.split('\n');
+    var rows = data.split('+');
     var counter = 0;
     var updated = [];
 
@@ -86,7 +86,7 @@ function updateRow(rowId, offlineFor, uptime, logsInLastMin, logsInLastHour, log
         $(row).find('.image_holder').html('<img class="up8px" src="/images/status_ok.png"/>');
     } else {
         $(row).find('.image_holder').html(
-                '<img class="up10px" src="/images/status_error.png"/>' +
+                '<img class="up8px" src="/images/status_error.png"/>' +
                 '<span class="offline_info">Offline: ' + offlineFor + ' s</span>');
     }
 

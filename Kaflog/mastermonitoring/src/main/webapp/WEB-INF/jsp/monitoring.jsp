@@ -146,22 +146,22 @@
 </div>
 
 <script type="text/javascript">
-//    function updateMonitoring() {
-//        $.ajax({url: 'poll_monitoring'})
-//                .fail(function (jqXHR, textStatus, errorThrown) {
-//                    clearInterval(id);
-//                    $('#main_table').html("<tr><td>Error</td><td>No connection to server</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>");
-//                })
-//                .done(function (response, textStatus, jqXHR) {
-//                    if (response != "") {
-//                        console.log(response);
-//                        updateAll(response);
-//                    }
-//                });
-//    }
-//    //var id = setInterval(updateMonitoring, 5000);
+    function updateMonitoring() {
+        $.ajax({url: 'poll_monitoring'})
+                .fail(function (jqXHR, textStatus, errorThrown) {
+                    clearInterval(id);
+                    $('#main_table').html("<tr><td>Error</td><td>No connection to server</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>");
+                })
+                .done(function (response, textStatus, jqXHR) {
+                    if (response != "") {
+                        updateAll(response);
+                    }
+                });
+    }
+    var id = setInterval(updateMonitoring, 1000);
 </script>
 
 </body>
 
 </html>
+

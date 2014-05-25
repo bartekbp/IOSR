@@ -7,7 +7,6 @@ public class NodeState implements Comparable<NodeState> {
     private String ip;
     private String hostname;
 
-    private boolean connected;
     private long lastHeartbeat;
     private long uptime;
 
@@ -16,10 +15,9 @@ public class NodeState implements Comparable<NodeState> {
     private int logsInLastHour;
     private int logsInLastMinute;
 
-    public NodeState(String ip, String hostname, boolean connected, long lastHeartbeat, long uptime, int totalLogs, int logsInlastDay, int logsInLastHour, int logsInLastMinute) {
+    public NodeState(String ip, String hostname, long lastHeartbeat, long uptime, int totalLogs, int logsInlastDay, int logsInLastHour, int logsInLastMinute) {
         this.ip = ip;
         this.hostname = hostname;
-        this.connected = connected;
         this.lastHeartbeat = lastHeartbeat;
         this.uptime = uptime;
         this.totalLogs = totalLogs;
@@ -39,10 +37,6 @@ public class NodeState implements Comparable<NodeState> {
 
     public String getHostname() {
         return hostname;
-    }
-
-    public boolean isConnected() {
-        return connected;
     }
 
     public long getLastHeartbeat() {
@@ -79,10 +73,6 @@ public class NodeState implements Comparable<NodeState> {
 
     public void setHostname(String hostname) {
         this.hostname = hostname;
-    }
-
-    public void setConnected(boolean connected) {
-        this.connected = connected;
     }
 
     public void setLastHeartbeat(long lastHeartbeat) {
