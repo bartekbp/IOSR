@@ -20,11 +20,11 @@ public class TimeStatistics {
         lastPosition = 0;
     }
 
-    public void start(long startDate) {
+    public synchronized void start(long startDate) {
         this.startTime = startDate;
     }
 
-    public void report(long time) {
+    public synchronized void report(long time) {
         long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
         int position = (seconds / resolution);
@@ -40,7 +40,7 @@ public class TimeStatistics {
         sum++;
     }
 
-    public int getSum(long time) {
+    public synchronized int getSum(long time) {
         long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
         int position = (seconds / resolution);

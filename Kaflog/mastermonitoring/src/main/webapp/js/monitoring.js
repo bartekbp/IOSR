@@ -1,5 +1,5 @@
 window.gauges = {};
-var maxLogsPerSec = 300;
+var maxLogsPerSec = 10;
 var gaugeOpts = {
     lines: 12, // The number of lines to draw
     angle: 0.1, // The length of each line

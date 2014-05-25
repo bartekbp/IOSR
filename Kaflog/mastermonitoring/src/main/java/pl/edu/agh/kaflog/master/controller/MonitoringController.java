@@ -9,13 +9,13 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.master.monitoring.NodeStateSummary;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
+import pl.edu.agh.kaflog.master.monitoring.RegisterClientMBean;
 
 import java.util.List;
 
 
 @Controller
 public class MonitoringController {
-    private final static long PRODUCER_TIMEOUT = 10000; // in ms
 
     @Autowired
     ProducerMonitoring producerMonitoring;
@@ -34,7 +34,7 @@ public class MonitoringController {
     public
     @ResponseBody
     String pollMonitoring() {
-        List<NodeStateSummary> nodeStateSummaries = producerMonitoring.mockListClients();
+        List<NodeStateSummary> nodeStateSummaries = producerMonitoring.listClients();
 
         StringBuilder sb = new StringBuilder();
         for (NodeStateSummary nodeStateSummary : nodeStateSummaries) {
@@ -60,16 +60,16 @@ public class MonitoringController {
         sb.append(nodeStateSummary.getIp());
         sb.append(";");
         long lastHeartBeatAgo = KaflogDateUtils.getCurrentTime() - nodeStateSummary.getLastHeartbeat();
-        if (lastHeartBeatAgo < PRODUCER_TIMEOUT) lastHeartBeatAgo = 0;
+        if (lastHeartBeatAgo < RegisterClientMBean.PRODUCER_CONTROL_PERIOD) lastHeartBeatAgo = 0;
         sb.append(lastHeartBeatAgo / 1000);
         sb.append(";");
-        sb.append(nodeStateSummary.getUptime());
+        sb.append(nodeStateSummary.getUptime() / 1000);
         sb.append(";");
         sb.append(nodeStateSummary.getLogsInLastMinute());
         sb.append(";");
         sb.append(nodeStateSummary.getLogsInLastHour());
         sb.append(";");
-        sb.append(nodeStateSummary.getLogsInlastDay());
+        sb.append(nodeStateSummary.getLogsInLastDay());
         sb.append(";");
         sb.append(nodeStateSummary.getTotalLogs());
         return sb.toString();

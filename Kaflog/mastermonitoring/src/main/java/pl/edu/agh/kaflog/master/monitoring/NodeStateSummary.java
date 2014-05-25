@@ -1,29 +1,35 @@
 package pl.edu.agh.kaflog.master.monitoring;
 
+import pl.edu.agh.kaflog.common.NodeState;
+import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
+
 /**
  * Created by lopiola on 22.05.14.
  */
 public class NodeStateSummary implements Comparable<NodeStateSummary> {
-    private String ip;
     private String hostname;
+    private String ip;
 
     private long lastHeartbeat;
-    private long uptime;
+    private long startTime;
 
     private int totalLogs;
-    private int logsInlastDay;
+    private int logsInLastDay;
     private int logsInLastHour;
     private int logsInLastMinute;
 
-    public NodeStateSummary(String ip, String hostname, long lastHeartbeat, long uptime, int totalLogs, int logsInlastDay, int logsInLastHour, int logsInLastMinute) {
-        this.ip = ip;
+    public NodeStateSummary(String hostname, String ip) {
         this.hostname = hostname;
-        this.lastHeartbeat = lastHeartbeat;
-        this.uptime = uptime;
-        this.totalLogs = totalLogs;
-        this.logsInlastDay = logsInlastDay;
-        this.logsInLastHour = logsInLastHour;
-        this.logsInLastMinute = logsInLastMinute;
+        this.ip = ip;
+    }
+
+    public void update(NodeState nodeState) {
+        lastHeartbeat = KaflogDateUtils.getCurrentTime();
+        startTime = nodeState.getStartTime();
+        totalLogs = nodeState.getTotalLogs();
+        logsInLastDay = nodeState.getLogsInLastDay();
+        logsInLastHour = nodeState.getLogsInLastHour();
+        logsInLastMinute = nodeState.getLogsInLastMinute();
     }
 
     @Override
@@ -47,8 +53,8 @@ public class NodeStateSummary implements Comparable<NodeStateSummary> {
         return totalLogs;
     }
 
-    public int getLogsInlastDay() {
-        return logsInlastDay;
+    public int getLogsInLastDay() {
+        return logsInLastDay;
     }
 
     public int getLogsInLastHour() {
@@ -60,38 +66,20 @@ public class NodeStateSummary implements Comparable<NodeStateSummary> {
     }
 
     public long getUptime() {
-        return uptime;
+        return KaflogDateUtils.getCurrentTime() - startTime;
     }
 
-    public void setUptime(long uptime) {
-        this.uptime = uptime;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    public void setLastHeartbeat(long lastHeartbeat) {
-        this.lastHeartbeat = lastHeartbeat;
-    }
-
-    public void setTotalLogs(int totalLogs) {
-        this.totalLogs = totalLogs;
-    }
-
-    public void setLogsInlastDay(int logsInlastDay) {
-        this.logsInlastDay = logsInlastDay;
-    }
-
-    public void setLogsInLastHour(int logsInLastHour) {
-        this.logsInLastHour = logsInLastHour;
-    }
-
-    public void setLogsInLastMinute(int logsInLastMinute) {
-        this.logsInLastMinute = logsInLastMinute;
+    @Override
+    public String toString() {
+        return "NodeStateSummary{" +
+                "ip='" + ip + '\'' +
+                ", hostname='" + hostname + '\'' +
+                ", lastHeartbeat=" + lastHeartbeat +
+                ", startTime=" + startTime +
+                ", totalLogs=" + totalLogs +
+                ", logsInLastDay=" + logsInLastDay +
+                ", logsInLastHour=" + logsInLastHour +
+                ", logsInLastMinute=" + logsInLastMinute +
+                '}';
     }
 }

@@ -25,5 +25,5 @@ spring:
 	cp -f Kaflog/mastermonitoring/target/kaflog-mastermonitoring-0.1.war vagrant/files/${RELEASE_NAME}/lib/
 
 producer: 
-	mvn -f Kaflog/logproducer/pom.xml clean package
+	mvn -f Kaflog/logproducer/pom.xml clean package assembly:single
 	cp -f Kaflog/logproducer/target/kaflog-logproducer-0.1-jar-with-dependencies.jar vagrant/files/${RELEASE_NAME}/lib/

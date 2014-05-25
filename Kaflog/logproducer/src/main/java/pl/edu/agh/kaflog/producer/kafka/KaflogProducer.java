@@ -32,6 +32,9 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
     private final TimeStatistics lastHour = new TimeStatistics(60, 60);
     private final TimeStatistics lastDay = new TimeStatistics(3600, 24);
 
+    private volatile long startTime;
+    private volatile int totalLogs = 0;
+
     public KaflogProducer() {
         String brokersList = KaflogProperties.getProperty("kaflog.kafka.brokersList");
         props.put("metadata.broker.list", brokersList);
@@ -53,6 +56,7 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
     }
 
     public void run() throws IOException, ParseException {
+        startTime = KaflogDateUtils.getCurrentTime();
         socket = new DatagramSocket(5001, InetAddress.getByName("127.0.0.1"));
         log.info("Listen on " + socket.getLocalAddress());
         byte[] buf = new byte[512];
@@ -98,6 +102,29 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
 
             KeyedMessage<Integer, LogMessage> msg = new KeyedMessage<Integer, LogMessage>(topic, logMessage);
             producer.send(msg);
+
+            totalLogs++;
         }
     }
+
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public int getTotalLogs() {
+        return totalLogs;
+    }
+
+    public int getLogsInLastMinute(long currentTime) {
+        return lastMinute.getSum(currentTime);
+    }
+
+    public int getLogsInLastHour(long currentTime) {
+        return lastHour.getSum(currentTime);
+    }
+
+    public int getLogsInLastDay(long currentTime) {
+        return lastDay.getSum(currentTime);
+    }
+
 }
