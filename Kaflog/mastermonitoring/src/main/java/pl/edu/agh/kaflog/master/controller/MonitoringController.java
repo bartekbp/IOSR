@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.master.monitoring.NodeState;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
 
@@ -16,6 +17,8 @@ import java.util.Random;
 
 @Controller
 public class MonitoringController {
+    private final static long PRODUCER_TIMEOUT = 10000; // in ms
+
     @Autowired
     ProducerMonitoring producerMonitoring;
 
@@ -35,16 +38,42 @@ public class MonitoringController {
     String pollMonitoring() {
         List<NodeState> nodeStates = producerMonitoring.mockListClients();
 
-        StringBuilder sb = new StringBuilder("<tr>");
+        StringBuilder sb = new StringBuilder();
         for (NodeState nodeState : nodeStates) {
             sb.append(renderRow(nodeState));
+            sb.append("\n");
         }
-        sb.append("</tr>");
         return sb.toString();
     }
 
+    // Tokens:
+    // 0: hostname
+    // 1: ipAddress
+    // 2: offlineFor
+    // 3: uptime
+    // 4: lastMinuteLogs
+    // 5: lastHourLogs
+    // 6: lastDayLogs
+    // 7: overallLogs
     private String renderRow(NodeState nodeState) {
-        StringBuilder sb = new StringBuilder("<td>" + new Random().nextInt(10000) + "</td>");
+        StringBuilder sb = new StringBuilder();
+        sb.append(nodeState.getHostname());
+        sb.append(";");
+        sb.append(nodeState.getIp());
+        sb.append(";");
+        long lastHeartBeatAgo = KaflogDateUtils.getCurrentTime() - nodeState.getLastHeartbeat();
+        if (lastHeartBeatAgo < PRODUCER_TIMEOUT) lastHeartBeatAgo = 0;
+        sb.append(lastHeartBeatAgo);
+        sb.append(";");
+        sb.append(3147654); // TODO uptime
+        sb.append(";");
+        sb.append(nodeState.getLogsInLastMinute());
+        sb.append(";");
+        sb.append(nodeState.getLogsInLastHour());
+        sb.append(";");
+        sb.append(nodeState.getLogsInlastDay());
+        sb.append(";");
+        sb.append(nodeState.getTotalLogs());
         return sb.toString();
     }
 }

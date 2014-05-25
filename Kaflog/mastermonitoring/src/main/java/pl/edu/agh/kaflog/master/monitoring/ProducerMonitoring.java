@@ -50,8 +50,7 @@ public class ProducerMonitoring {
     private NodeState mockState3 = new NodeState("10.200.150.3", "kafka-node3", false, 23423523, currentTimeMinusSecs(5), 10000, 1000, 100, 10);
 
     private void setRandomState(NodeState nodeState) {
-        nodeState.setConnected(new Random().nextInt(7) > 0);
-        nodeState.setLastHeartbeat(currentTimeMinusSecs(new Random().nextInt(20)));
+        nodeState.setLastHeartbeat(currentTimeMinusSecs(new Random().nextInt(14)));
         nodeState.setUptime(nodeState.getUptime() + 500);
         nodeState.setTotalLogs(new Random().nextInt(10000));
         nodeState.setLogsInlastDay(new Random().nextInt(1000));
