@@ -3,7 +3,7 @@ package pl.edu.agh.kaflog.master.monitoring;
 /**
  * Created by lopiola on 22.05.14.
  */
-public class NodeState implements Comparable<NodeState> {
+public class NodeStateSummary implements Comparable<NodeStateSummary> {
     private String ip;
     private String hostname;
 
@@ -15,7 +15,7 @@ public class NodeState implements Comparable<NodeState> {
     private int logsInLastHour;
     private int logsInLastMinute;
 
-    public NodeState(String ip, String hostname, long lastHeartbeat, long uptime, int totalLogs, int logsInlastDay, int logsInLastHour, int logsInLastMinute) {
+    public NodeStateSummary(String ip, String hostname, long lastHeartbeat, long uptime, int totalLogs, int logsInlastDay, int logsInLastHour, int logsInLastMinute) {
         this.ip = ip;
         this.hostname = hostname;
         this.lastHeartbeat = lastHeartbeat;
@@ -27,7 +27,7 @@ public class NodeState implements Comparable<NodeState> {
     }
 
     @Override
-    public int compareTo(NodeState o) {
+    public int compareTo(NodeStateSummary o) {
         return hostname.compareTo(o.hostname);
     }
 

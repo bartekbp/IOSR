@@ -8,4 +8,5 @@ cd $RUNNER_SCRIPT_DIR/..
 CP=lib/kaflog-logproducer-0.1-jar-with-dependencies.jar
 
 # Start kafka producer
-java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=n -cp $CP pl.edu.agh.kaflog.producer.Main
+#java -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=5005,suspend=n -cp $CP pl.edu.agh.kaflog.producer.Main
+java -cp $CP pl.edu.agh.kaflog.producer.Main

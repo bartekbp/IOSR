@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
-import pl.edu.agh.kaflog.master.monitoring.NodeState;
+import pl.edu.agh.kaflog.master.monitoring.NodeStateSummary;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
 
 import java.util.List;
-import java.util.Random;
 
 
 @Controller
@@ -36,11 +34,11 @@ public class MonitoringController {
     public
     @ResponseBody
     String pollMonitoring() {
-        List<NodeState> nodeStates = producerMonitoring.mockListClients();
+        List<NodeStateSummary> nodeStateSummaries = producerMonitoring.mockListClients();
 
         StringBuilder sb = new StringBuilder();
-        for (NodeState nodeState : nodeStates) {
-            sb.append(renderRow(nodeState));
+        for (NodeStateSummary nodeStateSummary : nodeStateSummaries) {
+            sb.append(renderRow(nodeStateSummary));
             sb.append("+");
         }
         return sb.substring(0, sb.length() - 1);
@@ -55,25 +53,25 @@ public class MonitoringController {
     // 5: lastHourLogs
     // 6: lastDayLogs
     // 7: overallLogs
-    private String renderRow(NodeState nodeState) {
+    private String renderRow(NodeStateSummary nodeStateSummary) {
         StringBuilder sb = new StringBuilder();
-        sb.append(nodeState.getHostname());
+        sb.append(nodeStateSummary.getHostname());
         sb.append(";");
-        sb.append(nodeState.getIp());
+        sb.append(nodeStateSummary.getIp());
         sb.append(";");
-        long lastHeartBeatAgo = KaflogDateUtils.getCurrentTime() - nodeState.getLastHeartbeat();
+        long lastHeartBeatAgo = KaflogDateUtils.getCurrentTime() - nodeStateSummary.getLastHeartbeat();
         if (lastHeartBeatAgo < PRODUCER_TIMEOUT) lastHeartBeatAgo = 0;
         sb.append(lastHeartBeatAgo / 1000);
         sb.append(";");
-        sb.append(nodeState.getUptime());
+        sb.append(nodeStateSummary.getUptime());
         sb.append(";");
-        sb.append(nodeState.getLogsInLastMinute());
+        sb.append(nodeStateSummary.getLogsInLastMinute());
         sb.append(";");
-        sb.append(nodeState.getLogsInLastHour());
+        sb.append(nodeStateSummary.getLogsInLastHour());
         sb.append(";");
-        sb.append(nodeState.getLogsInlastDay());
+        sb.append(nodeStateSummary.getLogsInlastDay());
         sb.append(";");
-        sb.append(nodeState.getTotalLogs());
+        sb.append(nodeStateSummary.getTotalLogs());
         return sb.toString();
     }
 }

@@ -17,6 +17,7 @@ public class RegisterClientMBean {
 
     @JmxOperation(description = "registerClient")
     public void registerClient(String address) {
+        System.out.println("new client address = [" + address + "]");
         clients.add(address);
     }
 

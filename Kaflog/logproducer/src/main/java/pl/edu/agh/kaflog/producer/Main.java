@@ -23,7 +23,8 @@ public class Main implements ExecutorUtils.ThrowingRunnable {
     @Override
     public void run() throws Exception {
         ExecutorUtils executorUtils = new ExecutorUtils();
-        executorUtils.addRecurringTask(new Pinger("cloudera-master", 2997), 30, TimeUnit.SECONDS);
+//        executorUtils.addRecurringTask(new Pinger("cloudera-master", 2997), 30, TimeUnit.SECONDS);
+        executorUtils.addRecurringTask(new Pinger("localhost", 2997), 30, TimeUnit.SECONDS);
         executorUtils.addTask(new KaflogProducer());
     }
 }

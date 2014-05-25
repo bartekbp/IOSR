@@ -33,11 +33,11 @@ public class ProducerMonitoring {
 
 
     // TODO this should return a real list of node states for nodes in the cluster
-    public List<NodeState> mockListClients() {
+    public List<NodeStateSummary> mockListClients() {
         setRandomState(mockState1);
         setRandomState(mockState2);
         setRandomState(mockState3);
-        List<NodeState> result = new LinkedList<NodeState>();
+        List<NodeStateSummary> result = new LinkedList<NodeStateSummary>();
         result.add(mockState2);
         result.add(mockState1);
         result.add(mockState3);
@@ -45,17 +45,17 @@ public class ProducerMonitoring {
         return result;
     }
 
-    private NodeState mockState1 = new NodeState("10.200.150.1", "kafka-node1", currentTimeMinusSecs(5), 1000, 10000, 1000, 100, 10);
-    private NodeState mockState2 = new NodeState("10.200.150.2", "kafka-node2", currentTimeMinusSecs(5), 501001, 10000, 1000, 100, 10);
-    private NodeState mockState3 = new NodeState("10.200.150.3", "kafka-node3", currentTimeMinusSecs(5), 2342352, 10000, 1000, 100, 10);
+    private NodeStateSummary mockState1 = new NodeStateSummary("10.200.150.1", "kafka-node1", currentTimeMinusSecs(5), 1000, 10000, 1000, 100, 10);
+    private NodeStateSummary mockState2 = new NodeStateSummary("10.200.150.2", "kafka-node2", currentTimeMinusSecs(5), 501001, 10000, 1000, 100, 10);
+    private NodeStateSummary mockState3 = new NodeStateSummary("10.200.150.3", "kafka-node3", currentTimeMinusSecs(5), 2342352, 10000, 1000, 100, 10);
 
-    private void setRandomState(NodeState nodeState) {
-        nodeState.setLastHeartbeat(currentTimeMinusSecs(new Random().nextInt(14)));
-        nodeState.setUptime(nodeState.getUptime() + 1);
-        nodeState.setTotalLogs(new Random().nextInt((int) (300 * nodeState.getUptime())));
-        nodeState.setLogsInlastDay(new Random().nextInt(300 * 86400));
-        nodeState.setLogsInLastHour(new Random().nextInt(300 * 3600));
-        nodeState.setLogsInLastMinute(new Random().nextInt(300 * 60));
+    private void setRandomState(NodeStateSummary nodeStateSummary) {
+        nodeStateSummary.setLastHeartbeat(currentTimeMinusSecs(new Random().nextInt(14)));
+        nodeStateSummary.setUptime(nodeStateSummary.getUptime() + 1);
+        nodeStateSummary.setTotalLogs(new Random().nextInt((int) (300 * nodeStateSummary.getUptime())));
+        nodeStateSummary.setLogsInlastDay(new Random().nextInt(300 * 86400));
+        nodeStateSummary.setLogsInLastHour(new Random().nextInt(300 * 3600));
+        nodeStateSummary.setLogsInLastMinute(new Random().nextInt(300 * 60));
     }
 
     private long currentTimeMinusSecs(int secs) {
