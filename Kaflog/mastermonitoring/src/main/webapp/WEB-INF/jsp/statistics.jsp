@@ -39,23 +39,7 @@
     </div>
 
     <br>
-    Message: ${message}
-
-    <table class="table table-striped table-hover">
-        <caption class="text-left">Clients</caption>
-        <thead>
-        <th>#</th>
-        <th>Addres</th>
-        </thead>
-        <tbody>
-        <c:forEach items="${clients}" var="client" varStatus="status">
-            <tr>
-                <td>${status.index}</td>
-                <td>${client}</td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
+    TODO
 
 </body>
 

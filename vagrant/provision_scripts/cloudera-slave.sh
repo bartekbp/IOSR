@@ -21,3 +21,6 @@ rm jdk-7u55-linux-x64.tar.gz
 cp /etc/sudoers /etc/sudoers.copy
 echo "Defaults env_keep+=JAVA_HOME" >> /etc/sudoers.copy
 mv /etc/sudoers.copy /etc/sudoers
+
+# Set timezone to proper
+sudo ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime

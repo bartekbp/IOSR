@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.master.logs.LogStreamConsumer;
+import pl.edu.agh.kaflog.master.logs.LogStreamMaster;
 
 import java.util.LinkedList;
 
@@ -18,7 +19,7 @@ import java.util.LinkedList;
 public class LogStreamController {
 
     @Autowired
-    LogStreamConsumer logStreamConsumer;
+    LogStreamMaster logStreamMaster;
 
     @RequestMapping("/log_stream")
     public ModelAndView logStream() {
@@ -36,7 +37,7 @@ public class LogStreamController {
     String pollLogs(@RequestParam(value = "since", required = false) long since,
                     @RequestParam(value = "limit", required = false) int limit) {
 
-        LinkedList<LogMessage> newLogs = logStreamConsumer.pollLogs(since, limit);
+        LinkedList<LogMessage> newLogs = logStreamMaster.pollLogs(since, limit);
         if (newLogs.size() == 0) {
             return since + ";";
         }

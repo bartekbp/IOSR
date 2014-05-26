@@ -67,3 +67,6 @@ chown -R vagrant kafka
 # curl -s http://archive.cloudera.com/cdh5/ubuntu/precise/amd64/cdh/archive.key | sudo apt-key add -
 # apt-get update
 # apt-get install -y zookeeper hadoop-yarn-resourcemanager hadoop-hdfs-namenode hadoop-hdfs-secondarynamenode hadoop-0.20-mapreduce-tasktracker hadoop-hdfs-datanode hadoop-client
+
+# Set timezone to proper
+sudo ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
