@@ -36,6 +36,10 @@ public class MonitoringController {
     String pollMonitoring() {
         List<NodeStateSummary> nodeStateSummaries = producerMonitoring.listClients();
 
+        if (nodeStateSummaries.size() == 0) {
+            return "";
+        }
+
         StringBuilder sb = new StringBuilder();
         for (NodeStateSummary nodeStateSummary : nodeStateSummaries) {
             sb.append(renderRow(nodeStateSummary));

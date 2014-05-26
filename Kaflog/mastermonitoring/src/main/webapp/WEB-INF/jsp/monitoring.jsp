@@ -155,6 +155,8 @@
                 .done(function (response, textStatus, jqXHR) {
                     if (response != "") {
                         updateAll(response);
+                    } else {
+                        $('#main_table').html("<tr><td>-</td><td>No nodes are connected</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>");
                     }
                 });
     }

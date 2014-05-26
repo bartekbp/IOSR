@@ -34,7 +34,7 @@ public class RegisterClientMBean {
 
     @JmxOperation(description = "registerClient")
     public void registerClient(NodeState nodeState) {
-        log.info("New ping from " + nodeState.getHostname());
+        System.out.println("New ping from " + nodeState.getHostname());
         if (!clients.contains(nodeState.getHostname())) {
             clients.put(nodeState.getHostname(), new NodeStateSummary(nodeState.getHostname(), nodeState.getIp()));
         }
