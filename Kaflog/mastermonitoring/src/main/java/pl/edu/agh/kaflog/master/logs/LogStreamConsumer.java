@@ -4,6 +4,7 @@ import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
+import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.LogMessageSerializer;
 import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
@@ -33,7 +34,9 @@ public class LogStreamConsumer extends Thread {
     public void run() {
         ConsumerIterator<byte[], byte[]> it = stream.iterator();
         while (active && it.hasNext()) {
-            logQueue.push(new LogMessageSerializer().fromBytes(it.next().message()));
+            LogMessage message = new LogMessageSerializer().fromBytes(it.next().message());
+            System.out.println("New log: " + message);
+            logQueue.push(message);
         }
     }
 
