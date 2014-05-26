@@ -159,7 +159,11 @@ Wreszcie można odpalić storma
 --------------------------------
 Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add.
 
-Dodatkowo należy dodać sobie użytkownika vagrant do cloudery.
+Dodatkowo należy dodać sobie użytkownika vagrant do cloudery i nadać uprawnienia 
+    
+    sudo -u hdfs hadoop fs -chmod 777 /user/hive.
+
+Polecam też dodanie zookeepera na cloudera-slave1.
 
 12. Podział na podmoduły
 --------------------------------

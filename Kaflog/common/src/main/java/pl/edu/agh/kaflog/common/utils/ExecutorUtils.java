@@ -3,6 +3,7 @@ package pl.edu.agh.kaflog.common.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -28,6 +29,12 @@ public class ExecutorUtils implements AutoCloseable {
                 }
             }
         });
+    }
+
+    public void addTasks(List<ThrowingRunnable> throwingRunnables) {
+        for(ThrowingRunnable throwingRunnable : throwingRunnables) {
+            addTask(throwingRunnable);
+        }
     }
 
     public void addRecurringTask(final Runnable runnable, int time, TimeUnit unit) {

@@ -40,7 +40,7 @@ public class LogMessage implements Serializable {
         char sep = '\7';
         return String.format("[%s]" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
                 LEVEL_STRING[severity],
-                timestamp,
+                timestamp / 1000,
                 hostname,
                 source,
                 message);
@@ -50,7 +50,7 @@ public class LogMessage implements Serializable {
         String[] tokens = str.split(Character.toString('\07'));
         String levelName = tokens[0].substring(1, tokens[0].length() - 1);
         int level = Arrays.asList(LEVEL_STRING).indexOf(levelName);
-        long timestamp = Long.parseLong(tokens[1]);
+        long timestamp = Long.parseLong(tokens[1]) * 1000;
         return new LogMessage(-1, level, timestamp, tokens[2], tokens[3], tokens[4]);
     }
 
