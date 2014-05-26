@@ -55,7 +55,7 @@ public class HiveLogMessageDao implements AutoCloseable {
         try {
             statement = connection.createStatement();
             statement.executeUpdate("create table IF NOT EXISTS " + hiveTable +
-                    " (severity string, `date` string, time string, hostname string, source string, message string) " +
+                    " (severity string, time string, hostname string, source string, message string) " +
                     "ROW FORMAT DELIMITED  FIELDS TERMINATED BY '" + delimiter + "'");
         } finally {
             CloseableUtils.close(statement);
@@ -132,13 +132,12 @@ public class HiveLogMessageDao implements AutoCloseable {
         ResultSet resultSet = null;
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("select * from " + hiveTable + " where `date` is not null");
+            resultSet = statement.executeQuery("select * from " + hiveTable + " where `time` is not null");
             RowSetDynaClass rowSetDynaClass = new RowSetDynaClass(resultSet);
             return Lists.transform(rowSetDynaClass.getRows(), new Function<DynaBean, LogMessage>() {
                 @Override
                 public LogMessage apply(DynaBean dynaBean) {
-                    return LogMessage.fromRawString(Joiner.on('\07').join(ObjectUtils.defaultIfNull(dynaBean.get("severity"), LogMessage.LEVEL_STRING[LogMessage.LEVEL_STRING.length - 1]),
-                            ObjectUtils.defaultIfNull(dynaBean.get("date"), ""),
+                    return LogMessage.fromHive(Joiner.on('\07').join(ObjectUtils.defaultIfNull(dynaBean.get("severity"), LogMessage.LEVEL_STRING[LogMessage.LEVEL_STRING.length - 1]),
                             ObjectUtils.defaultIfNull(dynaBean.get("time"), ""),
                             ObjectUtils.defaultIfNull(dynaBean.get("hostname"), ""),
                             ObjectUtils.defaultIfNull(dynaBean.get("source"), ""),

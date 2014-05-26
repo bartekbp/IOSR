@@ -25,17 +25,9 @@ public class LogMessage implements Serializable {
 
     @Override
     public String toString() {
-        return toString(" ");
-    }
-
-    public String toRawString() {
-        return toString(Character.toString('\7'));
-    }
-
-    private String toString(String sep) {
         String date = KaflogDateUtils.millisToDateAndTime(timestamp)[0];
         String time = KaflogDateUtils.millisToDateAndTime(timestamp)[1];
-        return String.format("[%s]" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
+        return String.format("[%s] %s %s %s %s %s",
                 LEVEL_STRING[severity],
                 date,
                 time,
@@ -44,15 +36,22 @@ public class LogMessage implements Serializable {
                 message);
     }
 
-    public static LogMessage fromRawString(String str) {
-        return fromTokens(str.split(Character.toString('\07')));
+    public String toHdfsFormat() {
+        char sep = '\7';
+        return String.format("[%s]" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
+                LEVEL_STRING[severity],
+                timestamp,
+                hostname,
+                source,
+                message);
     }
 
-    private static LogMessage fromTokens(String... tokens) {
+    public static LogMessage fromHive(String str) {
+        String[] tokens = str.split(Character.toString('\07'));
         String levelName = tokens[0].substring(1, tokens[0].length() - 1);
         int level = Arrays.asList(LEVEL_STRING).indexOf(levelName);
-        long timestamp = KaflogDateUtils.dateToMillis(tokens[1] + " " + tokens[2]);
-        return new LogMessage(-1, level, timestamp, tokens[3], tokens[4], tokens[5]);
+        long timestamp = Long.parseLong(tokens[1]);
+        return new LogMessage(-1, level, timestamp, tokens[2], tokens[3], tokens[4]);
     }
 
     public int getFacility() {

@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
         end
         cloudera_slave1.vm.provider :virtualbox do |v|
             v.name = "cloudera-slave1"
-            v.customize ["modifyvm", :id, "--memory", "1024"]
+            v.customize ["modifyvm", :id, "--memory", "2048"]
         end
         cloudera_slave1.vm.network :private_network, ip: "10.211.55.101"
         cloudera_slave1.vm.hostname = "cloudera-slave1"
@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
         end
         cloudera_master.vm.provider :virtualbox do |v|
             v.name = "cloudera-master"
-            v.customize ["modifyvm", :id, "--memory", "2048"]
+            v.customize ["modifyvm", :id, "--memory", "5092"]
         end
         cloudera_master.vm.network :private_network, ip: "10.211.55.100"
         cloudera_master.vm.hostname = "cloudera-master"
@@ -43,7 +43,7 @@ Vagrant.configure("2") do |config|
         end
         kafka_node1.vm.provider :virtualbox do |v|
             v.name = "kafka-node1"
-            v.customize ["modifyvm", :id, "--memory", "1024"]
+            v.customize ["modifyvm", :id, "--memory", "2048"]
         end
         kafka_node1.vm.network :private_network, ip: "10.211.55.102"
         kafka_node1.vm.hostname = "kafka-node1"
