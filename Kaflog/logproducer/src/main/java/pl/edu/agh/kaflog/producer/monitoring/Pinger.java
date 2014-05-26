@@ -30,7 +30,7 @@ public class Pinger implements ExecutorUtils.ThrowingRunnable {
                 "registerClient",
                 new NodeState(Inet4Address.getLocalHost().getHostAddress(),
                         Inet4Address.getLocalHost().getHostName(),
-                        currentTime - kaflogProducer.getStartTime(),
+                        kaflogProducer.getStartTime(),
                         kaflogProducer.getTotalLogs(),
                         kaflogProducer.getLogsInLastDay(currentTime),
                         kaflogProducer.getLogsInLastHour(currentTime),

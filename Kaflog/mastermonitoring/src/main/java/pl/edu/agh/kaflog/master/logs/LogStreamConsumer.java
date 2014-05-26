@@ -35,7 +35,7 @@ public class LogStreamConsumer extends Thread {
         ConsumerIterator<byte[], byte[]> it = stream.iterator();
         while (active && it.hasNext()) {
             LogMessage message = new LogMessageSerializer().fromBytes(it.next().message());
-            System.out.println("New log: " + message);
+            //System.out.println("New log: " + message.getTimestamp());
             logQueue.push(message);
         }
     }
