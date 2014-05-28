@@ -4,6 +4,7 @@ storm.zookeeper.servers:
 
 
 nimbus.host: "cloudera-master"
+ui.port: 9090
 
 storm.local.dir: "/mnt/storm"
 # 

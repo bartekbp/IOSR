@@ -38,7 +38,7 @@ public class FakeSpout extends BaseRichSpout {
         collector.emit(Lists.<Object>newArrayList(message));
 
 
-        long sleep = (long)(-10000 * Math.log(1 - Math.random()));
+        long sleep = (long)(-1000 * Math.log(1 - Math.random()));
 
         try {
             Thread.sleep(sleep);

@@ -145,15 +145,25 @@ Nie wiem czemu strasznie muli apt-get. Trzeba poczekać (u mnie ~ 20 minut)
 Następnie trzeba uruchomić cluster storma:
 
     # @cloudera-master: tu odpalamy nimbusa - taki storm-master
-    ~/storm-0.8.1/bin/storm nimbus
+    ~/storm-0.8.1/bin/storm nimbus &
+    # Warto uruchomić także ui aby można było śledzić status naszej topologii.
+    # UI jest dostępny pod adresem cloudera-master:8080
+    ~/storm-0.8.1/bin/storm ui &
 
     # @cloudera-slave1: tu odpalamy supervisora
     ~/storm-0.8.1/bin/storm supervisor
+    
+ 
 
-Wreszcie można odpalić storma
+Wreszcie można uruchmoić topologie
 
     # @cloudera-master
     /vagrant/files/kaflog-0.1/bin/kaflog_storm_consumer.sh
+
+Zabijanie topologi
+
+    # nasza topologia nazywa się 'storm'
+    ~/storm-0.8.1/bin/storm kill storm
 
 11. Import danych z Hdfs do Hive
 --------------------------------

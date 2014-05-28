@@ -7,6 +7,9 @@ import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Tuple;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.TableDescriptors;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
@@ -14,24 +17,34 @@ import org.apache.hadoop.hbase.util.Bytes;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class HBaseBolt extends BaseRichBolt {
 
-    private final String tableName;
+    private final HTDescriptor tableDescriptor;
+    private final Properties properties;
     private HTable table;
 
-    public HBaseBolt(String tableName) {
-        this.tableName = tableName;
+    public HBaseBolt(HTDescriptor tableDescriptor, Properties properties) {
+        this.tableDescriptor = tableDescriptor;
+        this.properties = properties;
     }
 
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         Configuration configuration = HBaseConfiguration.create();
-        configuration.set("hbase.zookeeper.quorum", "localhost");
-        configuration.set("hbase.zookeeper.property.clientPort","2181");
-        configuration.set("hbase.master", "localhost:60000");
+        configuration.set("hbase.zookeeper.quorum",
+                properties.getProperty("hbase.zookeeper.quorum"));
+        configuration.set("hbase.zookeeper.property.clientPort",
+                properties.getProperty("hbase.zookeeper.property.clientPort"));
+        configuration.set("hbase.master",
+                properties.getProperty("hbase.master"));
         try {
-            table = new HTable(configuration, tableName);
+            HBaseAdmin hBaseAdmin = new HBaseAdmin(configuration);
+            if(!hBaseAdmin.isTableAvailable(tableDescriptor.name)) {
+                hBaseAdmin.createTable(tableDescriptor.getHTableDescriptor());
+            }
+            table = new HTable(configuration, tableDescriptor.name);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
