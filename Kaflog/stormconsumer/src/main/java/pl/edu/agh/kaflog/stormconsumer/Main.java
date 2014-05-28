@@ -20,18 +20,18 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         IRichSpout spout;
-        if (KaflogProperties.getBoolProperty("kaflog.storm.useFakeSpout")) {
+        /*if (KaflogProperties.getBoolProperty("kaflog.storm.useFakeSpout")) {
             spout = new FakeSpout();
         } else {
             spout = new KaflogSpout(KaflogProperties.getProperties());
-        }
+        }*/
+        spout = new FakeSpout();
         HTDescriptor descriptor = new HTDescriptor(KaflogProperties.getProperty("kaflog.storm.hbase.table"),
                 "$host", "$severity", "$host$severity");
 
         HTDescriptor severityTable = new HTDescriptor("srm_severity_per_minute", "value");
         HTDescriptor hostTable = new HTDescriptor("srm_host_per_minute", "value");
         HTDescriptor hostSeverityTable = new HTDescriptor("srm_host_severity_per_minute", "value");
-
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("kaflogSpout", spout);
@@ -51,20 +51,20 @@ public class Main {
                 .shuffleGrouping("bucketHostSeverityAggregator");*/
 
 
-        // real real time part
-        builder.setBolt("delayer", new Delayer()).shuffleGrouping("kaflogSpout");
-        builder.setBolt("extractor", new Extractor()).shuffleGrouping("delayer");
-        builder.setBolt("severityAggregator", new RealTimeAggregator(StormFields.SEVERITY))
-                .fieldsGrouping("extractor", new Fields(StormFields.SEVERITY));
-        builder.setBolt("hostAggregator", new RealTimeAggregator(StormFields.HOST))
-                .fieldsGrouping("extractor", new Fields(StormFields.HOST));
-        builder.setBolt("hostSeverityAggregator", new RealTimeAggregator(StormFields.HOST, StormFields.SEVERITY))
-                .fieldsGrouping("extractor", new Fields(StormFields.HOST, StormFields.SEVERITY));
-        builder.setBolt(
-                "storage", new HBaseBolt(descriptor, KaflogProperties.getProperties()))
-                .shuffleGrouping("hostAggregator")
-                .shuffleGrouping("hostSeverityAggregator")
-                .shuffleGrouping("severityAggregator");
+//        // real real time part
+//        builder.setBolt("delayer", new Delayer()).shuffleGrouping("kaflogSpout");
+//        builder.setBolt("extractor", new Extractor()).shuffleGrouping("delayer");
+//        builder.setBolt("severityAggregator", new RealTimeAggregator(StormFields.SEVERITY))
+//                .fieldsGrouping("extractor", new Fields(StormFields.SEVERITY));
+//        builder.setBolt("hostAggregator", new RealTimeAggregator(StormFields.HOST))
+//                .fieldsGrouping("extractor", new Fields(StormFields.HOST));
+//        builder.setBolt("hostSeverityAggregator", new RealTimeAggregator(StormFields.HOST, StormFields.SEVERITY))
+//                .fieldsGrouping("extractor", new Fields(StormFields.HOST, StormFields.SEVERITY));
+//        builder.setBolt(
+//                "storage", new HBaseBolt(descriptor, KaflogProperties.getProperties()))
+//                .shuffleGrouping("hostAggregator")
+//                .shuffleGrouping("hostSeverityAggregator")
+//                .shuffleGrouping("severityAggregator");
 
         StormTopology topology = builder.createTopology();
 

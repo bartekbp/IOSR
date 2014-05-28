@@ -3,6 +3,7 @@ package pl.edu.agh.kaflog.common.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Closeable;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -10,7 +11,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class ExecutorUtils implements AutoCloseable {
+public class ExecutorUtils implements Closeable {
     private static final Logger LOG = LoggerFactory.getLogger(ExecutorUtils.class);
     private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -57,7 +58,7 @@ public class ExecutorUtils implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception {
+    public void close()  {
         executorService.shutdown();
     }
 

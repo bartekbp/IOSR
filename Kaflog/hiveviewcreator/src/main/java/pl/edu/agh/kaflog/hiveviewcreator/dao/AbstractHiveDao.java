@@ -9,11 +9,12 @@ import org.slf4j.LoggerFactory;
 import pl.edu.agh.kaflog.common.utils.CloseableUtils;
 import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
+import java.io.Closeable;
 import java.sql.*;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class AbstractHiveDao implements AutoCloseable {
+public abstract class AbstractHiveDao implements Closeable {
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractHiveDao.class);
     private static String driverName = "org.apache.hive.jdbc.HiveDriver";
     private final String jdbcUrl = KaflogProperties.getProperty("kaflog.hive.jdbc.url");
