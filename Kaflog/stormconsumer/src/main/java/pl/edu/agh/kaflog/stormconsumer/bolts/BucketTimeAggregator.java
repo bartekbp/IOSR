@@ -2,7 +2,6 @@ package pl.edu.agh.kaflog.stormconsumer.bolts;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
-import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichBolt;
 import backtype.storm.tuple.Fields;
@@ -16,7 +15,7 @@ import java.util.*;
 public class BucketTimeAggregator extends BaseRichBolt {
     private OutputCollector collector;
     private List<String> fields;
-    private Map<String, Map<String, Integer>> data;
+    private Map<String, Integer> data;
 
     public BucketTimeAggregator(String... fields) {
         this.fields = Arrays.asList(fields);
@@ -25,7 +24,7 @@ public class BucketTimeAggregator extends BaseRichBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
-        data = new HashMap<String, Map<String, Integer>>();
+        data = new HashMap<String, Integer>();
     }
 
     @Override
@@ -33,22 +32,17 @@ public class BucketTimeAggregator extends BaseRichBolt {
         String bucket = input.getStringByField(StormFields.BUCKET);
         FieldsKey key = new FieldsKey(input, fields);
         Integer value;
-        String rowId = key.getRowId();
-        Map<String, Integer> bucketMap = data.get(bucket);
-        if (bucketMap == null) {
-            bucketMap = new HashMap<String, Integer>();
-        }
-        if (!bucketMap.keySet().contains(rowId)) {
+        String rowId = key.getRowId(bucket);
+        if (!data.keySet().contains(rowId)) {
             value = 1;
-            bucketMap.put(rowId, value);
         } else {
-            value = 1 + bucketMap.get(rowId);
-            bucketMap.put(rowId, value);
+            value = 1 + data.get(rowId);
         }
-        data.put(bucket, bucketMap);
+        data.put(rowId, value);
         List<Object> toEmit = new ArrayList<Object>();
-        toEmit.add(bucket);
-        toEmit.add(Lists.<Object>newArrayList(new HBaseField("value", key.getRowId(), String.valueOf(value))));
+        toEmit.add(rowId);
+        toEmit.add(Lists.<Object>newArrayList(new HBaseField("value", "", String.valueOf(value))));
+        //System.out.println(toEmit);
         collector.emit(toEmit);
 
     }

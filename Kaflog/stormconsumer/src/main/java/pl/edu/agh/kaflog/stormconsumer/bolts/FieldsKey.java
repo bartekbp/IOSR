@@ -7,6 +7,7 @@ import java.util.List;
 
 
 public class FieldsKey {
+    public static final String SEPARATOR = "\07";
     private final List<String> keys;
     private final List<Object> values;
 
@@ -32,18 +33,13 @@ public class FieldsKey {
         return 31 * keys.hashCode() + values.hashCode();
     }
 
-    public String getQualifier() {
-        StringBuilder sb = new StringBuilder();
-        for(String key: keys) {
-            sb.append("$").append(key);
-        }
-        return sb.toString();
-    }
-
-    public String getRowId() {
+    public String getRowId(String rest) {
         StringBuilder sb = new StringBuilder();
         for(Object value: values) {
-            sb.append("$").append(value);
+            sb.append(value).append(SEPARATOR);
+        }
+        if (rest != null) {
+            sb.append(rest);
         }
         return sb.toString();
     }
