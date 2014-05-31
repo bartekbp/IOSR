@@ -32,6 +32,16 @@ public abstract class AbstractHiveDao implements Closeable {
         connection = DriverManager.getConnection(jdbcUrl, "vagrant", "");
     }
 
+    protected <T> T withStatement(CallablePreparedStatement<T> callableStatement) throws SQLException {
+        PreparedStatement statement = null;
+        try {
+            statement = connection.prepareStatement(callableStatement.query());
+            return callableStatement.call(statement);
+        } finally {
+            CloseableUtils.close(statement);
+        }
+    }
+
     protected <T> T withStatement(CallableStatement<T> callableStatement) throws SQLException {
         Statement statement = null;
         try {

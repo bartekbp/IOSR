@@ -38,7 +38,7 @@ public class LogMessage implements Serializable {
 
     public String toHdfsFormat() {
         char sep = '\7';
-        return String.format("[%s]" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
+        return String.format("%s" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
                 LEVEL_STRING[severity],
                 timestamp / 1000,
                 hostname,

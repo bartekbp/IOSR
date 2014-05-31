@@ -15,6 +15,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Properties;
 
 /**
@@ -78,7 +79,8 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             int facilityAndSeverity = Integer.parseInt(data.substring(1, parPos));
             data = data.substring(parPos + 1);
             String[] tokens = data.split("\\s+", 6);
-            long time = KaflogDateUtils.dateToMillis(String.format("%s %s %s", tokens[0], tokens[1], tokens[2]));
+//            long time = KaflogDateUtils.dateToMillis(String.format("%s %s %s", tokens[0], tokens[1], tokens[2])); -- wrong timezone
+            long time = Calendar.getInstance().getTimeInMillis();
             LogMessage logMessage = new LogMessage(
                     facilityAndSeverity / 8, // facility
                     facilityAndSeverity % 8, // severity

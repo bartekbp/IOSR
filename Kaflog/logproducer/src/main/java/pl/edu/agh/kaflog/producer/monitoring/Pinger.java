@@ -14,16 +14,28 @@ import java.net.Inet4Address;
 
 public class Pinger implements ExecutorUtils.ThrowingRunnable {
     private static final Logger LOG = Logger.getLogger(Pinger.class);
-    private final JmxClient client;
+    private JmxClient client;
     private KaflogProducer kaflogProducer;
+    private String masterIP;
+    private int masterPort;
 
-    public Pinger(String masterIP, int masterPort, KaflogProducer kaflogProducer) throws JMException {
-        this.client = new JmxClient(masterIP, masterPort);
+    public Pinger(String masterIP, int masterPort, KaflogProducer kaflogProducer) {
+        this.masterIP = masterIP;
+        this.masterPort = masterPort;
+        this.client = null;
         this.kaflogProducer = kaflogProducer;
+    }
+
+    private void lazyInit() throws JMException {
+        if (client == null) {
+            JmxClient client = new JmxClient(masterIP, masterPort);
+            this.client = client;
+        }
     }
 
     @Override
     public void run() throws Exception {
+        lazyInit();
         long currentTime = KaflogDateUtils.getCurrentTime();
         client.invokeOperation(
                 new ObjectName("RegisterClientMBean", "name", "RegisterClientMBean"),

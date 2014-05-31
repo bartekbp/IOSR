@@ -174,6 +174,7 @@ Dodatkowo należy dodać sobie użytkownika vagrant do cloudery i nadać uprawni
     sudo -u hdfs hadoop fs -chmod 777 /user/hive.
 
 Polecam też dodanie zookeepera na cloudera-slave1.
+Dodać hbaserestserver i hbasethriftserver.
 
 12. Podział na podmoduły
 --------------------------------
