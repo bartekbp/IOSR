@@ -34,6 +34,8 @@ sed -i 's/classdist_noinst.stamp/classnoinst.stamp/g' src/Makefile.am
 ./autogen.sh
 ./configure
 make
+make install
+mv /usr/local/lib/libjzmq* /usr/lib/
 cd -
 
 #   install unzpi
