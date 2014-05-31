@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Bucketize extends BaseRichBolt {
-    private static final DateFormat format = new SimpleDateFormat("HH:mm");
+    private static final DateFormat format = new SimpleDateFormat("HH\07mm");
 
     private OutputCollector collector;
     @Override
