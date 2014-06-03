@@ -24,4 +24,9 @@ public class KaflogSpout extends KafkaSpout {
         config.scheme = new SchemeAsMultiScheme(new LogMessageSchema());
         return config;
     }
+
+    @Override
+    public void nextTuple() {
+        super.nextTuple();
+    }
 }

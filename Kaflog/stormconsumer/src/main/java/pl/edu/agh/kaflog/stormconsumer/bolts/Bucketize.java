@@ -27,6 +27,7 @@ public class Bucketize extends BaseRichBolt {
 
     @Override
     public void execute(Tuple input) {
+        System.out.println(input);
         LogMessage logMessage = (LogMessage) input.getValueByField(StormFields.LOG_MESSAGE);
         List<Object> toEmit = Lists.<Object>newArrayList(
                 timestampToBucket(logMessage.getTimestamp()),

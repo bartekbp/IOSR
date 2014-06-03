@@ -42,9 +42,10 @@ cd -
 sudo apt-get install unzip
 
 #install storm
-wget -nv https://github.com/downloads/nathanmarz/storm/storm-0.8.1.zip
-unzip storm-0.8.1.zip
-rm -rf storm-0.8.1.zip
+wget -nv https://dl.dropboxusercontent.com/s/dj86w8ojecgsam7/storm-0.9.0.1.zip
+unzip storm-0.9.0.1.zip
+mv storm-0.9.0.1 storm-0.8.1
+rm -rf storm-0.9.0.1.zip
 cp /vagrant/files/config/storm/storm.yaml storm-0.8.1/conf
 mkdir /mnt/storm
 chown vagrant /mnt/storm
