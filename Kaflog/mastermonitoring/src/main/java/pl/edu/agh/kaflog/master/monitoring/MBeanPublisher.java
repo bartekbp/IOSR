@@ -19,7 +19,6 @@ public class MBeanPublisher {
     @PostConstruct
     private void startServer() throws JMException {
         jmxServer = new JmxServer(port);
-        jmxServer.setServerSocketFactory(new SslRMIServerSocketFactory());
         jmxServer.start();
     }
 

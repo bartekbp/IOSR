@@ -26,7 +26,7 @@ public class Main implements ExecutorUtils.ThrowingRunnable {
         ExecutorUtils executorUtils = new ExecutorUtils();
         KaflogProducer kaflogProducer = new KaflogProducer();
         executorUtils.addRecurringTask(
-                new Pinger(KaflogProperties.getProperty("kaflog.master"), 2997, kaflogProducer),
+                new Pinger("127.0.0.1", 2997, kaflogProducer),
                 1, TimeUnit.SECONDS);
         executorUtils.addTask(kaflogProducer);
     }
