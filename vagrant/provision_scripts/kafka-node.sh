@@ -44,3 +44,14 @@ chown -R vagrant kafka
 
 # Set timezone to proper
 sudo ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
+
+# Install and configure stunnel 4 for secure connection between producer and broker
+sudo apt-get install stunnel4
+mkdir -p /var/chroot/stunnel4/ 
+sudo chown stunnel4:stunnel4 /var/chroot/stunnel4/ 
+cp /vagrant/files/config/kafka-node1/stunnel4_default /etc/default/stunnel4
+cp /vagrant/files/config/kafka-node1/stunnel4_kafka_client.conf /etc/stunnel/
+cp /vagrant/files/config/kafka-node1/client.pem /etc/stunnel/
+cp /vagrant/files/config/kafka-node1/cacert.pem /etc/stunnel/
+
+/etc/init.d/stunnel4 start
