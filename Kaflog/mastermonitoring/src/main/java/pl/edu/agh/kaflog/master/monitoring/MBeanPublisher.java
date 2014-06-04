@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.management.JMException;
+import javax.rmi.ssl.SslRMIServerSocketFactory;
 
 @Component
 public class MBeanPublisher {
@@ -18,6 +19,7 @@ public class MBeanPublisher {
     @PostConstruct
     private void startServer() throws JMException {
         jmxServer = new JmxServer(port);
+        jmxServer.setServerSocketFactory(new SslRMIServerSocketFactory());
         jmxServer.start();
     }
 
