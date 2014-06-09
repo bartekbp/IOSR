@@ -4,14 +4,13 @@
 set -e
 
 if [[ -z "$1" ]]; then
-    LOGS_PER_MINUTE=60
-    echo "Generating default = 60 logs per minute. Use program argument for custom amount."
+    LOGS=100
+    echo "Generating default = 100 logs. Use program argument for custom amount."
 else
-    LOGS_PER_MINUTE=$1
-    echo "Generating $LOGS_PER_MINUTE logs per minute."
+    LOGS=$1
+    echo "Generating $LOGS logs."
 fi
 
-TIME_TO_SLEEP=`echo "scale=3; 60 / $LOGS_PER_MINUTE" | bc`
 
 COUNTER=0
 while true
@@ -19,7 +18,9 @@ do
 	logger "Auto generated log $COUNTER"
 	echo -en "\rGenerated logs: $COUNTER"
 	COUNTER=$((COUNTER + 1))
-	sleep $TIME_TO_SLEEP
+	if [[ $COUNTER -ge $LOGS ]]; then
+		break
+	fi
 done
 
 exit 0
