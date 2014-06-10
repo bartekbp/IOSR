@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +15,7 @@ public class ViewQueryHandler {
     }
 
     public Object createView(DateTime fromDate, DateTime toDate) throws SQLException {
-      /*  List<Pair<String, Long>> hostData = Lists.newArrayList();
+        List<Pair<String, Long>> hostData = Lists.newArrayList();
         List<Pair<String, Long>> severityData = Lists.newArrayList();
 
         for (Map.Entry<String, Long> entry : impalaHBaseDao.getHostResults(fromDate, toDate).entrySet()) {
@@ -28,13 +27,16 @@ public class ViewQueryHandler {
             severityData.add(new Pair<String,Long>(entry.getKey(), entry.getValue()));
             all += entry.getValue();
         }
+
+        Map<String, Map<String, Long>> hostSeverityData = impalaHBaseDao.getHostSeverityResults(fromDate, toDate);
         Report report = new Report();
         report.setHostData(hostData);
         report.setSeverityData(severityData);
-        report.setAll(all);*/
+        report.setHostSeverityData(hostSeverityData);
+        report.setAll(all);
 
-        return Report.fake();
-
+        return report;
+      //  return Report.fake();
     }
 
 }

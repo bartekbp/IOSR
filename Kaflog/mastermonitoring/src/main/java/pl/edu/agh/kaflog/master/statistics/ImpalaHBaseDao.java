@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class ImpalaHBaseDao extends AbstractHiveDao {
 
-    private Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) throws SQLException {
+    public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) throws SQLException {
         final DateTime hadoopFrom = from.withMinuteOfHour(00);
         final DateTime hadoopTo = to.withMinuteOfHour(00);
         DateTime now = new DateTime();

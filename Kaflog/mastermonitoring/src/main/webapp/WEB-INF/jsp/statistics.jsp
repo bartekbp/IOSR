@@ -8,6 +8,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.0.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" />
     <script type="text/javascript" src="/webjars/jquery/2.0.3/jquery.min.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script>
@@ -48,6 +49,7 @@
     </div>
 </div>
 
+
 <br>
 <div style="margin: 70px 10px 10px;">
     <form action="statistics" method="GET">
@@ -63,7 +65,7 @@
             <span>End date</span>
             <input type="text" id="to_datepicker" name="to" />
             <input type="text" id="to_hour" name="to_hour" />
-            <input type="submit" name="submit" value="go"/>
+            <input type="submit" name="submit" value="go" />
         </div>
     </form>
 </div>

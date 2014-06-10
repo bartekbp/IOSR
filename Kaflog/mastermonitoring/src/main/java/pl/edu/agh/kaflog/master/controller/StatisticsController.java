@@ -1,5 +1,8 @@
 package pl.edu.agh.kaflog.master.controller;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +23,8 @@ public class StatisticsController {
     private static final DateFormat format = DateFormat.getDateInstance();
     private final ViewQueryHandler viewQueryHandler;
 
+    DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
+
     public StatisticsController() throws SQLException {
         viewQueryHandler = new ViewQueryHandler();
     }
@@ -32,22 +37,33 @@ public class StatisticsController {
             @RequestParam(value = "to_hour", required = false) String to_hour) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("statistics");
-       // if(from != null) {
+        if(to != null) {
             modelAndView.addObject("report", createReport(from, from_hour, to, to_hour));
-       // }
+        }
         modelAndView.setViewName("statistics");
         return modelAndView;
     }
 
     private Object createReport(String from, String from_hour, String to, String to_hour) throws SQLException {
-//        try {
-           // Date fromDate = format.parse(from + " " + from_hour);
-           // Date toDate = format.parse(to + " " + to_hour);
-            return viewQueryHandler.createView(null, null);
-//        } catch (ParseException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
+
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
+        DateTime fromDate = null;
+        DateTime toDate = null;
+
+        try {
+            fromDate = fmt.parseDateTime(String.valueOf(from) + " " + String.valueOf(from_hour));
+            toDate = fmt.parseDateTime(String.valueOf(to) + " " + String.valueOf(to_hour));
+        } catch(Throwable t) {
+            t.printStackTrace();
+        }
+        if (fromDate == null) {
+            fromDate = new DateTime().hourOfDay().addToCopy(-1);
+        }
+        if (toDate == null) {
+            toDate = new DateTime();
+        }
+        return viewQueryHandler.createView(fromDate, toDate);
+
     }
 
 
