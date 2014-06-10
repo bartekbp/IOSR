@@ -1,5 +1,9 @@
 package pl.edu.agh.kaflog.hiveviewcreator.dao;
 
+import pl.edu.agh.kaflog.hivedao.AbstractHiveDao;
+import pl.edu.agh.kaflog.hivedao.CallablePreparedStatement;
+import pl.edu.agh.kaflog.hivedao.CallableStatement;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;

@@ -1,7 +1,6 @@
-package pl.edu.agh.kaflog.hiveviewcreator.dao;
+package pl.edu.agh.kaflog.hivedao;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public interface CallablePreparedStatement<T> {

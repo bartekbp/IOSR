@@ -21,50 +21,50 @@
 
     <dependencies>
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <groupId>pl.edu.agh.kaflog</groupId>
+            <artifactId>kaflog-common</artifactId>
+            <version>0.1</version>
         </dependency>
         <dependency>
             <groupId>pl.edu.agh.kaflog</groupId>
-            <artifactId>kaflog-hiveviewcreator</artifactId>
+            <artifactId>kaflog-hivedao</artifactId>
             <version>0.1</version>
             <exclusions>
                 <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>jsp-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
                     <artifactId>servlet-api</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>javax.servlet.jsp-api</artifactId>
+                    <artifactId>servlet-api-2.5</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
+                    <artifactId>jsp-2.1</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
+                    <artifactId>jetty</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-api</artifactId>
+                    <artifactId>jsp-api-2.1</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-log4j12</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>tomcat</groupId>
                     <artifactId>jasper-runtime</artifactId>
+                    <groupId>tomcat</groupId>
                 </exclusion>
                 <exclusion>
-                    <groupId>tomcat</groupId>
+                    <artifactId>jamon-runtime</artifactId>
+                    <groupId>org.jamon</groupId>
+                </exclusion>
+                <exclusion>
                     <artifactId>jasper-compiler</artifactId>
+                    <groupId>tomcat</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
                 </exclusion>
             </exclusions>
         </dependency>

@@ -1,15 +1,14 @@
 package pl.edu.agh.kaflog.hiveviewcreator;
 
-import com.google.common.collect.Lists;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.edu.agh.kaflog.common.utils.CloseableUtils;
 import pl.edu.agh.kaflog.common.utils.ExecutorUtils;
-import pl.edu.agh.kaflog.common.utils.HdfsUtils;
-import pl.edu.agh.kaflog.common.utils.IteratorUtils;
 import pl.edu.agh.kaflog.hiveviewcreator.dao.HiveHBaseDao;
 import pl.edu.agh.kaflog.hiveviewcreator.dao.HiveLogMessageDao;
+import pl.edu.agh.kaflog.hiveviewcreator.util.HdfsUtils;
+import pl.edu.agh.kaflog.hiveviewcreator.util.IteratorUtils;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -36,7 +35,7 @@ public class HiveDataImporter {
             }
 
             LOG.debug("Data to hdfs loaded");
-//            hdfsUtils.deleteSubPaths(root);
+            hdfsUtils.deleteSubPaths(root);
         } finally {
             CloseableUtils.close(hiveDao);
             CloseableUtils.close(hdfsUtils);

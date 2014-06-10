@@ -1,8 +1,7 @@
-package pl.edu.agh.kaflog.hiveviewcreator.dao;
+package pl.edu.agh.kaflog.hivedao;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public interface CallableResultSet<T> {
     public String query();

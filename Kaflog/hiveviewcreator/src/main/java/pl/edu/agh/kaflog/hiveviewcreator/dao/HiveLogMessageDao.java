@@ -9,8 +9,8 @@ import org.apache.commons.beanutils.RowSetDynaClass;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.hadoop.fs.Path;
 import pl.edu.agh.kaflog.common.LogMessage;
-import pl.edu.agh.kaflog.common.utils.CloseableUtils;
 import pl.edu.agh.kaflog.common.utils.KaflogProperties;
+import pl.edu.agh.kaflog.hivedao.*;
 
 import java.sql.*;
 import java.util.List;
@@ -23,7 +23,7 @@ public class HiveLogMessageDao extends AbstractHiveDao {
     }
 
     public HiveLogMessageDao dropTable() throws SQLException {
-        withStatement(new CallableStatement<Object>() {
+        withStatement(new pl.edu.agh.kaflog.hivedao.CallableStatement<Object>() {
             @Override
             public Object call(Statement statement) throws SQLException {
                 return statement.executeUpdate("drop table " + hiveTable);
@@ -33,7 +33,7 @@ public class HiveLogMessageDao extends AbstractHiveDao {
     }
 
     public HiveLogMessageDao createTableIfNotExistsWithFieldsDelimiter(final char delimiter) throws SQLException {
-        withStatement(new CallableStatement<Object>() {
+        withStatement(new pl.edu.agh.kaflog.hivedao.CallableStatement<Object>() {
             @Override
             public Object call(Statement statement) throws SQLException {
                 return statement.executeUpdate("create table IF NOT EXISTS " + hiveTable +
@@ -68,7 +68,7 @@ public class HiveLogMessageDao extends AbstractHiveDao {
     }
 
     public HiveLogMessageDao load(final Path path) throws SQLException {
-        withStatement(new CallableStatement<Object>() {
+        withStatement(new pl.edu.agh.kaflog.hivedao.CallableStatement<Object>() {
             @Override
             public Object call(Statement statement) throws SQLException {
                 return statement.execute("load data local inpath '" + path + "' into table " + hiveTable);
@@ -79,7 +79,7 @@ public class HiveLogMessageDao extends AbstractHiveDao {
     }
 
     public HiveLogMessageDao loadHdfs(final Path path) throws SQLException {
-        withStatement(new CallableStatement<Object>() {
+        withStatement(new pl.edu.agh.kaflog.hivedao.CallableStatement<Object>() {
             @Override
             public Object call(Statement statement) throws SQLException {
                 return statement.executeUpdate("load data inpath '" + path + "' into table " + hiveTable);

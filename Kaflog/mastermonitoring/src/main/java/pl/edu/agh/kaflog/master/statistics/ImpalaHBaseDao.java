@@ -5,15 +5,12 @@ import org.apache.commons.beanutils.RowSetDynaClass;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
-import pl.edu.agh.kaflog.hiveviewcreator.dao.AbstractHiveDao;
-import pl.edu.agh.kaflog.hiveviewcreator.dao.CallablePreparedStatement;
+import pl.edu.agh.kaflog.hivedao.AbstractHiveDao;
+import pl.edu.agh.kaflog.hivedao.CallablePreparedStatement;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ImpalaHBaseDao extends AbstractHiveDao {

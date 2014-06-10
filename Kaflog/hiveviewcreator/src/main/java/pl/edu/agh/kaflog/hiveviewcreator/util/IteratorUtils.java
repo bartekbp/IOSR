@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.common.utils;
+package pl.edu.agh.kaflog.hiveviewcreator.util;
 
 
 import com.google.common.collect.Lists;

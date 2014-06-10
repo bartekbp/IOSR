@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.hiveviewcreator.dao;
+package pl.edu.agh.kaflog.hivedao;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -11,7 +11,6 @@ import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
 import java.io.Closeable;
 import java.sql.*;
-import java.util.Collection;
 import java.util.List;
 
 public abstract class AbstractHiveDao implements Closeable {
