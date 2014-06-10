@@ -2,6 +2,7 @@
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="java.util.Map" %>
 
 <html lang="en">
 <head>
@@ -71,19 +72,37 @@
 
 <% if(request.getAttribute("report")!=null) {%>
 <% pl.edu.agh.kaflog.master.statistics.Report report = (pl.edu.agh.kaflog.master.statistics.Report)request.getAttribute("report"); %>
-<table>
+<table width="800" margin-left="200">
     <tr>
         <th>HOST</th>
-        <% for(pl.edu.agh.kaflog.master.statistics.Pair<String, Integer> pair: report.getSeverityData()) {%>
+        <% for(pl.edu.agh.kaflog.master.statistics.Pair<String, Long> pair: report.getSeverityData()) {%>
         <th><%= pair.getFirst() %></th>
         <% }%>
         <th>ALL</th>
     </tr>
-    <tr></tr>
-    <% for(pl.edu.agh.kaflog.master.statistics.Pair<String, Integer> pair: report.getSeverityData()) {%>
-    <th><%= pair.getFirst() %></th>
-    <th>ALL</th>
-    <% }%>
+    <tr>
+        <td>Cluster</td>
+        <% for(pl.edu.agh.kaflog.master.statistics.Pair<String, Long> pair: report.getSeverityData()) {%>
+        <td><%= pair.getSecond() %></td>
+        <% }%>
+        <td><%= report.getAll() %></td>
+    </tr>
+
+    <%
+        long all;
+        for(java.util.Map.Entry<String, java.util.Map<String, Long>> entry: report.getHostSeverityData().entrySet()) { %>
+    <tr>
+        <td><%= entry.getKey() %></td>
+        <%
+            all = 0;
+            for(pl.edu.agh.kaflog.master.statistics.Pair<String, Long> pair: report.getSeverityData()) { %>
+        <td><%= entry.getValue().get(pair.getFirst()) %></td>
+        <%all += entry.getValue().get(pair.getFirst());%>
+        <% } %>
+        <td><%=all%></td>
+    </tr>
+    <% } %>
+
 </table>
 <%}%>
 
