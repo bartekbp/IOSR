@@ -20,7 +20,7 @@ public class StatisticsController {
     private final ViewQueryHandler viewQueryHandler = new ViewQueryHandler();
 
     @RequestMapping("/statistics")
-    public String statistics(
+    public ModelAndView statistics(
             @RequestParam(value = "from", required = false) String from,
             @RequestParam(value = "from_hour", required = false) String from_hour,
             @RequestParam(value = "to", required = false) String to,
@@ -28,21 +28,22 @@ public class StatisticsController {
     {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("statistics");
-        if(from != null) {
+       // if(from != null) {
             modelAndView.addObject("report", createReport(from, from_hour, to, to_hour));
-        }
-        return "statistics";
+       // }
+        modelAndView.setViewName("statistics");
+        return modelAndView;
     }
 
     private Object createReport(String from, String from_hour, String to, String to_hour) {
-        try {
-            Date fromDate = format.parse(from + " " + from_hour);
-            Date toDate = format.parse(to + " " + to_hour);
-            return viewQueryHandler.createView(fromDate, toDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return null;
+//        try {
+           // Date fromDate = format.parse(from + " " + from_hour);
+           // Date toDate = format.parse(to + " " + to_hour);
+            return viewQueryHandler.createView(null, null);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
 

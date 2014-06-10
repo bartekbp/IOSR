@@ -21,6 +21,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+        <dependency>
             <groupId>pl.edu.agh.kaflog</groupId>
             <artifactId>kaflog-hiveviewcreator</artifactId>
             <version>0.1</version>

@@ -4,8 +4,7 @@ import java.util.Date;
 
 public class ViewQueryHandler {
     public Object createView(Date fromDate, Date toDate) {
-
-        return null;
+        return Report.fake();
     }
 
 }
