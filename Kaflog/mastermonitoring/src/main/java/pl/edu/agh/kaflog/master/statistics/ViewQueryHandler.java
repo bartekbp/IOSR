@@ -1,8 +1,11 @@
 package pl.edu.agh.kaflog.master.statistics;
 
-/**
- * Created by lopiola on 21.05.14.
- */
+import java.util.Date;
+
 public class ViewQueryHandler {
-    // TODO provided with query arguments, return a desired view
+    public Object createView(Date fromDate, Date toDate) {
+
+        return null;
+    }
+
 }

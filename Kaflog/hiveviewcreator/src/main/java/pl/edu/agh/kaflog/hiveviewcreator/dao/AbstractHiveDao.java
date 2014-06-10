@@ -17,7 +17,7 @@ import java.util.List;
 public abstract class AbstractHiveDao implements Closeable {
     protected static final Logger LOG = LoggerFactory.getLogger(AbstractHiveDao.class);
     private static String driverName = "org.apache.hive.jdbc.HiveDriver";
-    private final String jdbcUrl = KaflogProperties.getProperty("kaflog.hive.jdbc.url");
+    private static final String jdbcUrl = KaflogProperties.getProperty("kaflog.hive.jdbc.url");
     private final Connection connection;
 
     static {
@@ -29,6 +29,10 @@ public abstract class AbstractHiveDao implements Closeable {
     }
 
     public AbstractHiveDao() throws SQLException {
+       this(jdbcUrl);
+    }
+
+    public AbstractHiveDao(String jdbcUrl)throws SQLException {
         connection = DriverManager.getConnection(jdbcUrl, "vagrant", "");
     }
 

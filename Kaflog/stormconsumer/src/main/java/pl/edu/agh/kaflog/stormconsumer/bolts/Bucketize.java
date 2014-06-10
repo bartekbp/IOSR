@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Bucketize extends BaseRichBolt {
-    private static final DateFormat format = new SimpleDateFormat("HH\07mm");
 
     private OutputCollector collector;
     @Override
@@ -30,7 +29,7 @@ public class Bucketize extends BaseRichBolt {
         System.out.println(input);
         LogMessage logMessage = (LogMessage) input.getValueByField(StormFields.LOG_MESSAGE);
         List<Object> toEmit = Lists.<Object>newArrayList(
-                timestampToBucket(logMessage.getTimestamp()),
+                timestampToBucket(logMessage.getTimestamp() / 1000),
                 logMessage.getHostname(),
                 logMessage.getSeverity());
         collector.emit(toEmit);
@@ -41,7 +40,7 @@ public class Bucketize extends BaseRichBolt {
         declarer.declare(new Fields(StormFields.BUCKET, StormFields.HOST, StormFields.SEVERITY));
     }
 
-    private String timestampToBucket(long timestamp) {
-        return format.format(new Date(timestamp));
+    private Long timestampToBucket(long timestamp) {
+        return timestamp;
     }
 }

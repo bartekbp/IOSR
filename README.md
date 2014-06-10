@@ -147,7 +147,7 @@ Następnie trzeba uruchomić cluster storma:
     # @cloudera-master: tu odpalamy nimbusa - taki storm-master
     ~/storm-0.8.1/bin/storm nimbus &
     # Warto uruchomić także ui aby można było śledzić status naszej topologii.
-    # UI jest dostępny pod adresem cloudera-master:8080
+    # UI jest dostępny pod adresem cloudera-master:8088
     ~/storm-0.8.1/bin/storm ui &
 
     # @cloudera-slave1: tu odpalamy supervisora

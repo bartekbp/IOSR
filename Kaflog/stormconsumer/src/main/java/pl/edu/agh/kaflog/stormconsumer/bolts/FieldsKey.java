@@ -33,13 +33,17 @@ public class FieldsKey {
         return 31 * keys.hashCode() + values.hashCode();
     }
 
-    public String getRowId(String rest) {
+    public Long getBucketId(Long timestamp) {
+        return timestamp / 60;
+    }
+
+    public String getRowId(Long rest) {
         StringBuilder sb = new StringBuilder();
         for(Object value: values) {
             sb.append(value).append(SEPARATOR);
         }
         if (rest != null) {
-            sb.append(rest);
+            sb.append((rest / 60) * 60);
         }
         return sb.toString();
     }

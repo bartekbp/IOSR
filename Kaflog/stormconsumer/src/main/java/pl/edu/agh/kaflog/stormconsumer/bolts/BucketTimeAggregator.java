@@ -15,7 +15,7 @@ import java.util.*;
 public class BucketTimeAggregator extends BaseRichBolt {
     private OutputCollector collector;
     private List<String> fields;
-    private Map<String, Integer> data;
+    private Map<Long, Integer> data;
 
     public BucketTimeAggregator(String... fields) {
         this.fields = Arrays.asList(fields);
@@ -24,24 +24,25 @@ public class BucketTimeAggregator extends BaseRichBolt {
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
-        data = new HashMap<String, Integer>();
+        data = new HashMap<Long, Integer>();
     }
 
     @Override
     public void execute(Tuple input) {
-        String bucket = input.getStringByField(StormFields.BUCKET);
+        Long bucket = input.getLongByField(StormFields.BUCKET);
         FieldsKey key = new FieldsKey(input, fields);
         Integer value;
         String rowId = key.getRowId(bucket);
-        if (!data.keySet().contains(rowId)) {
+        Long bucketId = key.getBucketId(bucket);
+        if (!data.keySet().contains(bucketId)) {
             value = 1;
         } else {
-            value = 1 + data.get(rowId);
+            value = 1 + data.get(bucketId);
         }
-        data.put(rowId, value);
+        data.put(bucketId, value);
         List<Object> toEmit = new ArrayList<Object>();
         toEmit.add(rowId);
-        toEmit.add(Lists.<Object>newArrayList(new HBaseField("value", "", String.valueOf(value))));
+        toEmit.add(Lists.<Object>newArrayList(new HBaseField("f", "count", String.valueOf(value))));
         //System.out.println(toEmit);
         collector.emit(toEmit);
 

@@ -22,7 +22,7 @@
     <dependencies>
         <dependency>
             <groupId>pl.edu.agh.kaflog</groupId>
-            <artifactId>kaflog-common</artifactId>
+            <artifactId>kaflog-hiveviewcreator</artifactId>
             <version>0.1</version>
             <exclusions>
                 <exclusion>
@@ -132,6 +132,12 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.4</version>
+        </dependency>
+
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.6</version>
         </dependency>
     </dependencies>
 

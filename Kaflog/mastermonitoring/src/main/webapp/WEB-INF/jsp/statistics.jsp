@@ -8,6 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.0.3/css/bootstrap.min.css"/>
     <script type="text/javascript" src="/webjars/jquery/2.0.3/jquery.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script>
+        $(function() {
+            $( "#from_datepicker" ).datepicker();
+            $( "#to_datepicker" ).datepicker();
+            $( "#from_hour").timepicker();
+            $( "#to_hour").timepicker();
+        });
+    </script>
     <title>Statistics</title>
 </head>
 
@@ -39,7 +48,26 @@
     </div>
 
     <br>
-    TODO
+    <div style="margin: 70px 10px 10px;">
+        <form action="statistics" method="GET">
+            <div>
+                <p>Please select time range</p>
+            </div>
+            <div>
+                <span>Start date</span>
+                <input type="text" id="from_datepicker" name="from" />
+                <input type="text" id="from_hour" name="from_hour" />
+                <span>End date</span>
+                <input type="text" id="to_datepicker" name="to" />
+                <input type="text" id="to_hour" name="to_hour" />
+                <input type="submit" name="submit" value="go"/>
+            </div>
+        </form>
+    </div>
+
+    <br/><br/>
+
+
 
 </body>
 

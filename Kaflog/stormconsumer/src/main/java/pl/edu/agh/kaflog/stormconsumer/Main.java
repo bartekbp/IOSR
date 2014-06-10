@@ -30,9 +30,9 @@ public class Main {
         }
 
 
-        HTDescriptor severityTable = new HTDescriptor("srm_severity_per_minute", "value");
-        HTDescriptor hostTable = new HTDescriptor("srm_host_per_minute", "value");
-        HTDescriptor hostSeverityTable = new HTDescriptor("srm_host_severity_per_minute", "value");
+        HTDescriptor severityTable = new HTDescriptor("srm_severity_per_minute", "f");
+        HTDescriptor hostTable = new HTDescriptor("srm_host_per_minute", "f");
+        HTDescriptor hostSeverityTable = new HTDescriptor("srm_host_severity_per_minute", "f");
 
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("kaflogSpout", spout);

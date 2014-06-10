@@ -36,7 +36,7 @@ public class HiveDataImporter {
             }
 
             LOG.debug("Data to hdfs loaded");
-            hdfsUtils.deleteSubPaths(root);
+//            hdfsUtils.deleteSubPaths(root);
         } finally {
             CloseableUtils.close(hiveDao);
             CloseableUtils.close(hdfsUtils);
@@ -80,6 +80,19 @@ public class HiveDataImporter {
                     hiveDao = new HiveHBaseDao();
                     hiveDao.createHostPerSeverityPerTimeView();
                     LOG.debug("Created host per severity per time view");
+                } finally {
+                    CloseableUtils.close(hiveDao);
+                }
+            }
+        }, new ExecutorUtils.ThrowingRunnable() {
+            @Override
+            public void run() throws Exception {
+                HiveHBaseDao hiveDao = null;
+
+                try {
+                    hiveDao = new HiveHBaseDao();
+                    hiveDao.ensureStromTablesAvailability();
+                    LOG.debug("Created access to hbase strom tables ensured");
                 } finally {
                     CloseableUtils.close(hiveDao);
                 }
