@@ -31,7 +31,7 @@ public class Bucketize extends BaseRichBolt {
         List<Object> toEmit = Lists.<Object>newArrayList(
                 timestampToBucket(logMessage.getTimestamp() / 1000),
                 logMessage.getHostname(),
-                logMessage.getSeverity());
+                LogMessage.LEVEL_STRING[logMessage.getSeverity()]);
         collector.emit(toEmit);
     }
 
