@@ -1,5 +1,6 @@
 package pl.edu.agh.kaflog.master.controller;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,7 +11,9 @@ import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import pl.edu.agh.kaflog.master.monitoring.NodeStateSummary;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
 import pl.edu.agh.kaflog.master.monitoring.RegisterClientMBean;
+import pl.edu.agh.kaflog.master.statistics.ImpalaHBaseDao;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -33,7 +36,7 @@ public class MonitoringController {
     @RequestMapping(value = "/poll_monitoring", method = RequestMethod.GET)
     public
     @ResponseBody
-    String pollMonitoring() {
+    String pollMonitoring()  {
         List<NodeStateSummary> nodeStateSummaries = producerMonitoring.listClients();
 
         if (nodeStateSummaries.size() == 0) {

@@ -1,6 +1,7 @@
 package pl.edu.agh.kaflog.master;
 
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -23,8 +24,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
+import pl.edu.agh.kaflog.common.utils.HiveUtils;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
+import pl.edu.agh.kaflog.master.statistics.ImpalaHBaseDao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,6 +40,8 @@ import java.util.List;
 public class Main extends SpringBootServletInitializer {
     @Autowired
     ProducerMonitoring producerMonitoring;
+    @Autowired
+    private ImpalaHBaseDao dao;
 
     public static void main(String... args) {
         SpringApplication.run(Main.class, args);
@@ -47,8 +53,8 @@ public class Main extends SpringBootServletInitializer {
     }
 
     @Scheduled(fixedRate = 20000)
-    public void listClients() {
-        //System.out.println(producerMonitoring.listClients());
+    public void listClients() throws SQLException {
+
     }
 
     @Bean
@@ -72,6 +78,11 @@ public class Main extends SpringBootServletInitializer {
                 }
             }
         };
+    }
+
+    @Bean
+    public HiveUtils hiveUtils() {
+        return new HiveUtils();
     }
 
     protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {

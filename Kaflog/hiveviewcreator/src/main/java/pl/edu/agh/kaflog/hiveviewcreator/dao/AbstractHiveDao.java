@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.hivedao;
+package pl.edu.agh.kaflog.hiveviewcreator.dao;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;

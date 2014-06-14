@@ -3,6 +3,7 @@ package pl.edu.agh.kaflog.master.controller;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,12 +22,12 @@ import java.util.Date;
 @Controller
 public class StatisticsController {
     private static final DateFormat format = DateFormat.getDateInstance();
-    private final ViewQueryHandler viewQueryHandler;
+    @Autowired
+    private ViewQueryHandler viewQueryHandler;
 
     DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
 
-    public StatisticsController() throws SQLException {
-        viewQueryHandler = new ViewQueryHandler();
+    public StatisticsController()  {
     }
 
     @RequestMapping("/statistics")

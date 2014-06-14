@@ -14,6 +14,13 @@
         <version>1.0.2.RELEASE</version>
     </parent>
 
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <url>http://repo.springsource.org/libs-milestone/</url>
+        </repository>
+    </repositories>
+
     <properties>
         <m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
     </properties>
@@ -26,16 +33,52 @@
             <version>0.1</version>
         </dependency>
         <dependency>
-            <groupId>pl.edu.agh.kaflog</groupId>
-            <artifactId>kaflog-hivedao</artifactId>
-            <version>0.1</version>
+            <groupId>org.apache.hadoop</groupId>
+            <artifactId>hadoop-client</artifactId>
+            <version>2.0.0-cdh4.6.0</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>servlet-api</artifactId>
+                    <artifactId>jetty-util</artifactId>
                     <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>servlet-api-2.5</artifactId>
+                    <artifactId>netty</artifactId>
+                    <groupId>org.jboss.netty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>org.jboss.netty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jersey-server</artifactId>
+                    <groupId>com.sun.jersey</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-jdbc</artifactId>
+            <version>0.10.0-cdh4.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-hbase-handler</artifactId>
+            <version>0.10.0-cdh4.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jetty</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jetty-util</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>servlet-api</artifactId>
                     <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
@@ -43,16 +86,16 @@
                     <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>jetty</artifactId>
-                    <groupId>org.mortbay.jetty</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>jsp-api-2.1</artifactId>
                     <groupId>org.mortbay.jetty</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>jasper-runtime</artifactId>
-                    <groupId>tomcat</groupId>
+                    <artifactId>servlet-api-2.5</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jersey-server</artifactId>
+                    <groupId>com.sun.jersey</groupId>
                 </exclusion>
                 <exclusion>
                     <artifactId>jamon-runtime</artifactId>
@@ -63,12 +106,27 @@
                     <groupId>tomcat</groupId>
                 </exclusion>
                 <exclusion>
-                    <artifactId>netty</artifactId>
-                    <groupId>io.netty</groupId>
+                    <artifactId>jasper-runtime</artifactId>
+                    <groupId>tomcat</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>org.apache.hive</groupId>
+            <artifactId>hive-service</artifactId>
+            <version>0.10.0-cdh4.6.0</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -137,12 +195,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>1.6.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-            <version>1.6</version>
         </dependency>
     </dependencies>
 

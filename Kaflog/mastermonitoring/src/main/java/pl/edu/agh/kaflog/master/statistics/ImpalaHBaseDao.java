@@ -1,24 +1,53 @@
 package pl.edu.agh.kaflog.master.statistics;
 
+import com.google.common.base.Function;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Maps;
+import com.google.common.util.concurrent.AtomicLongMap;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.RowSetDynaClass;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
-import pl.edu.agh.kaflog.hivedao.AbstractHiveDao;
-import pl.edu.agh.kaflog.hivedao.CallablePreparedStatement;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterUtils;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.stereotype.Repository;
+import pl.edu.agh.kaflog.common.utils.HiveUtils;
+
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ImpalaHBaseDao extends AbstractHiveDao {
+@Repository
+public class ImpalaHBaseDao  {
+    @Autowired
+    private NamedParameterJdbcTemplate jdbc;
+    @Autowired
+    private HiveUtils hiveUtils;
+    @Value("${hdp.table}")
+    private String hdpTable;
+    @Value("${srm.table}")
+    private String srmTable;
 
-    public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) throws SQLException {
+
+    public ImpalaHBaseDao() {
+    }
+
+    public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) {
+        DateTime now = new DateTime();
+        to = to.isAfterNow() ? now : to;
         final DateTime hadoopFrom = from.withMinuteOfHour(00);
         final DateTime hadoopTo = to.withMinuteOfHour(00);
-        DateTime now = new DateTime();
         final DateTime stormFrom;
         final DateTime stormTo;
 
@@ -31,222 +60,77 @@ public class ImpalaHBaseDao extends AbstractHiveDao {
             stormTo = now;
         }
 
-        Map<String, Map<String, Long>> hostToSevToLogNum = new HashMap<String, Map<String, Long>>();
+        Map<String, AtomicLongMap<String>> hostToSevToLogNum = new HashMap<String, AtomicLongMap<String>>();
 
-        try {
-            if (stormFrom.isBefore(stormTo)) {
-                RowSetDynaClass stormRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
-
-                    @Override
-                    public String query() {
-                        return "select key.host as host, key.severity as sev, sum(value) as s from hbase_srm_host_severity_per_minute where key.time > ? and key.time <= ? group by key.host, key.severity";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, stormFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, stormTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : stormRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    String host = (String) row.get("host");
-                    String sev = (String) row.get("sev");
-                    Long sum = (Long) row.get("s");
-                    long currentSum = sum;
-                    if(!hostToSevToLogNum.containsKey(host)) {
-                        hostToSevToLogNum.put(host, new HashMap<String, Long>());
-                    }
-
-                    if(hostToSevToLogNum.get(host).containsKey(sev)) {
-                        currentSum += hostToSevToLogNum.get(host).get(sev);
-                    }
-
-                    hostToSevToLogNum.get(host).put(sev, currentSum);
-                }
-            }
-            if (hadoopFrom.isBefore(hadoopTo)) {
-                RowSetDynaClass hadoopRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
-
-                    @Override
-                    public String query() {
-                        return  "select key.host as host, key.severity as sev, sum(count) as s from hdp_host_severity_per_time where key.time > ? and key.time <= ? group by key.host, key.severity";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, hadoopFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, hadoopTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : hadoopRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    String host = (String) row.get("host");
-                    String sev = (String) row.get("sev");
-                    Long sum = (Long) row.get("s");
-                    long currentSum = sum;
-                    if(!hostToSevToLogNum.containsKey(host)) {
-                        hostToSevToLogNum.put(host, new HashMap<String, Long>());
-                    }
-
-                    if(hostToSevToLogNum.get(host).containsKey(sev)) {
-                        currentSum += hostToSevToLogNum.get(host).get(sev);
-                    }
-
-                    hostToSevToLogNum.get(host).put(sev, currentSum);
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (stormFrom.isBefore(stormTo)) {
+            queryForHostAndSeverity(stormFrom, stormTo, srmTable, hostToSevToLogNum);
         }
 
-        return hostToSevToLogNum;
+        if (hadoopFrom.isBefore(hadoopTo)) {
+            queryForHostAndSeverity(hadoopFrom, hadoopTo, hdpTable, hostToSevToLogNum);
+        }
+
+
+        return ImmutableMap.copyOf(Maps.transformValues(hostToSevToLogNum, new Function<AtomicLongMap<String>, Map<String, Long>>() {
+            @Override
+            public Map<String, Long> apply(AtomicLongMap<String> input) {
+                return ImmutableMap.copyOf(input.asMap());
+            }
+        }));
     }
 
-    public ImpalaHBaseDao() throws SQLException {
+    private void queryForHostAndSeverity(DateTime from, DateTime to, String table, final Map<String, AtomicLongMap<String>> hostToSevToLogNum) {
+        jdbc.query("select key as k, count as s from " + table +
+                        " where key > :from and key <= :to",
+                ImmutableMap.of("from", hiveUtils.toHBaseLowerKeyBound(from),
+                        "to", hiveUtils.toHBaseUpperKeyBound(to)), new RowCallbackHandler() {
+                    @Override
+                    public void processRow(ResultSet resultSet) throws SQLException {
+                        String timeHostSeverity = resultSet.getString(1);
+                        String host = hiveUtils.hBaseKeyToHost(timeHostSeverity);
+                        String severity = hiveUtils.hBaseKeyToSeverity(timeHostSeverity);
+                        long count = resultSet.getLong(2);
+
+                        if (!hostToSevToLogNum.containsKey(host)) {
+                            hostToSevToLogNum.put(host, AtomicLongMap.<String>create());
+                        }
+
+                        hostToSevToLogNum.get(host).addAndGet(severity, count);
+                    }
+                }
+        );
     }
 
-    public Map<String, Long> getSeverityResults(DateTime from, DateTime to) throws SQLException {
-        final DateTime hadoopFrom = from.withMinuteOfHour(00);
-        final DateTime hadoopTo = to.withMinuteOfHour(00);
-        DateTime now = new DateTime();
-        final DateTime stormFrom;
-        final DateTime stormTo;
 
-        Interval interval = new Interval(to, now);
-        if (interval.toDuration().isShorterThan(Duration.standardHours(1L))) {
-            stormFrom = to.withMinuteOfHour(00);
-            stormTo = to;
-        } else {
-            stormFrom = now;
-            stormTo = now;
-        }
-
-        Map<String, Long> severityToLogNum = new HashMap<String, Long>();
-
-        try {
-            if (stormFrom.isBefore(stormTo)) {
-                RowSetDynaClass stormRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
-
-                    @Override
-                    public String query() {
-                        return "select key.severity as sev, sum(value) as s from hbase_srm_severity_per_minute where key.time > ? and key.time <= ? group by key.severity";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, stormFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, stormTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : stormRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    severityToLogNum.put((String) row.get("sev"), (Long) row.get("s"));
-                }
-            }
-            if (hadoopFrom.isBefore(hadoopTo)) {
-                RowSetDynaClass hadoopRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
-
-                    @Override
-                    public String query() {
-                        return  "select key.severity as sev, sum(count) as s from hdp_severity_per_time where key.time > ? and key.time <= ? group by key.severity";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, hadoopFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, hadoopTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : hadoopRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    long numOfStormResults = 0;
-                    if(severityToLogNum.containsKey(row.get("sev"))) {
-                        numOfStormResults = severityToLogNum.get(row.get("sev"));
-                    }
-
-                    severityToLogNum.put((String) row.get("sev"), numOfStormResults + (Long) row.get("s"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return severityToLogNum;
+    public Map<String, Long> getSeverityResults(DateTime from, DateTime to)  {
+        Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
+        return getSeverityResults(hostSevToCount);
     }
 
-    public Map<String, Long> getHostResults(DateTime from, DateTime to) throws SQLException {
-        final DateTime hadoopFrom = from.withMinuteOfHour(00);
-        final DateTime hadoopTo = to.withMinuteOfHour(00);
-        DateTime now = new DateTime();
-        final DateTime stormFrom;
-        final DateTime stormTo;
-
-        Interval interval = new Interval(to, now);
-        if (interval.toDuration().isShorterThan(Duration.standardHours(1L))) {
-            stormFrom = to.withMinuteOfHour(00);
-            stormTo = to;
-        } else {
-            stormFrom = now;
-            stormTo = now;
+    public Map<String, Long> getSeverityResults(Map<String, Map<String, Long>> hostSevToCount)  {
+        AtomicLongMap<String> sevToTime = AtomicLongMap.<String>create();
+        for(Map<String, Long> value : hostSevToCount.values()) {
+            for(String sev : value.keySet()) {
+                sevToTime.addAndGet(sev, value.get(sev));
+            }
         }
 
-        Map<String, Long> hostToLogNum = new HashMap<String, Long>();
+        return ImmutableMap.copyOf(sevToTime.asMap());
+    }
 
-        try {
-            if (stormFrom.isBefore(stormTo)) {
-                RowSetDynaClass stormRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
+    public Map<String, Long> getHostResults(DateTime from, DateTime to)  {
+        Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
+        return getHostResults(hostSevToCount);
+    }
 
-                    @Override
-                    public String query() {
-                        return "select key.host as host, sum(value) as s from hbase_srm_host_per_minute where key.time > ? and key.time <= ? group by key.host";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, stormFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, stormTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : stormRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    hostToLogNum.put((String) row.get("host"), (Long) row.get("s"));
-                }
+    public Map<String, Long> getHostResults(Map<String, Map<String, Long>> hostSevToCount)  {
+        AtomicLongMap<String> hostToCount = AtomicLongMap.<String>create();
+        for(Map.Entry<String, Map<String, Long>> entry : hostSevToCount.entrySet()) {
+            for(Long count : entry.getValue().values()) {
+                hostToCount.addAndGet(entry.getKey(), count);
             }
-            if (hadoopFrom.isBefore(hadoopTo)) {
-                RowSetDynaClass hadoopRows = withStatement(new CallablePreparedStatement<RowSetDynaClass>() {
-
-                    @Override
-                    public String query() {
-                        return  "select key.host as host, sum(count) as s from hdp_host_per_time where key.time > ? and key.time <= ? group by key.host";
-                    }
-
-                    @Override
-                    public RowSetDynaClass call(PreparedStatement preparedStatement) throws SQLException {
-                        preparedStatement.setLong(1, hadoopFrom.getMillis() / 1000);
-                        preparedStatement.setLong(2, hadoopTo.getMillis() / 1000);
-                        return new RowSetDynaClass(preparedStatement.executeQuery());
-                    }
-                });
-                for(Object rawRow : hadoopRows.getRows()) {
-                    DynaBean row = (DynaBean) rawRow;
-                    long numOfStormResults = 0;
-                    if(hostToLogNum.containsKey(row.get("host"))) {
-                        numOfStormResults = hostToLogNum.get(row.get("host"));
-                    }
-
-                    hostToLogNum.put((String) row.get("host"), numOfStormResults + (Long) row.get("s"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
 
-        return hostToLogNum;
+        return ImmutableMap.copyOf(hostToCount.asMap());
     }
 }

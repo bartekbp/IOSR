@@ -1,4 +1,4 @@
-package pl.edu.agh.kaflog.hivedao;
+package pl.edu.agh.kaflog.hiveviewcreator.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;

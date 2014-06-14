@@ -27,7 +27,7 @@ Vagrant.configure("2") do |config|
         end
         cloudera_master.vm.provider :virtualbox do |v|
             v.name = "cloudera-master"
-            v.customize ["modifyvm", :id, "--memory", "5092"]
+            v.customize ["modifyvm", :id, "--memory", "6092"]
         end
         cloudera_master.vm.network :private_network, ip: "10.211.55.100"
         cloudera_master.vm.hostname = "cloudera-master"

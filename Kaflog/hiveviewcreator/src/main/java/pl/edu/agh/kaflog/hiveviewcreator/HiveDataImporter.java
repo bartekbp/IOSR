@@ -44,32 +44,6 @@ public class HiveDataImporter {
 
     public List<ExecutorUtils.ThrowingRunnable> createViews() throws SQLException {
         return Arrays.asList(new ExecutorUtils.ThrowingRunnable() {
-            public void run() throws Exception {
-                HiveHBaseDao hiveDao = null;
-
-                try {
-                    hiveDao = new HiveHBaseDao();
-                    hiveDao.createSeverityPerTimeView();
-                    LOG.debug("Created severity per time view");
-                } finally {
-                    CloseableUtils.close(hiveDao);
-                }
-            }
-        }, new ExecutorUtils.ThrowingRunnable() {
-
-            @Override
-            public void run() throws Exception {
-                HiveHBaseDao hiveDao = null;
-
-                try {
-                    hiveDao = new HiveHBaseDao();
-                    hiveDao.createHostPerTimeView();
-                    LOG.debug("Created host per time view");
-                } finally {
-                    CloseableUtils.close(hiveDao);
-                }
-            }
-        }, new ExecutorUtils.ThrowingRunnable() {
 
             @Override
             public void run() throws Exception {

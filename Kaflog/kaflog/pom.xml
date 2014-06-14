@@ -12,7 +12,6 @@
         <module>../common</module>
         <module>../hadoopconsumer</module>
         <module>../hiveviewcreator</module>
-        <module>../hivedao</module>
         <module>../mastermonitoring</module>
         <module>../stormconsumer</module>
         <module>../logproducer</module>

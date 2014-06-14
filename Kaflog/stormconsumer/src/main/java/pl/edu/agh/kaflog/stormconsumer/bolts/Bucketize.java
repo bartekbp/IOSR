@@ -8,6 +8,7 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import com.google.common.collect.Lists;
 import pl.edu.agh.kaflog.common.LogMessage;
+import pl.edu.agh.kaflog.common.utils.HiveUtils;
 import pl.edu.agh.kaflog.stormconsumer.utils.StormFields;
 
 import java.text.DateFormat;
@@ -19,6 +20,8 @@ import java.util.Map;
 public class Bucketize extends BaseRichBolt {
 
     private OutputCollector collector;
+    private HiveUtils hiveUtils = new HiveUtils();
+
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
@@ -29,18 +32,21 @@ public class Bucketize extends BaseRichBolt {
         System.out.println(input);
         LogMessage logMessage = (LogMessage) input.getValueByField(StormFields.LOG_MESSAGE);
         List<Object> toEmit = Lists.<Object>newArrayList(
-                timestampToBucket(logMessage.getTimestamp() / 1000),
-                logMessage.getHostname(),
-                LogMessage.LEVEL_STRING[logMessage.getSeverity()]);
+                hiveUtils.toHBaseKey(
+                        hiveUtils.toHiveTimestamp(roundToMinutes(logMessage)),
+                        logMessage.getHostname(),
+                        LogMessage.LEVEL_STRING[logMessage.getSeverity()])
+        );
         collector.emit(toEmit);
+    }
+
+    private long roundToMinutes(LogMessage logMessage) {
+        long bucketTime = 1000 * 60;
+        return (logMessage.getTimestamp() / bucketTime) * bucketTime;
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        declarer.declare(new Fields(StormFields.BUCKET, StormFields.HOST, StormFields.SEVERITY));
-    }
-
-    private Long timestampToBucket(long timestamp) {
-        return timestamp;
+        declarer.declare(new Fields(StormFields.ROWID));
     }
 }
