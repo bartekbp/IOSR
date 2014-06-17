@@ -33,27 +33,25 @@ public class StatisticsController {
     @RequestMapping("/statistics")
     public ModelAndView statistics(
             @RequestParam(value = "from", required = false) String from,
-            @RequestParam(value = "from_hour", required = false) String from_hour,
-            @RequestParam(value = "to", required = false) String to,
-            @RequestParam(value = "to_hour", required = false) String to_hour) throws SQLException {
+            @RequestParam(value = "to", required = false) String to) throws SQLException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("statistics");
         if(to != null) {
-            modelAndView.addObject("report", createReport(from, from_hour, to, to_hour));
+            modelAndView.addObject("report", createReport(from, to));
         }
         modelAndView.setViewName("statistics");
         return modelAndView;
     }
 
-    private Object createReport(String from, String from_hour, String to, String to_hour) throws SQLException {
+    private Object createReport(String from, String to) throws SQLException {
 
         DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
         DateTime fromDate = null;
         DateTime toDate = null;
 
         try {
-            fromDate = fmt.parseDateTime(String.valueOf(from) + " " + String.valueOf(from_hour));
-            toDate = fmt.parseDateTime(String.valueOf(to) + " " + String.valueOf(to_hour));
+            fromDate = fmt.parseDateTime(String.valueOf(from));
+            toDate = fmt.parseDateTime(String.valueOf(to));
         } catch(Throwable t) {
             t.printStackTrace();
         }
