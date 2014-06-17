@@ -25,8 +25,6 @@ public class StatisticsController {
     @Autowired
     private ViewQueryHandler viewQueryHandler;
 
-    DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
-
     public StatisticsController()  {
     }
 
@@ -45,7 +43,7 @@ public class StatisticsController {
 
     private Object createReport(String from, String to) throws SQLException {
 
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("MM/dd/yyyy HH:mm");
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");
         DateTime fromDate = null;
         DateTime toDate = null;
 
