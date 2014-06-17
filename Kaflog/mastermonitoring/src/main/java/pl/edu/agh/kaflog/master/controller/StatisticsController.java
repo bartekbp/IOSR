@@ -1,6 +1,7 @@
 package pl.edu.agh.kaflog.master.controller;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,7 @@ public class StatisticsController {
         if (toDate == null) {
             toDate = new DateTime();
         }
-        return viewQueryHandler.createView(fromDate, toDate);
+        return viewQueryHandler.createView(fromDate.withZoneRetainFields(DateTimeZone.UTC), toDate.withZoneRetainFields(DateTimeZone.UTC));
 
     }
 
