@@ -15,19 +15,30 @@ import pl.edu.agh.kaflog.stormconsumer.spouts.FakeSpout;
 import pl.edu.agh.kaflog.stormconsumer.spouts.KaflogSpout;
 
 
+/**
+ * Storm consumer Main class
+ */
 public class Main {
 
+    /**
+     * Creates storm topology and submit it to cluster
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         IRichSpout spout;
+        // fake spout may be used for testing purposes
         if (KaflogProperties.getBoolProperty("kaflog.storm.useFakeSpout")) {
             spout = new FakeSpout();
         } else {
             spout = new KaflogSpout(KaflogProperties.getProperties());
         }
 
+        //Describe HBase table to store data
         HTDescriptor hostSeverityTable = new HTDescriptor("srm_host_severity_per_minute", "f");
 
+        //Creating topology
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("kaflogSpout", spout);
         // buckets
@@ -36,6 +47,7 @@ public class Main {
                 .shuffleGrouping("bucketize");
 
 
+        //Config topology
         StormTopology topology = builder.createTopology();
 
         Config conf = new Config();
@@ -45,6 +57,7 @@ public class Main {
 
         String topologyName = KaflogProperties.getProperty("kaflog.storm.topologyName");
 
+        // Local cluster may be used for testing purposes
         if(KaflogProperties.getBoolProperty("kaflog.storm.useLocalCluster")) {
             LocalCluster localCluster = new LocalCluster();
             localCluster.submitTopology("delayerTopology", conf, topology);

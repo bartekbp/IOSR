@@ -15,17 +15,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+
+/**
+ * This bolt increments values for buckets crried in tuples
+ */
 public class HBaseIncrementingBolt extends BaseRichBolt {
 
     private final HTDescriptor tableDescriptor;
     private final Properties properties;
     private HTable table;
 
+    /**
+     *
+     * @param tableDescriptor descriptor of table where counts are stored
+     * @param properties configuration should include:
+     *                   <ul>
+     *                       <li>hbase.zookeeper.quorum=zookeeper_host</li>
+     *                       <li>hbase.zookeeper.property.clientPort=zookeeper_port</li>
+     *                       <li>hbase.master.clientPort=hbase_master_host:hbase_master_port</li>
+     *                   </ul>
+     */
     public HBaseIncrementingBolt(HTDescriptor tableDescriptor, Properties properties) {
         this.tableDescriptor = tableDescriptor;
         this.properties = properties;
     }
 
+    /**
+     * Prepares bolt, creates it's table if not yet created
+     */
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         Configuration configuration = HBaseConfiguration.create();
@@ -46,6 +63,10 @@ public class HBaseIncrementingBolt extends BaseRichBolt {
         }
     }
 
+    /**
+     * Increments value pointed by tuple (practicality a bucket value)
+     * @param input
+     */
     @Override
     public void execute(Tuple input) {
         String rowId = input.getString(0);
@@ -57,6 +78,10 @@ public class HBaseIncrementingBolt extends BaseRichBolt {
         }
     }
 
+
+    /**
+     * Closes table
+     */
     @Override
     public void cleanup() {
         try {
@@ -67,6 +92,10 @@ public class HBaseIncrementingBolt extends BaseRichBolt {
         }
     }
 
+
+    /**
+     * No output fields
+     */
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
 
