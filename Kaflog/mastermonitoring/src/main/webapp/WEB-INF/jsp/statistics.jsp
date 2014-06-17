@@ -134,9 +134,9 @@
             <%
                 all = 0;
                 for (pl.edu.agh.kaflog.master.statistics.Pair<String, Long> pair : report.getSeverityData()) { %>
-            <td><%= entry.getValue().get(pair.getFirst()) %>
-            </td>
-            <%all += entry.getValue().get(pair.getFirst());%>
+
+            <td><%= entry.getValue().containsKey(pair.getFirst()) ?entry.getValue().get(pair.getFirst()):0 %>  </td>
+            <%all += entry.getValue().containsKey(pair.getFirst()) ?entry.getValue().get(pair.getFirst()):0;%>
             <% } %>
             <td><%=all%>
             </td>

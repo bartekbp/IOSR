@@ -6,6 +6,10 @@ import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * This class implements Runnable that allows to submit it as a job to camus
+ * The Job is configured in "camus.properties" file
+ */
 public class Main implements Runnable {
     private static final Logger LOG = LoggerFactory.getLogger(Main.class);
     private final String[] args;
@@ -19,6 +23,9 @@ public class Main implements Runnable {
         main.run();
     }
 
+    /**
+     * Runs camus job
+     */
     @Override
     public void run() {
         try {

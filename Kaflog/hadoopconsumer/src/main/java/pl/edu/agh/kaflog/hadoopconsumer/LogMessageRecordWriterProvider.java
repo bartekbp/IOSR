@@ -15,6 +15,7 @@ import pl.edu.agh.kaflog.common.LogMessageSerializer;
 import java.io.IOException;
 
 
+
 public class LogMessageRecordWriterProvider implements RecordWriterProvider {
     public static final String ETL_OUTPUT_RECORD_DELIMITER = "etl.output.record.delimiter";
     public static final String DEFAULT_RECORD_DELIMITER    = "";

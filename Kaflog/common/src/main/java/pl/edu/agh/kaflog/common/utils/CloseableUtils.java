@@ -6,7 +6,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+
+/**
+ * In Java 6 there is no try with resource statement
+ * This class allows easy closing all entities that needs it
+ *
+ * Another issue is that Java 6 des not have AutoCloseable interface so we need
+ * to implements many signatures
+ */
 public class CloseableUtils {
+
     public static void close(Closeable autoCloseable) {
         if(autoCloseable != null) {
             try {

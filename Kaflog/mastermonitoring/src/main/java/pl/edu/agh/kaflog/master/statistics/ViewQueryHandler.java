@@ -1,5 +1,6 @@
 package pl.edu.agh.kaflog.master.statistics;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class ViewQueryHandler {
         List<Pair<String, Long>> severityData = Lists.newArrayList();
 
         for (Map.Entry<String, Long> entry : impalaHBaseDao.getHostResults(fromDate, toDate).entrySet()) {
-            hostData.add(new Pair<String,Long>(entry.getKey(), entry.getValue()));
+            hostData.add(new Pair<String,Long>(Objects.firstNonNull(entry.getKey(),""), entry.getValue()));
         }
 
         long all = 0;

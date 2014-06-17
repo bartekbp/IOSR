@@ -6,6 +6,10 @@ import pl.edu.agh.kaflog.common.utils.KaflogDateUtils;
 import java.io.*;
 import java.util.Arrays;
 
+/**
+ * This class encapsulates one Log entry taken from syslog and later processed by this system
+ * It is regular Java bean
+ */
 public class LogMessage implements Serializable {
     private int facility;
     private int severity;
@@ -36,21 +40,30 @@ public class LogMessage implements Serializable {
                 message);
     }
 
+    /**
+     * Converts LogMessage to string that can be processed by HDFS
+     * @return hdfs representation of Log Message
+     */
     public String toHdfsFormat() {
-        char sep = '\7';
+        char sep = KaflogConstants.SEPARATOR;
         return String.format("%s" + sep + "%s" + sep + "%s" + sep + "%s" + sep + "%s",
                 LEVEL_STRING[severity],
-                timestamp / 1000,
+                timestamp / KaflogConstants.MILLISECONDS_IN_SECOND,
                 hostname,
                 source,
                 message);
     }
 
+    /**
+     * Converts hdfs compliant string to LogMessage
+     * @param str taken from Hive
+     * @return equivalent LogMessage
+     */
     public static LogMessage fromHive(String str) {
-        String[] tokens = str.split(Character.toString('\07'));
+        String[] tokens = str.split(Character.toString(KaflogConstants.SEPARATOR));
         String levelName = tokens[0].substring(1, tokens[0].length() - 1);
         int level = Arrays.asList(LEVEL_STRING).indexOf(levelName);
-        long timestamp = Long.parseLong(tokens[1]) * 1000;
+        long timestamp = Long.parseLong(tokens[1]) * KaflogConstants.MILLISECONDS_IN_SECOND;
         return new LogMessage(-1, level, timestamp, tokens[2], tokens[3], tokens[4]);
     }
 
@@ -78,6 +91,10 @@ public class LogMessage implements Serializable {
         return message;
     }
 
+
+    /**
+     * List of facilities exported from unix documentation
+     */
     public static final String[] FACILITY_STRING = {
             "user-level messages",
             "mail system",
@@ -103,6 +120,10 @@ public class LogMessage implements Serializable {
             "local6",
             "local7"};
 
+
+    /**
+     * List of severity levels exported from unix documentation
+     */
     public static final String[] LEVEL_STRING = {
             "emergency",
             "alert",
