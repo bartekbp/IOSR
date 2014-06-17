@@ -1,10 +1,13 @@
 package pl.edu.agh.kaflog.master.statistics;
 
+import com.google.common.collect.Lists;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class ViewQueryHandler {
@@ -12,7 +15,7 @@ public class ViewQueryHandler {
     private ImpalaHBaseDao impalaHBaseDao;
 
     public Object createView(DateTime fromDate, DateTime toDate) throws SQLException {
-        /*List<Pair<String, Long>> hostData = Lists.newArrayList();
+        List<Pair<String, Long>> hostData = Lists.newArrayList();
         List<Pair<String, Long>> severityData = Lists.newArrayList();
 
         for (Map.Entry<String, Long> entry : impalaHBaseDao.getHostResults(fromDate, toDate).entrySet()) {
@@ -32,8 +35,8 @@ public class ViewQueryHandler {
         report.setHostSeverityData(hostSeverityData);
         report.setAll(all);
 
-        return report;*/
-        return Report.fake();
+        return report;
+      //  return Report.fake();
     }
 
 }
