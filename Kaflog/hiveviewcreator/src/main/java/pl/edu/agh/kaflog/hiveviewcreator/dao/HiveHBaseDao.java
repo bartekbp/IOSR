@@ -1,10 +1,15 @@
 package pl.edu.agh.kaflog.hiveviewcreator.dao;
 
+import pl.edu.agh.kaflog.common.KaflogConstants;
+
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 
+/**
+ * This dao handles external hive tables that are actually stored in HBase
+ */
 public class HiveHBaseDao extends AbstractHiveDao {
     private long creationTimeInSec;
     public HiveHBaseDao() throws SQLException {
@@ -12,9 +17,15 @@ public class HiveHBaseDao extends AbstractHiveDao {
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        creationTimeInSec = calendar.getTimeInMillis() / 1000;
+        creationTimeInSec = calendar.getTimeInMillis() / KaflogConstants.MILLISECONDS_IN_SECOND;
     }
 
+    /**
+     * Ensures that table for Hadoop outcomes exists
+     * This is external HiveTable stored in HBase
+     * This table that contains Host Per Severity Per Time data (time is stored as month day hour)
+     * @throws SQLException
+     */
     public void createHostPerSeverityPerTimeView() throws SQLException {
         withStatement(new CallableStatement<Object>() {
             @Override
@@ -42,6 +53,12 @@ public class HiveHBaseDao extends AbstractHiveDao {
         });
     }
 
+    /**
+     * Ensures that table for Storm outcomes exists
+     * This is external HiveTable stored in HBase
+     * This table that contains Host Per Severity Per Time data (time is stored as hour and minutes)
+     * @throws SQLException
+     */
     public void ensureStromTablesAvailability() throws SQLException {
         withStatement(new CallableStatement<Object>() {
             @Override

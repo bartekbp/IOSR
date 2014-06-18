@@ -6,6 +6,14 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.Properties;
 
+
+/**
+ * This class holds properties shared across multiple modules.
+ * It's contend is hold in kaflog.properties file.
+ * It is aimed to keep configuration data.
+ *
+ * Singleton.
+ */
 public class KaflogProperties {
 
     private static Logger LOGGER = LoggerFactory.getLogger(KaflogProperties.class);
@@ -20,22 +28,28 @@ public class KaflogProperties {
         }
     }
 
+    /**
+     *
+     * @return all properties from kaflog.properties file
+     */
     public static Properties getProperties() {
         return PROPERTIES;
     }
 
+    /**
+     * Property with given name
+     * @param name of property
+     * @return value of property
+     */
     public static String getProperty(String name) {
         return PROPERTIES.getProperty(name);
     }
 
-    public static int getIntProperty(String name) {
-        try {
-            return Integer.parseInt(PROPERTIES.getProperty(name));
-        } catch(NumberFormatException e) {
-            return 0;
-        }
-    }
-
+    /**
+     * Return property with given name converted from string to boolean
+     * @param name of property
+     * @return value of property
+     */
     public static boolean getBoolProperty(String name) {
         return Boolean.parseBoolean(PROPERTIES.getProperty(name));
     }

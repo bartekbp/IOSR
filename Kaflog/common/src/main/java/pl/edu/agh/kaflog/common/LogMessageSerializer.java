@@ -7,6 +7,9 @@ import kafka.utils.VerifiableProperties;
 
 import java.io.*;
 
+/**
+ * Allows to pass LogMessages through kafka as structured object instead of array of bytes
+ */
 public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMessage> {
 
     /**
@@ -23,6 +26,11 @@ public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMes
 
     }
 
+    /**
+     * Converts LogMessage to bytes
+     * @param logMessage
+     * @return
+     */
     @Override
     public byte[] toBytes(LogMessage logMessage) {
         byte[] result = null;
@@ -51,6 +59,11 @@ public class LogMessageSerializer implements Encoder<LogMessage>, Decoder<LogMes
         return result;
     }
 
+    /**
+     * Convert bytes back to LogMessage
+     * @param bytes
+     * @return
+     */
     @Override
     public LogMessage fromBytes(byte[] bytes) {
         LogMessage result = null;

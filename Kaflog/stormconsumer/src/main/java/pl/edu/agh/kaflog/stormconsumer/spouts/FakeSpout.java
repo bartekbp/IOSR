@@ -13,22 +13,34 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Fake Spout - kaflogSpout mock for testing purposes
+ */
 public class FakeSpout extends BaseRichSpout {
 
     private SpoutOutputCollector collector;
     private Random random = new Random();
     private int counter = 0;
 
+    /**
+     * Output fields declaration
+     */
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
         declarer.declare(new Fields(StormFields.LOG_MESSAGE));
     }
 
+    /**
+     * Spout initialization
+     */
     @Override
     public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
         this.collector = collector;
     }
 
+    /**
+     * generate fake LogMessage and wait for som time (about 1 second in exponential distribution)
+     */
     @Override
     public void nextTuple() {
         Date now = new Date();

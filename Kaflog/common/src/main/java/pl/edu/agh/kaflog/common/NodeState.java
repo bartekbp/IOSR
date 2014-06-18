@@ -2,6 +2,9 @@ package pl.edu.agh.kaflog.common;
 
 import java.io.Serializable;
 
+/**
+ * Encapsulates node state. Standard Java bean
+ */
 public class NodeState implements Serializable {
     private String ip;
     private String hostname;
@@ -11,6 +14,7 @@ public class NodeState implements Serializable {
     private int logsInLastDay;
     private int logsInLastHour;
     private int logsInLastMinute;
+
 
     public NodeState(String ip, String hostname, long startTime, int totalLogs, int logsInLastDay, int logsInLastHour, int logsInLastMinute) {
         this.ip = ip;

@@ -17,16 +17,28 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Bolt that divide LogMessages that are incoming from kafka to minute buckets
+ * E.g. for LogMessage with timestamp with time: 2014/06/01 18:36:12 bucket "18:36" would be created
+ */
 public class Bucketize extends BaseRichBolt {
 
     private OutputCollector collector;
     private HiveUtils hiveUtils = new HiveUtils();
 
+    /**
+     * Preparation
+     * @param collector is used later to emit tuples
+     */
     @Override
     public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
         this.collector = collector;
     }
 
+    /**
+     * For every incoming tuple it emits new tuple with proper bucket for HBase storage
+     * @param input
+     */
     @Override
     public void execute(Tuple input) {
         System.out.println(input);
