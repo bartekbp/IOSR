@@ -48,15 +48,16 @@ public class ImpalaHBaseDao  {
     public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) {
         DateTime now = new DateTime().toDateTime(DateTimeZone.UTC);
         to = to.isAfterNow() ? now : to;
-        final DateTime hadoopFrom = from.withMinuteOfHour(00);
-        final DateTime hadoopTo = to.withMinuteOfHour(00);
-        final DateTime stormFrom;
-        final DateTime stormTo;
+        DateTime hadoopFrom = from.withMinuteOfHour(00);
+        DateTime hadoopTo = to.withMinuteOfHour(00);
+        DateTime stormFrom;
+        DateTime stormTo;
 
         Interval interval = new Interval(to, now);
         if (interval.toDuration().isShorterThan(Duration.standardHours(1L))) {
-            stormFrom = to.withMinuteOfHour(00);
+            stormFrom = to.withMinuteOfHour(00).minusHours(1);
             stormTo = to;
+            hadoopTo = hadoopTo.minusHours(1);
         } else {
             stormFrom = now;
             stormTo = now;

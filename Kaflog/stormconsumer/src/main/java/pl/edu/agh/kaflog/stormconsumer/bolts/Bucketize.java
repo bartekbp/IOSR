@@ -50,6 +50,7 @@ public class Bucketize extends BaseRichBolt {
                         LogMessage.LEVEL_STRING[logMessage.getSeverity()])
         );
         collector.emit(toEmit);
+        collector.ack(input);
     }
 
     private long roundToMinutes(LogMessage logMessage) {
