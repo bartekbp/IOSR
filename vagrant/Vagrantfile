@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
         end
         cloudera_slave1.vm.provider :virtualbox do |v|
             v.name = "cloudera-slave1"
-            v.customize ["modifyvm", :id, "--memory", "2048"]
+            v.customize ["modifyvm", :id, "--memory", "3048"]
         end
         cloudera_slave1.vm.network :private_network, ip: "10.211.55.101"
         cloudera_slave1.vm.hostname = "cloudera-slave1"
@@ -23,7 +23,7 @@ Vagrant.configure("2") do |config|
     config.vm.define :"cloudera-master" do |cloudera_master|
         cloudera_master.vm.box = "precise64"
         cloudera_master.vm.provider "vmware_fusion" do |v|
-            v.vmx["memsize"]  = "5092"
+            v.vmx["memsize"]  = "7000"
         end
         cloudera_master.vm.provider :virtualbox do |v|
             v.name = "cloudera-master"
