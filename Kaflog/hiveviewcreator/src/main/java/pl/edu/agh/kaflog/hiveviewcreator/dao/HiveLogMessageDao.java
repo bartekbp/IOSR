@@ -41,7 +41,6 @@ public class HiveLogMessageDao extends AbstractHiveDao {
     }
 
     public HiveLogMessageDao createTableIfNotExistsWithFieldsDelimiter(final char delimiter) throws SQLException {
-        insertRandomData();
         withStatement(new CallableStatement<Object>() {
             @Override
             public Object call(Statement statement) throws SQLException {
@@ -53,65 +52,6 @@ public class HiveLogMessageDao extends AbstractHiveDao {
         return this;
     }
 
-    public void insertRandomData() throws SQLException {
-        withStatement(new CallableStatement<Object>() {
-            @Override
-            public Object call(Statement statement) throws SQLException {
-                Configuration configuration = new Configuration();
-                configuration.set("fs.hdfs.impl", DistributedFileSystem.class.getName());
-                Path f = new Path("/user/vagrant/test");
-                try {
-                    FileSystem fileSystem = FileSystem.get(new URI("hdfs://cloudera-master:8020/"), configuration);
-                    FSDataOutputStream out;
-                    if(!fileSystem.exists(f)) {
-                        out = FileSystem.create(fileSystem, f, FsPermission.createImmutable((short) 0777));
-                    } else {
-                        out = fileSystem.append(f);
-                    }
-                    DateTime dateTime = new DateTime();
-                    DateTime dateTime_before = new DateTime().minusDays(15);
-                    int[] host_prob = new int[9];
-                    Random rand = new Random();
-                    for(int i = 0; i < 9; i++) {
-                        host_prob[i] = (int) (2.0 + rand.nextDouble() * 7);
-                    }
-
-                    String hostname = "kafka-node";
-                    String s = Character.toString('\7') + "\n";
-                    for(long i = 0; i < 1000000; i++) {
-                        int current_host = rand.nextInt(9);
-                        String rand_host = hostname + String.valueOf(current_host + 1);
-                        int level;
-                        if (i % 1231 == 0) {
-                            level = 2;
-                        } else if (i % 731 == 0) {
-                            level = 3;
-                        } else if (i % 527 == 0) {
-                            level = 4;
-                        } else if (i % 371 == 0) {
-                            level = 5;
-                        } else if (i % 71 == 0) {
-                            level = 6;
-                        } else {
-                            level = 7;
-                        }
-
-                        for (int j = 0; j < host_prob[current_host]; j++) {
-                            long rand_timestamp = (dateTime_before.getMillis() + (rand.nextLong() % (dateTime.getMillis() - dateTime_before.getMillis())));
-                            LogMessage logMessage = new LogMessage(0, level, rand_timestamp, rand_host, "vagrant", "Auto generated log " + (i * 10 + j));
-                            out.writeBytes((logMessage.toHdfsFormat() + s));
-                        }
-                        System.out.println(i);
-                    }
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                loadHdfs(f);
-                return null;
-            }
-        });
-    }
 
     public List<String> describeTable() throws SQLException {
         return withResultSet(new CallableResultSet<List<String>>() {
