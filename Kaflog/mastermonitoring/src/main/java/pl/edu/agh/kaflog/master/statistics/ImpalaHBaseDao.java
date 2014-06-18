@@ -8,6 +8,7 @@ import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.RowSetDynaClass;
 import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import pl.edu.agh.kaflog.common.utils.HiveUtils;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +46,7 @@ public class ImpalaHBaseDao  {
     }
 
     public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) {
-        DateTime now = new DateTime();
+        DateTime now = new DateTime().toDateTime(DateTimeZone.UTC);
         to = to.isAfterNow() ? now : to;
         final DateTime hadoopFrom = from.withMinuteOfHour(00);
         final DateTime hadoopTo = to.withMinuteOfHour(00);

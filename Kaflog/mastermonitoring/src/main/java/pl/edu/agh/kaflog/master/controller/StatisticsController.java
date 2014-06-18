@@ -60,7 +60,7 @@ public class StatisticsController {
         if (toDate == null) {
             toDate = new DateTime();
         }
-        return viewQueryHandler.createView(fromDate.withZoneRetainFields(DateTimeZone.UTC), toDate.withZoneRetainFields(DateTimeZone.UTC));
+        return viewQueryHandler.createView(fromDate.toDateTime(DateTimeZone.UTC), toDate.toDateTime(DateTimeZone.UTC));
 
     }
 
