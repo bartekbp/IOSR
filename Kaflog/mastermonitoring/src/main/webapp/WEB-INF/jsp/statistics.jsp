@@ -10,15 +10,16 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="js/jquery.datetimepicker.css"/>
     <script type="text/javascript" src="/webjars/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/momentjs/2.7.0/moment.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="js/jquery.datetimepicker.js"></script>
     <script>
         $(function () {
             $("#from_datetime").datetimepicker({
-                maxDate: "2014/06/17"
+                maxDate: moment().format('YYYY/MM/DD')
             });
             $("#to_datetime").datetimepicker({
-                maxDate: "2014/06/17"
+                maxDate: moment().format('YYYY/MM/DD')
             });
         });
         function getDateTime(str) {
