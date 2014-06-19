@@ -7,10 +7,7 @@ import com.google.common.util.concurrent.AtomicLongMap;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.RowSetDynaClass;
 import org.apache.commons.lang.StringUtils;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Duration;
-import org.joda.time.Interval;
+import org.joda.time.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -48,19 +45,28 @@ public class ImpalaHBaseDao  {
     public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) {
         DateTime now = new DateTime().toDateTime(DateTimeZone.UTC);
         to = to.isAfterNow() ? now : to;
-        DateTime hadoopFrom = from.withMinuteOfHour(00);
-        DateTime hadoopTo = to.withMinuteOfHour(00);
+        DateTime hadoopFrom;
+        DateTime hadoopTo;
         DateTime stormFrom;
         DateTime stormTo;
 
         Interval interval = new Interval(to, now);
-        if (interval.toDuration().isShorterThan(Duration.standardHours(1L))) {
-            stormFrom = to.withMinuteOfHour(00).minusHours(1);
+        if (interval.toDuration().isShorterThan(Duration.standardHours(2L))) {
             stormTo = to;
-            hadoopTo = hadoopTo.minusHours(1);
+            if(from.isBefore(now.minusHours(2))) {
+                stormFrom = now.minusHours(2).withMinuteOfHour(00);
+                hadoopTo = stormFrom;
+                hadoopFrom = from.withMinuteOfHour(00);
+            } else {
+                stormFrom = from;
+                hadoopTo = now;
+                hadoopFrom = now;
+            }
         } else {
             stormFrom = now;
             stormTo = now;
+            hadoopTo = to.withMinuteOfHour(00);
+            hadoopFrom = from.withMinuteOfHour(00);
         }
 
         Map<String, AtomicLongMap<String>> hostToSevToLogNum = new HashMap<String, AtomicLongMap<String>>();
@@ -84,7 +90,7 @@ public class ImpalaHBaseDao  {
 
     private void queryForHostAndSeverity(DateTime from, DateTime to, String table, final Map<String, AtomicLongMap<String>> hostToSevToLogNum) {
         jdbc.query("select key as k, count as s from " + table +
-                        " where key > :from and key <= :to",
+                        " where key >= :from and key < :to",
                 ImmutableMap.of("from", hiveUtils.toHBaseLowerKeyBound(from),
                         "to", hiveUtils.toHBaseUpperKeyBound(to)), new RowCallbackHandler() {
                     @Override

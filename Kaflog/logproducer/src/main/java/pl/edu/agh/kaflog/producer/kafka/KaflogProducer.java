@@ -80,7 +80,7 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             data = data.substring(parPos + 1);
             String[] tokens = data.split("\\s+", 6);
 //            long time = KaflogDateUtils.dateToMillis(String.format("%s %s %s", tokens[0], tokens[1], tokens[2])); -- wrong timezone
-            long time = Calendar.getInstance().getTimeInMillis();
+            long time = KaflogDateUtils.getCurrentTime();
             LogMessage logMessage = new LogMessage(
                     facilityAndSeverity / 8, // facility
                     facilityAndSeverity % 8, // severity
