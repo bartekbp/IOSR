@@ -16,7 +16,7 @@ echo 'export JAVA_HOME=/usr/lib/jvm/java-7-oracle' >> /home/vagrant/.bashrc
 echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /home/vagrant/.bashrc
 source /home/vagrant/.bashrc
 ln -s /usr/lib/jvm/java-7-oracle /usr/lib/jvm/default-java
-rm jdk-7u55-linux-x64.tar.gz 
+rm jdk-7u55-linux-x64.tar.gz
 
 cp /etc/sudoers /etc/sudoers.copy
 echo "Defaults env_keep+=JAVA_HOME" >> /etc/sudoers.copy
@@ -24,3 +24,4 @@ mv /etc/sudoers.copy /etc/sudoers
 
 # Set timezone to proper
 sudo ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
+echo "Europe/Warsaw" | sudo tee /etc/timezone

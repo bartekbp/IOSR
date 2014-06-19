@@ -22,7 +22,7 @@ echo 'export JAVA_HOME=/usr/lib/jvm/java-7-oracle' >> /home/vagrant/.bashrc
 echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /home/vagrant/.bashrc
 source /home/vagrant/.bashrc
 ln -s /usr/lib/jvm/java-7-oracle /usr/lib/jvm/default-java
-rm jdk-7u55-linux-x64.tar.gz 
+rm jdk-7u55-linux-x64.tar.gz
 
 cp /etc/sudoers /etc/sudoers.copy
 echo "Defaults env_keep+=JAVA_HOME" >> /etc/sudoers.copy
@@ -44,11 +44,12 @@ chown -R vagrant kafka
 
 # Set timezone to proper
 sudo ln -sf /usr/share/zoneinfo/Europe/Warsaw /etc/localtime
+echo "Europe/Warsaw" | sudo tee /etc/timezone
 
 # Install and configure stunnel 4 for secure connection between producer and broker
 sudo apt-get install stunnel4
-mkdir -p /var/chroot/stunnel4/ 
-chown stunnel4:stunnel4 /var/chroot/stunnel4/ 
+mkdir -p /var/chroot/stunnel4/
+chown stunnel4:stunnel4 /var/chroot/stunnel4/
 cp /vagrant/files/config/kafka-node1/stunnel4_default /etc/default/stunnel4
 cp /vagrant/files/config/kafka-node1/stunnel4_kafka_client.conf /etc/stunnel/
 cp /vagrant/files/config/kafka-node1/client.pem /etc/stunnel/
