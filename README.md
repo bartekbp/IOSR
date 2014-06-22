@@ -157,7 +157,7 @@ Trzeba uruchomić cluster storma:
     ~/storm-0.8.1/bin/storm supervisor    
  
 
-Uruchmoić topologie:
+Uruchomić topologie:
 
     # @cloudera-master
     /vagrant/files/kaflog-0.1/bin/kaflog_storm_consumer.sh
@@ -170,14 +170,17 @@ Zabijanie topologi
 
 11. Import danych z Hdfs do Hive
 --------------------------------
-Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add w GUI Cloudery.
 
-Dodatkowo należy dodać sobie użytkownika vagrant do cloudery i nadać uprawnienia 
+Wymagania początkowe:
+* posiadanie uruchomionej dodatkowej roli hiveserver2 w clouderze
+* posiadanie uruchomionej dodatkowej roli hbaserestserver w clouderze
+* posiadanie uruchomionej dodatkowej roli hbasethriftserver w clouderze
+* posiadanie praw do zapisu do katalogu /user/hive w hdfs'ie
+
+Uruchamiamy:
+
+    /vagrant/files/kaflog-0.1/bin/kaflog_hive_view_creator
     
-    sudo -u hdfs hadoop fs -chmod 777 /user/hive.
-
-Polecam też dodanie zookeepera na cloudera-slave1.
-Dodać hbaserestserver i hbasethriftserver w GUI Cloudery.
 
 
 12. Podział na podmoduły
