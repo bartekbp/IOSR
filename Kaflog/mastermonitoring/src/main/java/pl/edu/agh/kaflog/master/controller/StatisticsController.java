@@ -6,22 +6,16 @@ import org.joda.time.format.DateTimeFormatter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import pl.edu.agh.kaflog.master.statistics.ViewQueryHandler;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 
 @Controller
 public class StatisticsController {
-    private static final DateFormat format = DateFormat.getDateInstance();
+    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");;
     @Autowired
     private ViewQueryHandler viewQueryHandler;
 
@@ -35,6 +29,7 @@ public class StatisticsController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("statistics");
         if(to != null) {
+            modelAndView.addObject("fmt", fmt);
             modelAndView.addObject("report", createReport(from, to));
         }
         modelAndView.setViewName("statistics");
@@ -42,8 +37,6 @@ public class StatisticsController {
     }
 
     private Object createReport(String from, String to) throws SQLException {
-
-        DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy/MM/dd HH:mm");
         DateTime fromDate = null;
         DateTime toDate = null;
 
@@ -60,7 +53,6 @@ public class StatisticsController {
             toDate = new DateTime();
         }
         return viewQueryHandler.createView(fromDate, toDate);
-
     }
 
 

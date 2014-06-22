@@ -132,49 +132,4 @@ public class ImpalaHBaseDao  {
                 }
         );
     }
-
-
-    /**
-     * Pull severity results out of host severity results
-     */
-    public Map<String, Long> getSeverityResults(DateTime from, DateTime to)  {
-        Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
-        return getSeverityResults(hostSevToCount);
-    }
-
-    /**
-     * Pull severity results out of host severity results
-     */
-    public Map<String, Long> getSeverityResults(Map<String, Map<String, Long>> hostSevToCount)  {
-        AtomicLongMap<String> sevToTime = AtomicLongMap.<String>create();
-        for(Map<String, Long> value : hostSevToCount.values()) {
-            for(String sev : value.keySet()) {
-                sevToTime.addAndGet(sev, value.get(sev));
-            }
-        }
-
-        return ImmutableMap.copyOf(sevToTime.asMap());
-    }
-
-    /**
-     * Pull host results out of host severity results
-     */
-    public Map<String, Long> getHostResults(DateTime from, DateTime to)  {
-        Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
-        return getHostResults(hostSevToCount);
-    }
-
-    /**
-     * Pull host results out of host severity results
-     */
-    public Map<String, Long> getHostResults(Map<String, Map<String, Long>> hostSevToCount)  {
-        AtomicLongMap<String> hostToCount = AtomicLongMap.<String>create();
-        for(Map.Entry<String, Map<String, Long>> entry : hostSevToCount.entrySet()) {
-            for(Long count : entry.getValue().values()) {
-                hostToCount.addAndGet(entry.getKey(), count);
-            }
-        }
-
-        return ImmutableMap.copyOf(hostToCount.asMap());
-    }
 }

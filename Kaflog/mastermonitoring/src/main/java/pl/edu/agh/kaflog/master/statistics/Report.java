@@ -1,6 +1,9 @@
 package pl.edu.agh.kaflog.master.statistics;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Maps;
+import org.joda.time.DateTime;
+import pl.edu.agh.kaflog.common.LogMessage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +15,10 @@ import java.util.Map;
  * Standard Java bean
  */
 public class Report {
+    private static final List<String> severitiesList =
+            ImmutableList.<String>builder().add(LogMessage.LEVEL_STRING).build();
+
+    private DateTime startDate, endDate;
     private Map<String, Map<String, Long>> hostSeverityData;
     private List<Pair<String, Long>> hostData;
     private List<Pair<String, Long>> severityData;
@@ -21,20 +28,23 @@ public class Report {
      * Creates fake report for testing purposes
      * @return fake report
      */
-    static Report fake() {
+    static Report fake(DateTime startDate, DateTime endDate) {
+
         Report result = new Report();
+        result.setStartDate(startDate);
+        result.setEndDate(endDate);
         result.severityData = new ArrayList<Pair<String, Long>>();
         result.hostData = new ArrayList<Pair<String, Long>>();
         result.hostSeverityData = new HashMap<String, Map<String, Long>>();
 
-        result.severityData.add(new Pair<String, Long>("DEBUG", 521L));
-        result.severityData.add(new Pair<String, Long>("INFO", 1029L));
-        result.severityData.add(new Pair<String, Long>("NOTICE", 7L));
-        result.severityData.add(new Pair<String, Long>("WARN", 154L));
-        result.severityData.add(new Pair<String, Long>("ERROR", 45L));
-        result.severityData.add(new Pair<String, Long>("CRITICAL", 1L));
-        result.severityData.add(new Pair<String, Long>("ALERT", 0L));
-        result.severityData.add(new Pair<String, Long>("EMERGENCY", 0L));
+        result.severityData.add(new Pair<String, Long>("debug", 521L));
+        result.severityData.add(new Pair<String, Long>("info", 1029L));
+        result.severityData.add(new Pair<String, Long>("notice", 7L));
+        result.severityData.add(new Pair<String, Long>("warn", 154L));
+        result.severityData.add(new Pair<String, Long>("error", 45L));
+        result.severityData.add(new Pair<String, Long>("critical", 1L));
+        result.severityData.add(new Pair<String, Long>("alert", 0L));
+        result.severityData.add(new Pair<String, Long>("emergency", 0L));
 
         result.hostData.add(new Pair<String, Long>("192.168.0.12", 889L));
         result.hostData.add(new Pair<String, Long>("192.168.0.17", 868L));
@@ -42,24 +52,24 @@ public class Report {
         result.all = 1757L;
 
         Map<String, Long> h1Map = Maps.newHashMap();
-        h1Map.put("DEBUG", 252L);
-        h1Map.put("INFO", 573L);
-        h1Map.put("NOTICE", 7L);
-        h1Map.put("WARN", 52L);
-        h1Map.put("ERROR", 4L);
-        h1Map.put("CRITICAL", 1L);
-        h1Map.put("ALERT", 0L);
-        h1Map.put("EMERGENCY", 0L);
+        h1Map.put("debug", 252L);
+        h1Map.put("info", 573L);
+        h1Map.put("notice", 7L);
+        h1Map.put("warn", 52L);
+        h1Map.put("error", 4L);
+        h1Map.put("critical", 1L);
+        h1Map.put("alert", 0L);
+        h1Map.put("emergency", 0L);
 
         Map<String, Long> h2Map = Maps.newHashMap();
-        h2Map.put("DEBUG", 269L);
-        h2Map.put("INFO", 456L);
-        h2Map.put("NOTICE", 0L);
-        h2Map.put("WARN", 102L);
-        h2Map.put("ERROR", 41L);
-        h2Map.put("CRITICAL", 0L);
-        h2Map.put("ALERT", 0L);
-        h2Map.put("EMERGENCY", 0L);
+        h2Map.put("debug", 269L);
+        h2Map.put("info", 456L);
+        h2Map.put("notice", 0L);
+        h2Map.put("warn", 102L);
+        h2Map.put("error", 41L);
+        h2Map.put("critical", 0L);
+        h2Map.put("alert", 0L);
+        h2Map.put("emergency", 0L);
 
         result.hostSeverityData = Maps.newHashMap();
         result.hostSeverityData.put("192.168.0.12", h1Map);
@@ -125,5 +135,30 @@ public class Report {
      */
     public void setAll(long all) {
         this.all = all;
+    }
+
+    /**
+     *
+     * @return list of all possible severities
+     */
+    public static List<String> getSeveritiesList() {
+        return severitiesList;
+    }
+
+    public DateTime getStartDate() {
+
+        return startDate;
+    }
+
+    public void setStartDate(DateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public DateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(DateTime endDate) {
+        this.endDate = endDate;
     }
 }

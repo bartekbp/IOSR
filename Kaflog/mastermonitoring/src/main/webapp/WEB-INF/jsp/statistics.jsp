@@ -1,3 +1,4 @@
+<%@ page import="org.joda.time.format.DateTimeFormatter" %>
 <!DOCTYPE html>
 
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -10,15 +11,16 @@
     <link rel="stylesheet" href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css"/>
     <link rel="stylesheet" type="text/css" href="js/jquery.datetimepicker.css"/>
     <script type="text/javascript" src="/webjars/jquery/2.0.3/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/momentjs/2.7.0/moment.js"></script>
     <script src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script src="js/jquery.datetimepicker.js"></script>
     <script>
         $(function () {
             $("#from_datetime").datetimepicker({
-                maxDate: "2014/06/17"
+                maxDate: moment().format('YYYY/MM/DD')
             });
             $("#to_datetime").datetimepicker({
-                maxDate: "2014/06/17"
+                maxDate: moment().format('YYYY/MM/DD')
             });
         });
         function getDateTime(str) {
@@ -34,11 +36,11 @@
             var from = getDateTime(document.forms["data_range"]["from_datetime"].value);
             var to = getDateTime(document.forms["data_range"]["to_datetime"].value);
             if (from == null) {
-                alert("Plese fill start date");
+                alert("Please fill start date");
                 return false;
             }
             if (to == null) {
-                alert("Plese fill end date");
+                alert("Please fill end date");
                 return false;
             }
             if (from >= to) {
@@ -103,6 +105,8 @@
 
 <% if(request.getAttribute("report")!=null) {%>
 <% pl.edu.agh.kaflog.master.statistics.Report report = (pl.edu.agh.kaflog.master.statistics.Report)request.getAttribute("report"); %>
+<% org.joda.time.format.DateTimeFormatter fmt = (org.joda.time.format.DateTimeFormatter)request.getAttribute("fmt"); %>
+<h3>Report for time frame:<%=fmt.print(report.getStartDate())%> - <%=fmt.print(report.getEndDate())%><h3>
 <div style="margin: 70px 10px 10px;">
     <table class="table table-striped table-hover" style="width: 100%; table-layout: fixed;">
         <thead>
