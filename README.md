@@ -57,10 +57,8 @@ Na poszczególne VMki logujemy się przy użyciu komendy vagrant ssh podając na
 
 W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korzystać z następującego mechanizmu - wszystko wrzucone do folderu zawierającego Vagrantfile (u nas w repo katalog vagrant/) jest podmontowane pod ścieżką /vagrant na vmkach.
 
-Używanie kafki - na maszyny "kafka-nodexxx" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka.
 
-
-5/ Stawianie clustra cloudery
+5. Stawianie clustra cloudery
 ------------------------------------------
 
 Wejść przez przeglądarkę na adres:
