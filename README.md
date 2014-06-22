@@ -97,7 +97,7 @@ I paczka z naszym kaflogiem będzie dostępna na każdej maszynie wirtualnej pod
 
 7. Odpalanie mastera
 --------------------
-Warunkiem początkowym jest postawienie cloudery na cloudera-master (no i slavach w miarę potrzeb) - patrz punkt 4.
+Warunkiem początkowym jest postawienie cloudery na cloudera-master (no i slavach w miarę potrzeb) - patrz punkt 5.
 Na cloudera-master odpalamy:
 
     /vagrant/files/kaflog-0.1/bin/kaflog_broker.sh 
@@ -107,15 +107,19 @@ Na cloudera-master odpalamy:
 8. Używanie KaflogProducera
 ---------------------------
 Warunkiem początkowym jest wykonianie punktu 7. 
-Na każdy kafka-node, który chcemy podłączyć, odpalamy:
+Na każdym kafka-node, który chcemy podłączyć, odpalamy:
 
     /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh 
 
-W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na trzy sposoby:
+W tym momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na trzy sposoby:
 
     logger "tresc loga"
     /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow>
     /vagrant/files/kaflog-0.1/bin/log_generator_per_min.sh <ilosc_logow_na_minute>
+
+Wejść na:
+
+    http://cloudera-master:8080
 
 Zrobić popcorn i oglądać.
 
