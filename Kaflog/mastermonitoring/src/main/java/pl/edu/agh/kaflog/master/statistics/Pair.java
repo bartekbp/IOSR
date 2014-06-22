@@ -1,5 +1,10 @@
 package pl.edu.agh.kaflog.master.statistics;
 
+/**
+ * Encapsulates pair of objects
+ * @param <A> first object type
+ * @param <B> second object type
+ */
 public class Pair<A, B> {
     private A first;
     private B second;

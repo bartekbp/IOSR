@@ -19,9 +19,8 @@ import java.util.Calendar;
 import java.util.Properties;
 
 /**
- * We could replace this class with:
- * https://github.com/xstevens/syslog-kafka/blob/master/src/main/java/kafka/syslog/SyslogKafkaServer.java
- * (in this way we could achieve better log parsing and higher level api)
+ This class defines a task that is listening on syslog, takes all messages that appear
+ and publish it to a kafka topic ("kaflogtopic" more specifically)
  */
 public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
     private static Logger log = LoggerFactory.getLogger(KaflogProducer.class);
@@ -36,6 +35,9 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
     private volatile long startTime;
     private volatile int totalLogs = 0;
 
+    /**
+     * Creates and configures kafka producer
+     */
     public KaflogProducer() {
         String brokersList = KaflogProperties.getProperty("kaflog.kafka.brokersList");
         props.put("metadata.broker.list", brokersList);
@@ -56,6 +58,11 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
         });
     }
 
+    /**
+     * Read data from syslog and publish to kafka
+     * @throws IOException
+     * @throws ParseException
+     */
     public void run() throws IOException, ParseException {
         startTime = KaflogDateUtils.getCurrentTime();
         socket = new DatagramSocket(5001, InetAddress.getByName("127.0.0.1"));
@@ -80,7 +87,7 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             data = data.substring(parPos + 1);
             String[] tokens = data.split("\\s+", 6);
 //            long time = KaflogDateUtils.dateToMillis(String.format("%s %s %s", tokens[0], tokens[1], tokens[2])); -- wrong timezone
-            long time = KaflogDateUtils.getCurrentTime();
+            long time = Calendar.getInstance().getTimeInMillis();
             LogMessage logMessage = new LogMessage(
                     facilityAndSeverity / 8, // facility
                     facilityAndSeverity % 8, // severity
@@ -94,6 +101,7 @@ public class KaflogProducer implements ExecutorUtils.ThrowingRunnable {
             lastHour.report(time);
             lastDay.report(time);
 
+            //Once per every 10 seconds print statistic about emited logs
             if (System.currentTimeMillis() - timer > 10000) {
                 timer = System.currentTimeMillis();
                 long currentTime = KaflogDateUtils.getCurrentTime();

@@ -11,13 +11,12 @@ import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
 
 /**
- * This bolt increments values for buckets crried in tuples
+ * This bolt increments values for buckets carried in tuples
  */
 public class HBaseIncrementingBolt extends BaseRichBolt {
 

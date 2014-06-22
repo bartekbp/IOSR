@@ -6,6 +6,7 @@ import java.util.LinkedList;
 
 /**
  * Created by lopiola on 19.05.14.
+ * Queue of logs to be displayed
  */
 public class LogQueue {
     private LogMessage[] queue;

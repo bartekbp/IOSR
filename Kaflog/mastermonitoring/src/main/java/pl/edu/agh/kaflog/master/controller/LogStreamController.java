@@ -14,7 +14,10 @@ import pl.edu.agh.kaflog.master.logs.LogStreamMaster;
 
 import java.util.LinkedList;
 
-
+/**
+ * Responsible for log stream page
+ * Shows live incoming logs
+ */
 @Controller
 public class LogStreamController {
 
@@ -49,6 +52,11 @@ public class LogStreamController {
         return sb.toString();
     }
 
+    /**
+     * Convert one log to HTML view of it
+     * @param logMessage
+     * @return
+     */
     private String renderLog(LogMessage logMessage) {
         StringBuilder sb = new StringBuilder();
         sb.append("<tr>");

@@ -16,7 +16,10 @@ import pl.edu.agh.kaflog.master.statistics.ImpalaHBaseDao;
 import java.sql.SQLException;
 import java.util.List;
 
-
+/***
+ * Responsible for monitoring tab.
+ * Shows active nodes, and speed of log production of each node
+ */
 @Controller
 public class MonitoringController {
 

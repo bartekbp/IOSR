@@ -5,14 +5,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import pl.edu.agh.kaflog.common.utils.CloseableUtils;
 import pl.edu.agh.kaflog.common.utils.ExecutorUtils;
+import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
-public class Main implements ExecutorUtils.ThrowingRunnable {
-    private static final Logger LOG = LoggerFactory.getLogger(Main.class);
 
+/**
+ * Creates and runs bath job that imports LogMessages from HDFS to HiveTable
+ */
+public class Main implements ExecutorUtils.ThrowingRunnable {
     public static void main(String... args) throws Exception {
         Main main = new Main();
         main.run();
@@ -24,7 +27,9 @@ public class Main implements ExecutorUtils.ThrowingRunnable {
         try {
             executorUtils = new ExecutorUtils();
             HiveDataImporter hiveDataImporter = new HiveDataImporter();
-            hiveDataImporter.fromHdfs(new Path("hdfs://cloudera-master:8020/user/vagrant/kafka/output"), true);
+            Path root = new Path(KaflogProperties.getProperty("kaflog.hdfs.uri") +
+                    KaflogProperties.getProperty("kaflog.hive.view.dataPath"));
+            hiveDataImporter.fromHdfs(root, true);
             executorUtils.addTasks(hiveDataImporter.createViews());
         } finally {
             CloseableUtils.close(executorUtils);

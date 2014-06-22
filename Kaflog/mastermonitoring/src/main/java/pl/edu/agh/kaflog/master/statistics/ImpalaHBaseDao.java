@@ -27,6 +27,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Encapsulates layers join (batch and speed)
+ * Uses storm and hadoop tables to generate report data
+ */
 @Repository
 public class ImpalaHBaseDao  {
     @Autowired
@@ -42,7 +46,13 @@ public class ImpalaHBaseDao  {
     public ImpalaHBaseDao() {
     }
 
-    public Map<String, Map<String,Long>> getHostSeverityResults(DateTime from, DateTime to) {
+    /**
+     * Returns number of logs per host and severity.
+     * @param from start time
+     * @param to end time
+     * @return Map - host to map - severity to number of logs (Map<HostName, Map<SeverityLevel, NumberOfLogs>>)
+     */
+    public Map<String, Map<String, Long>> getHostSeverityResults(DateTime from, DateTime to) {
         DateTime now = new DateTime().toDateTime(DateTimeZone.UTC);
         to = to.isAfterNow() ? now : to;
         DateTime hadoopFrom;
@@ -50,6 +60,7 @@ public class ImpalaHBaseDao  {
         DateTime stormFrom;
         DateTime stormTo;
 
+        // Splits time range to parts that can be read using speed layer and hadoop layer
         Interval interval = new Interval(to, now);
         if (interval.toDuration().isShorterThan(Duration.standardHours(2L))) {
             stormTo = to;
@@ -71,15 +82,17 @@ public class ImpalaHBaseDao  {
 
         Map<String, AtomicLongMap<String>> hostToSevToLogNum = new HashMap<String, AtomicLongMap<String>>();
 
+        //if storm is needed
         if (stormFrom.isBefore(stormTo)) {
             queryForHostAndSeverity(stormFrom, stormTo, srmTable, hostToSevToLogNum);
         }
 
+        //if hadoop is needed
         if (hadoopFrom.isBefore(hadoopTo)) {
             queryForHostAndSeverity(hadoopFrom, hadoopTo, hdpTable, hostToSevToLogNum);
         }
 
-
+        // Turns result map to Immutable map
         return ImmutableMap.copyOf(Maps.transformValues(hostToSevToLogNum, new Function<AtomicLongMap<String>, Map<String, Long>>() {
             @Override
             public Map<String, Long> apply(AtomicLongMap<String> input) {
@@ -88,7 +101,17 @@ public class ImpalaHBaseDao  {
         }));
     }
 
+    /**
+     * Query host severity data for given time frime from given table
+     * @param from start time
+     * @param to end time
+     * @param table table to be queried
+     * @param hostToSevToLogNum map where data is stored, actually data is added to data that exists in map previously
+     *                          that allow to easily merge results from multiple tables (in our case number of logs is
+     *                          just additive number)
+     */
     private void queryForHostAndSeverity(DateTime from, DateTime to, String table, final Map<String, AtomicLongMap<String>> hostToSevToLogNum) {
+        //time ranges are converted to masked timestamps that allow query for a range
         jdbc.query("select key as k, count as s from " + table +
                         " where key >= :from and key < :to",
                 ImmutableMap.of("from", hiveUtils.toHBaseLowerKeyBound(from),
@@ -111,11 +134,17 @@ public class ImpalaHBaseDao  {
     }
 
 
+    /**
+     * Pull severity results out of host severity results
+     */
     public Map<String, Long> getSeverityResults(DateTime from, DateTime to)  {
         Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
         return getSeverityResults(hostSevToCount);
     }
 
+    /**
+     * Pull severity results out of host severity results
+     */
     public Map<String, Long> getSeverityResults(Map<String, Map<String, Long>> hostSevToCount)  {
         AtomicLongMap<String> sevToTime = AtomicLongMap.<String>create();
         for(Map<String, Long> value : hostSevToCount.values()) {
@@ -127,11 +156,17 @@ public class ImpalaHBaseDao  {
         return ImmutableMap.copyOf(sevToTime.asMap());
     }
 
+    /**
+     * Pull host results out of host severity results
+     */
     public Map<String, Long> getHostResults(DateTime from, DateTime to)  {
         Map<String, Map<String, Long>> hostSevToCount = getHostSeverityResults(from, to);
         return getHostResults(hostSevToCount);
     }
 
+    /**
+     * Pull host results out of host severity results
+     */
     public Map<String, Long> getHostResults(Map<String, Map<String, Long>> hostSevToCount)  {
         AtomicLongMap<String> hostToCount = AtomicLongMap.<String>create();
         for(Map.Entry<String, Map<String, Long>> entry : hostSevToCount.entrySet()) {

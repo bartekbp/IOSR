@@ -10,11 +10,20 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
+
 @Component
 public class ViewQueryHandler {
     @Autowired
     private ImpalaHBaseDao impalaHBaseDao;
 
+    /**
+     * Delegates query to ImpalaHBaseDao and converts query results into Report object that is
+     * later used to create report view
+     * @param fromDate - start report date
+     * @param toDate - end report date
+     * @return Report object
+     * @throws SQLException
+     */
     public Object createView(DateTime fromDate, DateTime toDate) throws SQLException {
         List<Pair<String, Long>> hostData = Lists.newArrayList();
         List<Pair<String, Long>> severityData = Lists.newArrayList();

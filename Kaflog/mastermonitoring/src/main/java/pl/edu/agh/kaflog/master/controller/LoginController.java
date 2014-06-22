@@ -1,19 +1,14 @@
 package pl.edu.agh.kaflog.master.controller;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
-
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by lopiola on 21.05.14.
+ * Responsible for login page
  */
 @Controller
 public class LoginController {

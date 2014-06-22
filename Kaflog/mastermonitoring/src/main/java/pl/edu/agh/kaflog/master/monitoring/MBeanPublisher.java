@@ -10,6 +10,9 @@ import javax.annotation.PreDestroy;
 import javax.management.JMException;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 
+/**
+ * This bean encapsulates JMX Server
+ */
 @Component
 public class MBeanPublisher {
     @Value("${application.mBeanPublisher.port}")

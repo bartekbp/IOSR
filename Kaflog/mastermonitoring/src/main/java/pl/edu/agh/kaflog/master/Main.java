@@ -1,18 +1,14 @@
 package pl.edu.agh.kaflog.master;
 
 
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -23,16 +19,17 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Controller;
 import pl.edu.agh.kaflog.common.utils.HiveUtils;
 import pl.edu.agh.kaflog.master.monitoring.ProducerMonitoring;
-import pl.edu.agh.kaflog.master.statistics.ImpalaHBaseDao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+
+/**
+ * Kaflog master node, and web interface
+ */
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
@@ -40,8 +37,6 @@ import java.util.List;
 public class Main extends SpringBootServletInitializer {
     @Autowired
     ProducerMonitoring producerMonitoring;
-    @Autowired
-    private ImpalaHBaseDao dao;
 
     public static void main(String... args) {
         SpringApplication.run(Main.class, args);
@@ -57,11 +52,20 @@ public class Main extends SpringBootServletInitializer {
 
     }
 
+    /**
+     * Creates ApplicationSecurity Bean
+     * @return
+     */
     @Bean
     public ApplicationSecurity applicationSecurity() {
         return new ApplicationSecurity();
     }
 
+    /**
+     * creates bean responsible for authentication
+     * Very simple authentication: admin admin
+     * @return
+     */
     @Bean
     public AuthenticationManager authenticationManager() {
         return new AuthenticationManager() {
@@ -80,11 +84,19 @@ public class Main extends SpringBootServletInitializer {
         };
     }
 
+    /**
+     * Creates HiveUtils bean
+     * @return
+     */
     @Bean
     public HiveUtils hiveUtils() {
         return new HiveUtils();
     }
 
+    /**
+     * ApplicationSecurity
+     * Configure sub-pages availability and login page
+     */
     protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
         @Override
         protected void configure(HttpSecurity http) throws Exception {

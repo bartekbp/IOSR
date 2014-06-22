@@ -12,6 +12,9 @@ import javax.management.JMException;
 import javax.management.ObjectName;
 import java.net.Inet4Address;
 
+/**
+ * Task that cyclic report node state to master node
+ */
 public class Pinger implements ExecutorUtils.ThrowingRunnable {
     private static final Logger LOG = Logger.getLogger(Pinger.class);
     private JmxClient client;
@@ -19,6 +22,12 @@ public class Pinger implements ExecutorUtils.ThrowingRunnable {
     private String masterIP;
     private int masterPort;
 
+    /**
+     *
+     * @param masterIP - master node ip
+     * @param masterPort - master node JMX port
+     * @param kaflogProducer - used to get node state
+     */
     public Pinger(String masterIP, int masterPort, KaflogProducer kaflogProducer) {
         this.masterIP = masterIP;
         this.masterPort = masterPort;
@@ -26,6 +35,10 @@ public class Pinger implements ExecutorUtils.ThrowingRunnable {
         this.kaflogProducer = kaflogProducer;
     }
 
+    /**
+     * Creates JMX client
+     * @throws JMException
+     */
     private void lazyInit() throws JMException {
         if (client == null) {
             JmxClient client = new JmxClient(masterIP, masterPort);
@@ -33,6 +46,10 @@ public class Pinger implements ExecutorUtils.ThrowingRunnable {
         }
     }
 
+    /**
+     * This method is called in circle. Pings master node and reports current state
+     * @throws Exception
+     */
     @Override
     public void run() throws Exception {
         lazyInit();

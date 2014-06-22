@@ -14,6 +14,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * This been is used to register kafka node to master node
+ */
 @Component
 public class ProducerMonitoring {
     private static final Logger log = LoggerFactory.getLogger(ProducerMonitoring.class);

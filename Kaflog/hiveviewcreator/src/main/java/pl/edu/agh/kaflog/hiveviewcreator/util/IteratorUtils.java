@@ -9,7 +9,15 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * This class lets use RemoteIterator as (standard) Iterator, by handling possible exception.
+ * Actually it pass it thorough RuntimeException
+ *
+ */
 public class IteratorUtils {
+    /**
+     * Translates RemoteIterator to iterator
+     */
     public static <T> Iterator<T> fromRemoteIterator(final RemoteIterator<T> iterator) {
         return new Iterator<T>() {
 
@@ -38,6 +46,9 @@ public class IteratorUtils {
         };
     }
 
+    /**
+     * Translate an iterator to iterable, by storing all entities in an ArrayList
+     */
     public static <T> Iterable<T> toIterable(final Iterator<T> iterator) {
         return Lists.newArrayList(iterator);
     }

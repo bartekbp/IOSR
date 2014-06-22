@@ -3,20 +3,13 @@ package pl.edu.agh.kaflog.master.logs;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.KafkaStream;
-import kafka.javaapi.consumer.ConsumerConnector;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.LogMessageSerializer;
-import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-//import pl.edu.agh.kaflog.common.LogMessage;
 
 /**
  * Created by lopiola on 19.05.14.
+ * It takes message stream from kafka topic and deserialize it and put into logQueue
  */
 
 public class LogStreamConsumer extends Thread {
@@ -25,6 +18,9 @@ public class LogStreamConsumer extends Thread {
 
     private volatile boolean active = true;
 
+    /**
+     * Creates kafka consumer
+     * */
     public LogStreamConsumer(KafkaStream<byte[], byte[]> stream, LogQueue logQueue) {
         this.stream = stream;
         this.logQueue = logQueue;
@@ -35,11 +31,13 @@ public class LogStreamConsumer extends Thread {
         ConsumerIterator<byte[], byte[]> it = stream.iterator();
         while (active && it.hasNext()) {
             LogMessage message = new LogMessageSerializer().fromBytes(it.next().message());
-            //System.out.println("New log: " + message.getTimestamp());
             logQueue.push(message);
         }
     }
 
+    /**
+     * Stops consumer
+     */
     public void terminate() {
         active = false;
     }

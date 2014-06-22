@@ -7,12 +7,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Encapsulates all aggregated data
+ * Standard Java bean
+ */
 public class Report {
     private Map<String, Map<String, Long>> hostSeverityData;
     private List<Pair<String, Long>> hostData;
     private List<Pair<String, Long>> severityData;
     private long all;
 
+    /**
+     * Creates fake report for testing purposes
+     * @return fake report
+     */
     static Report fake() {
         Report result = new Report();
         result.severityData = new ArrayList<Pair<String, Long>>();
@@ -60,34 +68,61 @@ public class Report {
         return result;
     }
 
+    /**
+     * @return Map of hosts' names to severity to number of logs map (Map<HostName, Map<SeverityLevel, NumberOfLogs>>)
+     */
     public Map<String, Map<String, Long>> getHostSeverityData() {
         return hostSeverityData;
     }
 
+    /**
+     * @param hostSeverityData Map of hosts' names to severity to number of logs map (Map<HostName, Map<SeverityLevel, NumberOfLogs>>)
+     */
     public void setHostSeverityData(Map<String, Map<String, Long>> hostSeverityData) {
         this.hostSeverityData = hostSeverityData;
     }
 
+    /**
+     * @return List of pairs - hostname to number of logs
+     */
     public List<Pair<String, Long>> getHostData() {
         return hostData;
     }
 
+    /**
+     * List of pairs - hostname to number of logs
+     * @param hostData
+     */
     public void setHostData(List<Pair<String, Long>> hostData) {
         this.hostData = hostData;
     }
 
+    /**
+     * @return List of pairs - severity level to number of logs
+     */
     public List<Pair<String, Long>> getSeverityData() {
         return severityData;
     }
 
+    /**
+     * @param severityData List of pairs - severity level to number of logs
+     */
     public void setSeverityData(List<Pair<String, Long>> severityData) {
         this.severityData = severityData;
     }
 
+    /**
+     *
+     * @return total number of all logs
+     */
     public long getAll() {
         return all;
     }
 
+    /**
+     *
+     * @param all total number of all logs
+     */
     public void setAll(long all) {
         this.all = all;
     }

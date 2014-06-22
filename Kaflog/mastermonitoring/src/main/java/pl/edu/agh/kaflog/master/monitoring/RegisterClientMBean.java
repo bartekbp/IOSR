@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 
+/**
+ * This bean handles registrations to master node, and also allows to query registred nodes state
+ */
 @Component
 @JmxResource(beanName = "RegisterClientMBean", domainName = "RegisterClientMBean")
 public class RegisterClientMBean {
@@ -32,6 +35,10 @@ public class RegisterClientMBean {
     private ConcurrentHashMap<String, NodeStateSummary> clients = new ConcurrentHashMap<String, NodeStateSummary>();
     private long lastPurge = 0;
 
+    /**
+     * Registers node
+     * @param nodeState describes node state
+     */
     @JmxOperation(description = "registerClient")
     public void registerClient(NodeState nodeState) {
         System.out.println("New ping from " + nodeState.getHostname());
@@ -41,6 +48,9 @@ public class RegisterClientMBean {
         clients.get(nodeState.getHostname()).update(nodeState);
     }
 
+    /**
+     * @return list of registered nodes statuses
+     */
     public List<NodeStateSummary> listClients() {
         purgeClientList();
         LinkedList<NodeStateSummary> result = new LinkedList<NodeStateSummary>(clients.values());
@@ -48,6 +58,9 @@ public class RegisterClientMBean {
         return result;
     }
 
+    /**
+     * Clears client list
+     */
     private void purgeClientList() {
         if (KaflogDateUtils.getCurrentTime() - lastPurge > PURGE_PERIOD) {
             List<String> keySet = new LinkedList<String>(clients.keySet());

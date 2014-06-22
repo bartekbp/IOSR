@@ -15,6 +15,7 @@ import java.util.*;
 
 /**
  * Created by lopiola on 26.05.14.
+ * Configures kafka stream
  */
 @Component
 public class LogStreamMaster {

@@ -13,6 +13,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Creates pinger to master node, and pings it every second.
+ */
 public class Main implements ExecutorUtils.ThrowingRunnable {
     private static Logger log = LoggerFactory.getLogger(Main.class);
 

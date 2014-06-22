@@ -2,6 +2,9 @@ package pl.edu.agh.kaflog.producer.kafka;
 
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Encapsulate statistics about amount of some events 
+ */
 public class TimeStatistics {
     private int resolution;
     private int width;
@@ -12,6 +15,10 @@ public class TimeStatistics {
 
     private long startTime;
 
+    /**
+     * @param resolution - time cell size in seconds
+     * @param width - number of cells
+     */
     public TimeStatistics(int resolution, int width) {
         this.resolution = resolution;
         this.width = width;
@@ -20,10 +27,18 @@ public class TimeStatistics {
         lastPosition = 0;
     }
 
+    /**
+     * Start gathering data
+     * @param startDate start time in number of milliseconds since Unix epoch 
+     */
     public synchronized void start(long startDate) {
         this.startTime = startDate;
     }
 
+    /**
+     * report an event occurrence
+     * @param time time of an event in number of milliseconds since Unix epoch 
+     */
     public synchronized void report(long time) {
         long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
@@ -40,6 +55,10 @@ public class TimeStatistics {
         sum++;
     }
 
+    /**
+     * getNumber of events
+     * @param time time of an event in number of milliseconds since Unix epoch 
+     */
     public synchronized int getSum(long time) {
         long diff = time - startTime;
         int seconds = (int) TimeUnit.MILLISECONDS.toSeconds(diff);
@@ -55,6 +74,11 @@ public class TimeStatistics {
         return sum;
     }
 
+    /**
+     * free unused cells
+     * @param lastPos previous last used cell position
+     * @param newPos current last used cell position
+     */
     private void clearCells(int lastPos, int newPos) {
         for (int i = lastPos + 1; i <= newPos; i++) {
             sum -= cells[i % width];

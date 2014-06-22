@@ -7,19 +7,13 @@ import com.google.common.collect.Lists;
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.beanutils.RowSetDynaClass;
 import org.apache.commons.lang.ObjectUtils;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import pl.edu.agh.kaflog.common.KaflogConstants;
 import pl.edu.agh.kaflog.common.LogMessage;
 import pl.edu.agh.kaflog.common.utils.KaflogProperties;
 
-import java.io.IOException;
-import java.net.URI;
 import java.sql.*;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Hive dao implementation that handles {@link pl.edu.agh.kaflog.common.LogMessage} objects
