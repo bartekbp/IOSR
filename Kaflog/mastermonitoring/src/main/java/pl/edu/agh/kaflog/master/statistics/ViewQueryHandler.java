@@ -26,7 +26,7 @@ public class ViewQueryHandler {
      * @throws SQLException
      */
     public Object createView(DateTime fromDate, DateTime toDate) throws SQLException {
-       /* List<Pair<String, Long>> hostData = Lists.newArrayList();
+        List<Pair<String, Long>> hostData = Lists.newArrayList();
         List<Pair<String, Long>> severityData = Lists.newArrayList();
         Map<String, Map<String, Long>> hostSeverityData = Maps.newHashMap();
 
@@ -69,8 +69,7 @@ public class ViewQueryHandler {
         report.setStartDate(fromDate);
         report.setEndDate(toDate);
 
-        return report;*/
-        return Report.fake(fromDate, toDate);
+        return report;
     }
 
 }
