@@ -37,9 +37,6 @@ Dodać wpisy z pliku vagrant/files/hosts do lokalnego /etc/hosts, aby móc posł
 
 3. Stawianie clustra cloudery
 ------------------------------------------
-TODO: Docelowo będę chciał napisać skrypt, który postawi klaster automatycznie, na razie jednak jest to mniej ważne. Dlatego też trzeba sobie wyklikać klaster przez GUI.
-
-TODO: Na razie nie udało mi się przejść całego procesu instalacji. Póki co można to olać i pobawić się kafką.
 
 Wejść przez przeglądarkę na adres:
     
@@ -61,7 +58,7 @@ Skonfigurować cluster cloudery za pomocą wizarda, który nam się wyświetlił
     5. Instalacja serwisów - wybieramy All services
     6. Wybór baz danych - test connection, potem continue
     7. Configuration changes - continue
-    8. Tutaj mi się zawsze wywala na instalowaniu Oozie. Trzeba sprawdzić, czy jest w ogóle nam potrzebne
+    8. Poczekać na instalację wszystkich pakietów, przeklikać do końca instalacji
 
 
 4. Wstrzymywanie, kasowanie środowiska
@@ -87,17 +84,7 @@ W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korz
 Używanie kafki - na maszyny "kafka-nodexxx" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka.
 
 
-6. Uwagi do dokumentacji kafki (uzywamy wersji 0.8.1, a w ebooku jest 0.72/0.8)
--------------------------------------------------------------------------------
-Proponuję tutaj dopisywać rzeczy, które należy wiedzieć jeśli chodzi o kafkę 0.8.1 (w szczególności to, co się zmieniło względem starych wersji).
-
-Zmieniono sposób tworzenia topica
-
-    stary -> bin/kafka-create-topic.sh --zookeeper localhost:2181 --replica 1 --partition 1 --topic kafkatopic
-    nowy ->  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kafkatopic
-
-
-7. Budowanie projektu i deploy na wirtualne maszyny
+6. Budowanie projektu i deploy na wirtualne maszyny
 ---------------------------------------------------
 W głównym folderze projektu jest Makefile. Odpalamy
 
@@ -108,25 +95,35 @@ I paczka z naszym kaflogiem będzie dostępna na każdej maszynie wirtualnej pod
     /vagrant/files/kaflog-0.1/
 
 
+7. Odpalanie mastera
+--------------------
+Warunkiem początkowym jest postawienie cloudery na cloudera-master (no i slavach w miarę potrzeb).
+Na cloudera-master odpalamy:
+
+    /vagrant/files/kaflog-0.1/bin/kaflog_broker.sh 
+    /vagrant/files/kaflog-0.1/bin/kaflog_master.sh 
+
+
 8. Używanie KaflogProducera
 ---------------------------
-Przykład powinien działać w zasetupowanym clouderowym klastrze i być odpalany na kafka-node1.
-Odpalamy:
+Warunkiem początkowym jest wykonianie punktu 7. 
+Na każdy kafka-node, który chcemy podłączyć, odpalamy:
 
-    /vagrant/files/kaflog-0.1/bin/kaflog_producer_all.sh 
+    /vagrant/files/kaflog-0.1/bin/kaflog_producer.sh 
 
-
-W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na dwa sposoby:
+W ty momencie działa nasz producent i będzie publikował logi z sysloga. Zalogować coś do sysloga można na trzy sposoby:
 
     logger "tresc loga"
-    /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow_na_minute>
+    /vagrant/files/kaflog-0.1/bin/log_generator.sh <ilosc_logow>
+    /vagrant/files/kaflog-0.1/bin/log_generator_per_min.sh <ilosc_logow_na_minute>
 
 Zrobić popcorn i oglądać.
 
+
 9. Używanie HadoopConsumera
 ---------------------------
-Przykład powienien działać w zasetupowanym clouderowym klastrze i być odpalany na cloudera-master. 
-Odpalamy:
+Warunkiem początkowym jest wykonianie punktu 7.  
+Na cloudera-master odpalamy:
 
     /vagrant/files/kaflog-0.1/bin/kaflog_hadoop_consumer.sh
 
@@ -135,14 +132,10 @@ Zrobić makaron i nie zapomnieć dodać soli.
 
 10. Używanie Storm Consumera
 ---------------------------
-Trzeba doinstalować kilka rzeczy, zatem jednorazowo należy ponownie wykonać provisioning. Cluster będzie postawiony
-na nodach cloudera-master i cloudera-slave1.
+Warunkiem początkowym jest wykonianie punktu 7. 
+Domyślnie storm działa na cloudera-master i cloudera-slave1.
 
-Nie wiem czemu strasznie muli apt-get. Trzeba poczekać (u mnie ~ 20 minut)
-
-    vagrant provision cloudera-master cloudera-slave1
-
-Następnie trzeba uruchomić cluster storma:
+Trzeba uruchomić cluster storma:
 
     # @cloudera-master: tu odpalamy nimbusa - taki storm-master
     ~/storm-0.8.1/bin/storm nimbus &
@@ -151,11 +144,10 @@ Następnie trzeba uruchomić cluster storma:
     ~/storm-0.8.1/bin/storm ui &
 
     # @cloudera-slave1: tu odpalamy supervisora
-    ~/storm-0.8.1/bin/storm supervisor
-    
+    ~/storm-0.8.1/bin/storm supervisor    
  
 
-Wreszcie można uruchmoić topologie
+Uruchmoić topologie:
 
     # @cloudera-master
     /vagrant/files/kaflog-0.1/bin/kaflog_storm_consumer.sh
@@ -165,16 +157,18 @@ Zabijanie topologi
     # nasza topologia nazywa się 'storm'
     ~/storm-0.8.1/bin/storm kill storm
 
+
 11. Import danych z Hdfs do Hive
 --------------------------------
-Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add.
+Trzeba mieć działającą odpowiednią rolę - hiveserver2. Dodaje się ją przez services/hive/add w GUI Cloudery.
 
 Dodatkowo należy dodać sobie użytkownika vagrant do cloudery i nadać uprawnienia 
     
     sudo -u hdfs hadoop fs -chmod 777 /user/hive.
 
 Polecam też dodanie zookeepera na cloudera-slave1.
-Dodać hbaserestserver i hbasethriftserver.
+Dodać hbaserestserver i hbasethriftserver w GUI Cloudery.
+
 
 12. Podział na podmoduły
 --------------------------------
@@ -182,3 +176,13 @@ Główny moduł to kaflog. Jest to parent pom dla prawie wszystkich projektów p
 
 Mastermonitoring to webappka, ale można ją odpalać przez java -jar.
 Alternatywny sposób to odpalanie przez mvn spring-boot:run - to się przydaje podczas pracy.
+
+
+13. Uwagi do dokumentacji kafki (uzywamy wersji 0.8.1, a w ebooku jest 0.72/0.8)
+-------------------------------------------------------------------------------
+Proponuję tutaj dopisywać rzeczy, które należy wiedzieć jeśli chodzi o kafkę 0.8.1 (w szczególności to, co się zmieniło względem starych wersji).
+
+Zmieniono sposób tworzenia topica
+
+    stary -> bin/kafka-create-topic.sh --zookeeper localhost:2181 --replica 1 --partition 1 --topic kafkatopic
+    nowy ->  bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partition 1 --topic kafkatopic
