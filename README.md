@@ -97,7 +97,7 @@ I paczka z naszym kaflogiem będzie dostępna na każdej maszynie wirtualnej pod
 
 7. Odpalanie mastera
 --------------------
-Warunkiem początkowym jest postawienie cloudery na cloudera-master (no i slavach w miarę potrzeb).
+Warunkiem początkowym jest postawienie cloudery na cloudera-master (no i slavach w miarę potrzeb) - patrz punkt 4.
 Na cloudera-master odpalamy:
 
     /vagrant/files/kaflog-0.1/bin/kaflog_broker.sh 
