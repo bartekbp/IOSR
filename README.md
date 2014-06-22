@@ -103,6 +103,12 @@ Na cloudera-master odpalamy:
     /vagrant/files/kaflog-0.1/bin/kaflog_broker.sh 
     /vagrant/files/kaflog-0.1/bin/kaflog_master.sh 
 
+Po wstaniu mastera, panel admina jest dostępny na:
+
+    http://cloudera-master:8080
+
+Hasło i login: admin.
+
 
 8. Używanie KaflogProducera
 ---------------------------
@@ -119,7 +125,7 @@ W tym momencie działa nasz producent i będzie publikował logi z sysloga. Zalo
 
 Wejść na:
 
-    http://cloudera-master:8080
+    http://cloudera-master:8080/
 
 Zrobić popcorn i oglądać.
 
