@@ -106,7 +106,7 @@
 <% if(request.getAttribute("report")!=null) {%>
 <% pl.edu.agh.kaflog.master.statistics.Report report = (pl.edu.agh.kaflog.master.statistics.Report)request.getAttribute("report"); %>
 <% org.joda.time.format.DateTimeFormatter fmt = (org.joda.time.format.DateTimeFormatter)request.getAttribute("fmt"); %>
-<h3>Report for time frame:<%=fmt.print(report.getStartDate())%> - <%=fmt.print(report.getEndDate())%><h3>
+<h3>Report for time frame:<%=fmt.print(report.getStartDate())%> - <%=fmt.print(report.getEndDate())%></h3>
 <div style="margin: 70px 10px 10px;">
     <table class="table table-striped table-hover" style="width: 100%; table-layout: fixed;">
         <thead>

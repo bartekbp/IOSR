@@ -55,6 +55,7 @@ public class ViewQueryHandler {
 
             hostSeverityData.put(hostName, oneHostSeverityData);
             hostData.add(new Pair<String, Long>(hostName, oneHostSum));
+            all += oneHostSum;
         }
 
         for (String severityName : Report.getSeveritiesList()) {
