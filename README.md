@@ -37,7 +37,30 @@ Za pierwszym uruchomieniem środowiska, Vagrant wykona tzw. "provisioning" - skr
 Dodać wpisy z pliku vagrant/files/hosts do lokalnego /etc/hosts, aby móc posługiwać się hostname'ami np. w przeglądarce.
 
 
-3. Stawianie clustra cloudery
+3. Wstrzymywanie, kasowanie środowiska
+--------------------------------------
+Aby wstrzymać wszystkie VMki, a potem wznowić pracę w tym samym miejscu, używamy:
+
+    vagrant halt
+    vagrant up
+
+Natomiast aby całkowicie usunąć środowisko:
+
+    vagrant destroy
+
+
+4. Używanie środowiska
+----------------------
+Na poszczególne VMki logujemy się przy użyciu komendy vagrant ssh podając nazwę VMki (zgodną z definicjami w Vagrantfile). Przykładowo:
+
+    vagrant ssh kafka-node1
+
+W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korzystać z następującego mechanizmu - wszystko wrzucone do folderu zawierającego Vagrantfile (u nas w repo katalog vagrant/) jest podmontowane pod ścieżką /vagrant na vmkach.
+
+Używanie kafki - na maszyny "kafka-nodexxx" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka.
+
+
+5/ Stawianie clustra cloudery
 ------------------------------------------
 
 Wejść przez przeglądarkę na adres:
@@ -61,29 +84,6 @@ Skonfigurować cluster cloudery za pomocą wizarda, który nam się wyświetlił
     6. Wybór baz danych - test connection, potem continue
     7. Configuration changes - continue
     8. Poczekać na instalację wszystkich pakietów, przeklikać do końca instalacji
-
-
-4. Wstrzymywanie, kasowanie środowiska
---------------------------------------
-Aby wstrzymać wszystkie VMki, a potem wznowić pracę w tym samym miejscu, używamy:
-
-    vagrant halt
-    vagrant up
-
-Natomiast aby całkowicie usunąć środowisko:
-
-    vagrant destroy
-
-
-5. Używanie środowiska
-----------------------
-Na poszczególne VMki logujemy się przy użyciu komendy vagrant ssh podając nazwę VMki (zgodną z definicjami w Vagrantfile). Przykładowo:
-
-    vagrant ssh kafka-node1
-
-W celu skopiowania jakiegoś pliku na VMkę z własnej maszyny, najłatwiej korzystać z następującego mechanizmu - wszystko wrzucone do folderu zawierającego Vagrantfile (u nas w repo katalog vagrant/) jest podmontowane pod ścieżką /vagrant na vmkach.
-
-Używanie kafki - na maszyny "kafka-nodexxx" trafiają binarki Kafki, do folderu ~/kafka. Podobnie na maszynę cloudera-master, która docelowo będzie konsumentem Kafkowych wiadomości. Aby postawić usługi Kafki, najlepiej kierować się ebookiem Apache Kafka.
 
 
 6. Budowanie projektu i deploy na wirtualne maszyny
