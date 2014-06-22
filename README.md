@@ -18,7 +18,7 @@ Pobrać i zainstalować najnowszą wersje Vagrant'a i VirtualBoxa 4.2 (konieczni
 
 2. Stawianie środowiska (maszyn wirtualnych)
 --------------------------------------------
-UWAGA: Obecna konfugaracja wymaga 2GB RAMu. Jeśli to za dużo, należy edytować Vagrantfile i zmniejszyć ilość pamięci przydzielanej poszczególnym VMkom.
+UWAGA: Obecna konfugaracja wymaga 11GB RAMu. Jeśli to za dużo, należy edytować Vagrantfile i zmniejszyć ilość pamięci przydzielanej poszczególnym VMkom.
 
 Wejść do katalogu vagrant/ i odpalić:
 
