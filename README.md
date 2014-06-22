@@ -6,6 +6,8 @@ Pierwszy krok; pobrać:
 
 i umieścić w vagrant/files/.
 
+Nie jest to piękne, ale działa, i vagrant nie musi ściągać javy dla każdej jednej VMki podczas stawiania środowiska.
+
 UWAGA: Potrzebne jest dużo wolnego miejsca na dysku (30GB). Domyślnie wszystko wyląduje w "~/VirtualBox VMs". Aby zmienić tę lokalizację, trzeba odpalić virtualbox'a, wejść w preferencje i zmienić domyślny katalog.
 
 Pobrać i zainstalować najnowszą wersje Vagrant'a i VirtualBoxa 4.2 (koniecznie ta wersja, ze względu na wersję guest additions w boxach vagrantowych):
