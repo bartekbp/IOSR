@@ -109,6 +109,13 @@ Po wstaniu mastera, panel admina jest dostępny na:
 
 Hasło i login: admin.
 
+Aby wyświetlanie statystyk dotyczących logów działało poprawnie, niezbędne jest posiadanie aktualnych metadanych dla potrzeb Apache Impala.
+
+Metadane można odświeżyć wykonując polecenie w konsoli Apache Impala:
+
+    invalidate metadata
+    
+
 
 8. Używanie KaflogProducera
 ---------------------------
