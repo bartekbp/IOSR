@@ -9,6 +9,7 @@
 \usepackage{pgf}
 \usepackage{listings}
 \usepackage{color}
+\usepackage{tabularx}
 \usepackage{amsmath}
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
 \begin{document}
@@ -25,7 +26,8 @@
         \begin{flushleft} \large
         \emph{Autorzy:} \\
         Łukasz \textsc{Opioła} \\
-        Bartosz \textsc{Polnik}
+        Bartosz \textsc{Polnik} \\
+        Michał \textsc{Janiec}
         \end{flushleft}
     \end{minipage}
     \begin{minipage}{0.4\textwidth}
@@ -43,17 +45,18 @@
 \end{titlepage}
 
 \section{Opis tematu}
-    System agregacji logów z rozproszonych węzłów obliczeniowych wspierających masywną skalowalność w oparciu o bibliotekę Kafka. Na węzłach uruchomieni są agenci (producenci) śledzący zmiany w plikach zdarzeń i wysyłający informacje do brokera Kafka, który następnie wpisuje dane do Hadoopa. Celem jest dostarczenie określonych raportów odnośnie kategorii zdarzeń (INFO, ERROR, DEBUG), częstotliwości ich występowania etc.
+    Celem projektu jest utworzenie systemu agregacji logów z rozproszonych węzłów obliczeniowych wspierających masywną skalowalność w oparciu o bibliotekę Kafka. Na węzłach uruchomieni są agenci (producenci) śledzący zmiany w plikach zdarzeń i wysyłający informacje do brokera Kafka, który następnie wpisuje dane do Hadoopa. Celem jest dostarczenie określonych raportów odnośnie kategorii zdarzeń (INFO, ERROR, DEBUG), częstotliwości ich występowania etc. Utworzone rozwiązanie będzie realizować architekturę lambda.
 
 \section{Technologie} 
     Projekt zostanie zrealizowany z wykorzystaniem następujących technologii:
     \begin{itemize}
-        \item Cloudera
-        \item Hadoop Yarn (MR2)
-        \item Hive
-        \item HBase
-        \item Oozie
-        \item Kafka
+        \item Cloudera - do konfiguracji i zarządzania clustrem
+        \item Hadoop Yarn (MR2) - do importu danych z brokera Kafka
+        \item Hive - do przechowywania danych umożliwiających generowanie widokow
+        \item HBase - do przechowywania widoków
+        \item Kafka - do zbierania logów od agentów
+        \item Impala - do łączenia widoków warstwy usługowej
+        \item JMX - do monitorowania agentów
     \end{itemize}
 
 \section{Przypadki użycia}
@@ -62,7 +65,7 @@
     \begin{umlsystem}[x=0, y=0, fill=red!10]{KafLog} 
         \umlactor[x=-7.5]{Użytkownik}
 
-        \foreach \x/\a in {2/Zarejestruj agenta, 1/Pokaż stan systemu, 0/Pokaż statystyki agenta, -1/Pokaż statystyki zbiorcze, -2/Stwórz raport w HTML, -3/Pokaż historię logów} {
+        \foreach \x/\a in {2/Zarejestruj agenta, 1/Pokaż stan systemu, 0/Pokaż statystyki agenta, -1/Pokaż statystyki zbiorcze, -2/Pokaż historię logów} {
             \umlusecase[name=\x,x=0, y=\x]{\a}; 
             \umlassoc{Użytkownik}{\x};
         }
@@ -71,17 +74,19 @@
 
 \section{Podział zadań}
 
-\begin{tabular}{ c | c }
-  Łukasz Opioła & Bartosz Polnik \\ \hline
-  przewodzenie zespołem & konfiguracja środowiska \\
-  tworzenie use-case & spisywanie minutek \\
-  specyfikacja funkcjonalna & specyfikacja funkcjonalna \\
-  utworzenie planu testów funkcjonalnych & utworzenie diagramów klas/sekwencji \\
-  naprawa luk bezpieczeństwa & generowanie raportów w mvn \\
-  testowanie aplikacji & poszukiwanie luk bezpieczeństwa \\
-  optymalizacja aplikacji & przeprowadzenie testów wydajnościowych \\
-   & generowanie strony w mvn
-\end{tabular}
+\begin{tabularx}{\linewidth}{ X | X | X}
+  \textsc{Łukasz Opioła} & \textsc{Bartosz Polnik} & \textsc{Michał Janiec} \\ \hline
+  utworzenie szablonu środowiska & zarządzanie zespołem & zbieranie logów w celu przetwarzania real-time \\ \hline
+  tworzenie use-case & utworzenie szablonu projektu i podział na moduły & przetwarzanie logów w czasie rzeczywistym \\ \hline
+  utworzenie producenta & zapisywanie logów w celu generacji widoków w hdfsie & utworzenie inkrementacyjnych widoków na podstawie przetwarzanych danych \\ \hline
+  generowanie statystyk przez agentów & utworzenie widoków warstwy batch & utworzenie widoku statystyk w gui \\ \hline
+  widok w gui do monitorowania agentów & łączenie widoków & dodanie komentarzy do kodu \\ \hline
+  widok w gui aktualnie generowanych logów & testowanie platformy & refactoring kodu \\ \hline
+  testy wydajnościowe & dopasowanie generacji widoków real-time i batch celem integracji z Apache Impala & optymalizacja działanie aplikacji do monitorowania agentów \\ \hline
+  zapewnienie bezpieczeństwa platformie & dodanie bezpieczeństwa do aplikacji monitorującej agentów & dodanie informacji o przedziale czasowym statystyk w gui\\ \hline
+  opis poszczególnych modułów & utworzenie przykładów dla gui & umożliwienie uruchamiania storma lokalnie \\ \hline
+  utworzenie diagramu architektury & uruchamianie cykliczne generacji widoków warstwy batch & poprawia wizualna widoku statystyk\\ \hline
+\end{tabularx}
 
 
 
